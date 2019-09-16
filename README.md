@@ -56,12 +56,12 @@ Actions:
 
    downloadlog - Download ULO log into specified location
        Arguments:
-           1. destination type - local, ntfs, ftp
+           1. destination type - local, nfs, ftp
            2. destination path - location where snapshot files should be moved
                                  NOTE: Alwayse use absolute paths! Destination
                                        folder must already exist!
                a) local - "<drive>:\<path>\"
-               b) ntfs - "\\<host>\<path>" (Required: username, password)
+               b) nfs - "\\<host>\<path>" (Required: username, password)
                c) ftp - "ftp://<host>:<port>/<path>" (Required: username,
                         password)
            3. retention - how old uploaded files should be removed in hours;
@@ -74,12 +74,12 @@ Actions:
                      location, if snapshot with same name exists it
                      is overwritten
        Arguments:
-           1. destination type - local, ntfs, ftp
+           1. destination type - local, nfs, ftp
            2. destination path - location where snapshot files should be moved
                                  NOTE: Alwayse use absolute paths! Destination
                                        folder must already exist!
                a) local - "<drive>:\<path>\"
-               b) ntfs - "\\<host>\<path>" (Required: username, password)
+               b) nfs - "\\<host>\<path>" (Required: username, password)
                c) ftp - "ftp://<host>:<port>/<path>" (Required: username,
                         password)
            3. username
@@ -88,12 +88,12 @@ Actions:
    downloadvideos - Download all available videos stored in ULO into specified
                     location, if video with same name exists it is skipped
        Arguments:
-           1. destination type - local, ntfs, ftp
+           1. destination type - local, nfs, ftp
            2. destination path - location where video files should be moved
                                  NOTE: Alwayse use absolute paths! Destination
                                        folder must already exist!
                a) local - "<drive>:\<path>\"
-               b) ntfs - "\\<host>\<path>" (Required: username, password)
+               b) nfs - "\\<host>\<path>" (Required: username, password)
                c) ftp - "ftp://<host>:<port>/<path>" (Required: username,
                         password)
            3. age - how old files should be downloaded in hours; if set
@@ -109,12 +109,12 @@ Actions:
                        specified location, if snapshot with same name exists it
                        is skipped
        Arguments:
-           1. destination type - local, ntfs, ftp
+           1. destination type - local, nfs, ftp
            2. destination path - location where snapshot files should be moved
                                  NOTE: Alwayse use absolute paths! Destination
                                        folder must already exist!
                a) local - "<drive>:\<path>\"
-               b) ntfs - "\\<host>\<path>" (Required: username, password)
+               b) nfs - "\\<host>\<path>" (Required: username, password)
                c) ftp - "ftp://<host>:<port>/<path>" (Required: username,
                         password)
            3. age - how old files should be downloaded in hours; if set
@@ -164,7 +164,7 @@ Notes from working with ULO:
     - If mutiple activities are performed at a same time or their execution
       might overlap, it is advised to create separate ULO users for such
       activities.
-    - NTFS cannot be both used in Windows and used by script, if used so,
+    - NFS cannot be both used in Windows and used by script, if used so,
       one or the other might stop working after some time.
     - FTP upload supports anonymouse login.
     - FTP is very permission sensitive, wrongly set permissions may lead to

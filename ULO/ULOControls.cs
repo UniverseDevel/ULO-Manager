@@ -97,7 +97,7 @@ namespace ULOControls
         public class DestinationType
         {
             public const string Local = "local";
-            public const string NTFS = "ntfs";
+            public const string NFS = "nfs";
             public const string FTP = "ftp";
         }
 
@@ -496,7 +496,7 @@ namespace ULOControls
                             break;
                     }
                     break;
-                case DestinationType.NTFS:
+                case DestinationType.NFS:
                     // Open connection to NFS
                     NetworkCredential credentials = new NetworkCredential(username, password);
                     using (ConnectToSharedFolder nfsConnection = new ConnectToSharedFolder(destination, credentials))
