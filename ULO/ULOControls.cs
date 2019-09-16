@@ -680,7 +680,10 @@ namespace ULOControls
             foreach (string directory in directories)
             {
                 writeLog(tempOutFile, "Retention clean-up of files in directory '" + directory + "' started...", true);
-                foreach (string file in Directory.GetFiles(directory))
+
+                string[] files = Directory.GetFiles(directory);
+                Array.Sort(files);
+                foreach (string file in files)
                 {
                     if (Path.GetExtension(file).ToLower() != "." + mediatype_extension)
                     {
@@ -934,6 +937,7 @@ namespace ULOControls
                     int removed_count = 0;
                     if (files.Length != 0)
                     {
+                        Array.Sort(files);
                         foreach (string file in files)
                         {
                             Regex regex = new Regex(@"(\d+_\d+)");
