@@ -8,11 +8,11 @@ namespace ULOController
 {
     static class Controller
     {
-        private static string product_root = Path.GetPathRoot(Assembly.GetEntryAssembly().Location);
-        private static string product_location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        private static string product_title = ((AssemblyTitleAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
-        private static string product_version = Assembly.GetEntryAssembly().GetName().Version.ToString();
-        private static string product_filename = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+        private static readonly string product_root = Path.GetPathRoot(Assembly.GetEntryAssembly().Location);
+        private static readonly string product_location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        private static readonly string product_title = ((AssemblyTitleAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
+        private static readonly string product_version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+        private static readonly string product_filename = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
 
         private static string _action = String.Empty;
 

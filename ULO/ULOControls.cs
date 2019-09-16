@@ -28,26 +28,26 @@ namespace ULOControls
         private static string[] supportedVersions = new string[] { "01.0101", "08.0803", "08.0804", "08.0904", "10.1308" };
 
         // Private
-        private static string product_location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        private static string host = String.Empty;
-        private static string token = String.Empty;
-        private static string timeFormat = "yyyyMMdd_HHmmss";
+        private static readonly string product_location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        private string host = String.Empty;
+        private string token = String.Empty;
 
         // Public
-        public static int processId = Process.GetCurrentProcess().Id;
-        public static string filesName = "ULOControls";
-        public static string filesTimestamp = DateTime.Now.ToString(timeFormat);
-        public static string archivePath = product_location + "\\archive";
-        public static string logHandlerFlag = product_location + "\\LOG_HANDLING";
-        public static string tempOutFile = product_location + "\\" + filesName + "_" + filesTimestamp + "_" + processId.ToString() + ".out.tmp";
-        public static string tempErrFile = product_location + "\\" + filesName + "_" + filesTimestamp + "_" + processId.ToString() + ".err.tmp";
-        public static string outFile = product_location + "\\" + filesName + ".out";
-        public static string errFile = product_location + "\\" + filesName + ".err";
-        public static string confFile = product_location + "\\" + filesName + ".conf";
-        public static DateTime session_start = DateTime.Now;
-        public static DateTime session_end = DateTime.Now;
-        public static bool is_supported = false;
-        public static string currentVersion = String.Empty;
+        public static readonly int processId = Process.GetCurrentProcess().Id;
+        public static readonly string filesName = "ULOControls";
+        public static readonly string timeFormat = "yyyyMMdd_HHmmss";
+        public static readonly string filesTimestamp = DateTime.Now.ToString(timeFormat);
+        public static readonly string tempOutFile = product_location + "\\" + filesName + "_" + filesTimestamp + "_" + processId.ToString() + ".out.tmp";
+        public static readonly string tempErrFile = product_location + "\\" + filesName + "_" + filesTimestamp + "_" + processId.ToString() + ".err.tmp";
+        public static readonly string outFile = product_location + "\\" + filesName + ".out";
+        public static readonly string errFile = product_location + "\\" + filesName + ".err";
+        public static readonly string confFile = product_location + "\\" + filesName + ".conf";
+        public static readonly string archivePath = product_location + "\\archive";
+        public static readonly string logHandlerFlag = product_location + "\\LOG_HANDLING";
+        public DateTime session_start = DateTime.Now;
+        public DateTime session_end = DateTime.Now;
+        public bool is_supported = false;
+        public string currentVersion = String.Empty;
 
         public Configuration configuration = new Configuration();
 
@@ -1414,7 +1414,7 @@ namespace ULOControls
 
                 // Handle logs
                 DirectoryInfo dir = new DirectoryInfo(product_location);
-                FileInfo[] files = dir.GetFiles("ULOControls*.tmp", SearchOption.TopDirectoryOnly);
+                FileInfo[] files = dir.GetFiles(filesName + "*.tmp", SearchOption.TopDirectoryOnly);
                 Array.Sort(files, delegate (FileInfo f1, FileInfo f2) { return f1.CreationTime.CompareTo(f2.CreationTime); });
                 bool output_stopped = false;
                 bool error_stopped = false;
