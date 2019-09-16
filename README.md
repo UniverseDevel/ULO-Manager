@@ -1,8 +1,7 @@
-```
 ULO Controller v1.0.0.0
 
 Usage:
-   ./ULOController <ulo_host> <username> <password> <action> <arg1> <argN>
+   ./ULOController <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>
 
 Actions:
    getmode - Get current ULO camera mode
@@ -171,4 +170,8 @@ Notes from working with ULO:
       some features returning errors.
     - ULO can perform unintended self reeboots which always reset current
       camera mode to standard and therefore ULO will stop recodring.
-```
+    - In version 10.1308 and maybe earlier, there is a bug where anyone who
+      knows about ULO can access all ULO files even when not logged in to ULO,
+      when at least one user is logged in to ULO no matter where.
+    - In version 10.1308 and maybe earlier, ULO stores WiFi passwords in
+      plain text inside its system log which is accessible if requested.

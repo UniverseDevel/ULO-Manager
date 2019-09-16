@@ -14,11 +14,15 @@ namespace ULOControls
 {
     public class ULO
     {
-        // If you want to enjoy a little fun by ULOs India developement 
-        // team, log in to your ULO and then insert following URL 
-        // into your browser: http://<ULO_IP>/assets/sounds/snapshot_20170829_092122.mp4
-        // it's either test file or they were not so hard at work.
-        // Confirmed in version 01.0101 trough 10.1308.
+        /*
+        If you want to enjoy a little fun by ULOs India developement 
+        team, log in to your ULO and then insert following URL 
+        into your browser: http://<ULO_IP>/assets/sounds/snapshot_20170829_092122.mp4
+        it's either test file or they were not so hard at work.
+        Confirmed in version 01.0101 trough 10.1308.
+
+        Be careful when using ULO: https://support.ulo.camera/hc/en-us/community/posts/360005096479-ULO-security-risk-for-your-network-and-worse
+        */
 
         // List of supported version that this script was tested on, not all versions were catched
         private static string[] supportedVersions = new string[] { "01.0101", "08.0803", "08.0804", "08.0904", "10.1308" };
@@ -200,7 +204,7 @@ namespace ULOControls
             }
             if (!supported)
             {
-                writeLog(tempOutFile, "WARNING: Your current ULO version (" + currentVersion + ") is not supported.", true);
+                writeLog(tempOutFile, "WARNING: Your current ULO version (" + currentVersion + ") is not tested, yet. Results may vary.", true);
             }
 
             return supported;

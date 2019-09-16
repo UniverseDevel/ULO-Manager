@@ -8,6 +8,7 @@ namespace ULOController
 {
     static class Controller
     {
+        private static string product_root = Path.GetPathRoot(Assembly.GetEntryAssembly().Location);
         private static string product_location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         private static string product_title = ((AssemblyTitleAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
         private static string product_version = Assembly.GetEntryAssembly().GetName().Version.ToString();
@@ -55,7 +56,7 @@ namespace ULOController
             Console.WriteLine(product_title + @" v" + product_version);
             Console.WriteLine(@"");
             Console.WriteLine(@"Usage:");
-            Console.WriteLine(@"   ./" + product_filename + @" <ulo_host> <username> <password> <action> <arg1> <argN>");
+            Console.WriteLine(@"   ./" + product_filename + @" <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>");
             Console.WriteLine(@"");
             Console.WriteLine(@"Actions:");
             Console.WriteLine(@"   " + Actions.GetMode + @" - Get current ULO camera mode");
@@ -224,6 +225,11 @@ namespace ULOController
             Console.WriteLine(@"      some features returning errors.");
             Console.WriteLine(@"    - ULO can perform unintended self reeboots which always reset current");
             Console.WriteLine(@"      camera mode to standard and therefore ULO will stop recodring.");
+            Console.WriteLine(@"    - In version 10.1308 and maybe earlier, there is a bug where anyone who");
+            Console.WriteLine(@"      knows about ULO can access all ULO files even when not logged in to ULO,");
+            Console.WriteLine(@"      when at least one user is logged in to ULO no matter where.");
+            Console.WriteLine(@"    - In version 10.1308 and maybe earlier, ULO stores WiFi passwords in");
+            Console.WriteLine(@"      plain text inside its system log which is accessible if requested.");
             /*                  |------------------------------------------------------------------------------| */
         }
 
@@ -329,7 +335,15 @@ namespace ULOController
                 }
 
                 // Main execution
-                if (host == "/?" || host == String.Empty || host == "?" || host == "-help" || host == "--help")
+                if (host == String.Empty)
+                {
+                    // No arguments open CMD on this path
+                    Process process = new Process();
+                    process.StartInfo.FileName = "cmd.exe";
+                    process.Start();
+                    // Alternative is to run GUI here (maybe in the distant future)
+                }
+                else if(host == "/?" || host == "?" || host == "-h" || host == "-help" || host == "--help")
                 {
                     usage();
                 }

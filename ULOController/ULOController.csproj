@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B0836722-573D-4D47-8FE9-414FBE812D4A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>ULOController</RootNamespace>
     <AssemblyName>ULOController</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
