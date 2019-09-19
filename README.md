@@ -125,6 +125,33 @@ Actions:
            4. username
            5. password
 
+   testavailability - Test for device availability
+       Arguments:
+           1. host - hostname of device you want to check if available
+
+   checkavailability - Check for device availability and set proper mode
+       Arguments:
+           1. mode if true - camera recording mode if conditions are met
+               a) standard - ULO awake and not recording
+               b) spy - ULO awake and recording
+               c) alert - ULO asleep and recording
+           2. mode if false - camera recording mode if conditions are not met
+               a) standard - ULO awake and not recording
+               b) spy - ULO awake and recording
+               c) alert - ULO asleep and recording
+           3. operation - operation to determine how to check devices
+               a) and - All devices available to be true
+               b) or - Any device available to be true
+           4. host1 - hostname of device you want to check if available
+           5. host2 - hostname of device you want to check if available
+                      (optional)
+           6. host3 - hostname of device you want to check if available
+                      (optional)
+           7. host4 - hostname of device you want to check if available
+                      (optional)
+           8. host5 - hostname of device you want to check if available
+                      (optional)
+
 Examples:
     - Download video files
         ./ULOController "192.168.0.10" "test" "123!Abc" "downloadvideos"
@@ -140,7 +167,8 @@ Library configuration (optional):
        2. showArguments - incoming arguments will be written to console
        3. showTrace - error trace will be written to console
        4. showSkipped - skipped files will be written to log and console
-       5. suppressLogHandling - log handler will stop chronologically push logs
+       5. showPingResults - availability check will show more information
+       6. suppressLogHandling - log handler will stop chronologically push logs
                                 into single log file
 
 Examples:

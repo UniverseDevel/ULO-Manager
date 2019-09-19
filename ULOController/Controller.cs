@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using ULOControls;
 
 namespace ULOController
@@ -36,6 +38,8 @@ namespace ULOController
             public const string CurrentSnapshot = "currentsnapshot";
             public const string DownloadVideos = "downloadvideos";
             public const string DownloadSnapshots = "downloadsnapshots";
+            public const string CheckAvailability = "checkavailability";
+            public const string TestAvailability = "testavailability";
         }
 
         public class DeletePeriodMap
@@ -180,6 +184,33 @@ namespace ULOController
             Console.WriteLine(@"           4. username");
             Console.WriteLine(@"           5. password");
             Console.WriteLine(@"");
+            Console.WriteLine(@"   " + Actions.TestAvailability + @" - Test for device availability");
+            Console.WriteLine(@"       Arguments:");
+            Console.WriteLine(@"           1. host - hostname of device you want to check if available");
+            Console.WriteLine(@"");
+            Console.WriteLine(@"   " + Actions.CheckAvailability + @" - Check for device availability and set proper mode");
+            Console.WriteLine(@"       Arguments:");
+            Console.WriteLine(@"           1. mode if true - camera recording mode if conditions are met");
+            Console.WriteLine(@"               a) " + ULO.CameraMode.Standard + @" - ULO awake and not recording");
+            Console.WriteLine(@"               b) " + ULO.CameraMode.Spy + @" - ULO awake and recording");
+            Console.WriteLine(@"               c) " + ULO.CameraMode.Alert + @" - ULO asleep and recording");
+            Console.WriteLine(@"           2. mode if false - camera recording mode if conditions are not met");
+            Console.WriteLine(@"               a) " + ULO.CameraMode.Standard + @" - ULO awake and not recording");
+            Console.WriteLine(@"               b) " + ULO.CameraMode.Spy + @" - ULO awake and recording");
+            Console.WriteLine(@"               c) " + ULO.CameraMode.Alert + @" - ULO asleep and recording");
+            Console.WriteLine(@"           3. operation - operation to determine how to check devices");
+            Console.WriteLine(@"               a) " + ULO.Operation.And + @" - All devices available to be true");
+            Console.WriteLine(@"               b) " + ULO.Operation.Or + @" - Any device available to be true");
+            Console.WriteLine(@"           4. host1 - hostname of device you want to check if available");
+            Console.WriteLine(@"           5. host2 - hostname of device you want to check if available");
+            Console.WriteLine(@"                      (optional)");
+            Console.WriteLine(@"           6. host3 - hostname of device you want to check if available");
+            Console.WriteLine(@"                      (optional)");
+            Console.WriteLine(@"           7. host4 - hostname of device you want to check if available");
+            Console.WriteLine(@"                      (optional)");
+            Console.WriteLine(@"           8. host5 - hostname of device you want to check if available");
+            Console.WriteLine(@"                      (optional)");
+            Console.WriteLine(@"");
             Console.WriteLine(@"Examples:");
             Console.WriteLine(@"    - Download video files");
             Console.WriteLine(@"        ./" + product_filename + @" ""192.168.0.10"" ""test"" ""123!Abc"" ""downloadvideos""");
@@ -195,7 +226,8 @@ namespace ULOController
             Console.WriteLine(@"       2. " + ULO.ConfigParams.ShowArguments + @" - incoming arguments will be written to console");
             Console.WriteLine(@"       3. " + ULO.ConfigParams.ShowTrace + @" - error trace will be written to console");
             Console.WriteLine(@"       4. " + ULO.ConfigParams.ShowSkipped + @" - skipped files will be written to log and console");
-            Console.WriteLine(@"       5. " + ULO.ConfigParams.SuppressLogHandling + @" - log handler will stop chronologically push logs");
+            Console.WriteLine(@"       5. " + ULO.ConfigParams.ShowPingResults + @" - availability check will show more information");
+            Console.WriteLine(@"       6. " + ULO.ConfigParams.SuppressLogHandling + @" - log handler will stop chronologically push logs");
             Console.WriteLine(@"                                into single log file");
             Console.WriteLine(@"");
             Console.WriteLine(@"Examples:");
@@ -333,15 +365,27 @@ namespace ULOController
                 {
                     ulo.writeLog(ULO.tempOutFile, String.Empty, true);
                 }
-
+                
                 // Main execution
                 if (host == String.Empty)
                 {
-                    // No arguments open CMD on this path
-                    Process process = new Process();
-                    process.StartInfo.FileName = "cmd.exe";
-                    process.Start();
-                    // Alternative is to run GUI here (maybe in the distant future)
+                    // No arguments, find who called it and perform appropriate action
+                    Process parent = ParentProcessUtilities.GetParentProcess();
+                    //Console.WriteLine("Parent name: " + parent.ProcessName);
+                    if (parent.ProcessName == "explorer")
+                    {
+                        // If explorer started this application, open CMD
+                        Process process = new Process();
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.UseShellExecute = true;
+                        process.Start();
+                        // Alternative is to run GUI here (maybe in the distant future) - Application output type has to be changed to Windows Application
+                    }
+                    else
+                    {
+                        // If applicaation is not started by explorer show help
+                        usage();
+                    }
                 }
                 else if(host == "/?" || host == "?" || host == "-h" || host == "-help" || host == "--help")
                 {
@@ -455,6 +499,61 @@ namespace ULOController
                                 // Download snapshots
                                 ulo.downloadMedia(ULO.MediaType.Snapshot, arg1, arg2, ((arg3 != String.Empty) ? Int32.Parse(arg3) : 0), ((arg4 != String.Empty) ? Int32.Parse(arg4) : 0), arg5, arg6);
                                 break;
+                            case Actions.TestAvailability:
+                                // Test for device availability
+                                ulo.testAvailability(arg1);
+                                break;
+                            case Actions.CheckAvailability:
+                                // Check for device availability and set proper mode
+                                string mode_if_true = "";
+                                switch (arg1.ToLower())
+                                {
+                                    case ULO.CameraMode.Standard:
+                                        mode_if_true = ULO.CameraMode.Standard;
+                                        break;
+                                    case ULO.CameraMode.Spy:
+                                        mode_if_true = ULO.CameraMode.Spy;
+                                        break;
+                                    case ULO.CameraMode.Alert:
+                                        mode_if_true = ULO.CameraMode.Alert;
+                                        break;
+                                    default:
+                                        throw new Exception("Mode '" + arg1 + "' is not supported.");
+                                }
+
+                                string mode_if_false = "";
+                                switch (arg2.ToLower())
+                                {
+                                    case ULO.CameraMode.Standard:
+                                        mode_if_false = ULO.CameraMode.Standard;
+                                        break;
+                                    case ULO.CameraMode.Spy:
+                                        mode_if_false = ULO.CameraMode.Spy;
+                                        break;
+                                    case ULO.CameraMode.Alert:
+                                        mode_if_false = ULO.CameraMode.Alert;
+                                        break;
+                                    default:
+                                        throw new Exception("Mode '" + arg2 + "' is not supported.");
+                                }
+
+
+
+                                string operation = "";
+                                switch (arg3.ToLower())
+                                {
+                                    case ULO.Operation.And:
+                                        operation = ULO.Operation.And;
+                                        break;
+                                    case ULO.Operation.Or:
+                                        operation = ULO.Operation.Or;
+                                        break;
+                                    default:
+                                        throw new Exception("Operation '" + arg3 + "' is not supported.");
+                                }
+
+                                ulo.checkAvailability(mode_if_true, mode_if_false, operation, arg4, arg5, arg6, arg7, arg8);
+                                break;
                             default:
                                 throw new Exception("Action '" + action + "' is not supported.");
                         }
@@ -512,6 +611,68 @@ namespace ULOController
             ulo.writeLog(ULO.tempErrFile, errorOutput, false, true);
 
             //throw ex;
+        }
+    }
+}
+
+/// <summary>
+/// A utility class to determine a process parent.
+/// </summary>
+[StructLayout(LayoutKind.Sequential)]
+public struct ParentProcessUtilities
+{
+    // These members must match PROCESS_BASIC_INFORMATION
+    internal IntPtr Reserved1;
+    internal IntPtr PebBaseAddress;
+    internal IntPtr Reserved2_0;
+    internal IntPtr Reserved2_1;
+    internal IntPtr UniqueProcessId;
+    internal IntPtr InheritedFromUniqueProcessId;
+
+    [DllImport("ntdll.dll")]
+    private static extern int NtQueryInformationProcess(IntPtr processHandle, int processInformationClass, ref ParentProcessUtilities processInformation, int processInformationLength, out int returnLength);
+
+    /// <summary>
+    /// Gets the parent process of the current process.
+    /// </summary>
+    /// <returns>An instance of the Process class.</returns>
+    public static Process GetParentProcess()
+    {
+        return GetParentProcess(Process.GetCurrentProcess().Handle);
+    }
+
+    /// <summary>
+    /// Gets the parent process of specified process.
+    /// </summary>
+    /// <param name="id">The process id.</param>
+    /// <returns>An instance of the Process class.</returns>
+    public static Process GetParentProcess(int id)
+    {
+        Process process = Process.GetProcessById(id);
+        return GetParentProcess(process.Handle);
+    }
+
+    /// <summary>
+    /// Gets the parent process of a specified process.
+    /// </summary>
+    /// <param name="handle">The process handle.</param>
+    /// <returns>An instance of the Process class.</returns>
+    public static Process GetParentProcess(IntPtr handle)
+    {
+        ParentProcessUtilities pbi = new ParentProcessUtilities();
+        int returnLength;
+        int status = NtQueryInformationProcess(handle, 0, ref pbi, Marshal.SizeOf(pbi), out returnLength);
+        if (status != 0)
+            throw new Win32Exception(status);
+
+        try
+        {
+            return Process.GetProcessById(pbi.InheritedFromUniqueProcessId.ToInt32());
+        }
+        catch (ArgumentException)
+        {
+            // not found
+            return null;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -48,6 +49,7 @@ namespace ULOControls
         public DateTime session_end = DateTime.Now;
         public bool is_supported = false;
         public string currentVersion = String.Empty;
+        public int ping_timeout = 5000;
 
         public Configuration configuration = new Configuration();
 
@@ -68,6 +70,7 @@ namespace ULOControls
             public const string ShowArguments = "showArguments";
             public const string ShowTrace = "showTrace";
             public const string ShowSkipped = "showSkipped";
+            public const string ShowPingResults = "showPingResults";
             public const string SuppressLogHandling = "suppressLogHandling";
         }
 
@@ -77,6 +80,7 @@ namespace ULOControls
             public bool showArguments = readConfigBool(ConfigParams.ShowArguments, false);
             public bool showTrace = readConfigBool(ConfigParams.ShowTrace, false);
             public bool showSkipped = readConfigBool(ConfigParams.ShowSkipped, false);
+            public bool ShowPingResults = readConfigBool(ConfigParams.ShowPingResults, false);
             public bool suppressLogHandling = readConfigBool(ConfigParams.SuppressLogHandling, false);
         }
 
@@ -103,6 +107,12 @@ namespace ULOControls
             public const string Local = "local";
             public const string NFS = "nfs";
             public const string FTP = "ftp";
+        }
+
+        public class Operation
+        {
+            public const string And = "and";
+            public const string Or = "or";
         }
 
         private class FsAction
@@ -143,10 +153,186 @@ namespace ULOControls
 
         public void reloadConfiguration()
         {
-            Console.WriteLine("Z");
             configuration = new Configuration();
         }
-        
+
+        public bool ping(string host, bool output)
+        {
+            if (!host.Contains("://"))
+            {
+                host = "https://" + host;
+            }
+            host = new Uri(host).Host;
+
+            Ping ping = new Ping();
+
+            string data = new String('.', 32);
+            int packet_size = Encoding.UTF8.GetByteCount(data);
+            byte[] buffer = Encoding.UTF8.GetBytes(data);
+
+            PingOptions options = new PingOptions(64, true);
+            PingReply reply = ping.Send(host, ping_timeout, buffer, options);
+
+            bool state = false;
+
+            if (reply.Status == IPStatus.Success)
+            {
+                if (output)
+                {
+                    writeLog(tempOutFile, "Address:             " + reply.Address.ToString(), true);
+                    writeLog(tempOutFile, "RoundTrip time [ms]: " + reply.RoundtripTime, true);
+                    writeLog(tempOutFile, "Time to live [hops]: " + reply.Options.Ttl, true);
+                    writeLog(tempOutFile, "Don't fragment:      " + reply.Options.DontFragment, true);
+                    writeLog(tempOutFile, "Buffer size [bytes]: " + reply.Buffer.Length, true);
+                }
+
+                state = true;
+            }
+            else
+            {
+                if (output)
+                {
+                    writeLog(tempOutFile, "Ping failed with status: " + reply.Status, true);
+                }
+
+                state = false;
+            }
+
+            return state;
+        }
+
+        public void testAvailability(string host)
+        {
+            // Test for device availability
+            if (ping(host, true))
+            {
+                writeLog(tempOutFile, "", true);
+                writeLog(tempOutFile, "Device is available.", true);
+            }
+            else
+            {
+                writeLog(tempOutFile, "", true);
+                writeLog(tempOutFile, "Device is NOT available.", true);
+            }
+        }
+
+        public void checkAvailability(string if_true, string if_false, string operation, string host1, string host2, string host3, string host4, string host5)
+        {
+            // Check for device availability and set proper mode
+            writeLog(tempOutFile, "", true);
+            writeLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
+
+            string[] hosts = new string[] { };
+            bool result = false;
+            bool result_step = false;
+
+            switch (operation)
+            {
+                case Operation.And:
+                    result_step = true;
+                    break;
+                case Operation.Or:
+                    result_step = false;
+                    break;
+                default:
+                    throw new Exception("Operation '" + operation + "' is not supported.");
+            }
+
+            if (host1 != String.Empty)
+            {
+                Array.Resize(ref hosts, hosts.Length + 1);
+                hosts[hosts.Length - 1] = host1;
+            }
+            if (host2 != String.Empty)
+            {
+                Array.Resize(ref hosts, hosts.Length + 1);
+                hosts[hosts.Length - 1] = host2;
+            }
+            if (host3 != String.Empty)
+            {
+                Array.Resize(ref hosts, hosts.Length + 1);
+                hosts[hosts.Length - 1] = host3;
+            }
+            if (host4 != String.Empty)
+            {
+                Array.Resize(ref hosts, hosts.Length + 1);
+                hosts[hosts.Length - 1] = host4;
+            }
+            if (host5 != String.Empty)
+            {
+                Array.Resize(ref hosts, hosts.Length + 1);
+                hosts[hosts.Length - 1] = host5;
+            }
+
+            foreach (string host in hosts)
+            {
+                result = ping(host, false);
+
+                if (configuration.ShowPingResults)
+                {
+                    writeLog(tempOutFile, "Host:                    " + host, true);
+                    writeLog(tempOutFile, "Operation:               " + operation, true);
+                    writeLog(tempOutFile, "Result:                  " + result, true);
+                    writeLog(tempOutFile, "Result step before eval: " + result_step, true);
+                }
+
+                switch (operation)
+                {
+                    case Operation.And:
+                        if (result && result_step) { result_step = true; } else { result_step = false; }
+                        break;
+                    case Operation.Or:
+                        if (result || result_step) { result_step = true; } else { result_step = false; }
+                        break;
+                    default:
+                        throw new Exception("Operation '" + operation + "' is not supported.");
+                }
+
+                if (configuration.ShowPingResults)
+                {
+                    writeLog(tempOutFile, "Result step after eval:  " + result_step, true);
+                    writeLog(tempOutFile, "===============================================", true);
+                }
+            }
+
+            if (result_step)
+            {
+                switch (operation)
+                {
+                    case Operation.And:
+                        writeLog(tempOutFile, "All devices are available.", true);
+                        break;
+                    case Operation.Or:
+                        writeLog(tempOutFile, "At least one device is available.", true);
+                        break;
+                    default:
+                        throw new Exception("Operation '" + operation + "' is not supported.");
+                }
+
+                // Set mode based on provided value
+                writeLog(tempOutFile, "Setting camera to '" + if_true + "' mode.", true);
+                setMode(if_true);
+            }
+            else
+            {
+                switch (operation)
+                {
+                    case Operation.And:
+                        writeLog(tempOutFile, "At least one device is not available.", true);
+                        break;
+                    case Operation.Or:
+                        writeLog(tempOutFile, "All devices are not available.", true);
+                        break;
+                    default:
+                        throw new Exception("Operation '" + operation + "' is not supported.");
+                }
+
+                // Set mode based on provided value
+                writeLog(tempOutFile, "Setting camera to '" + if_false + "' mode.", true);
+                setMode(if_false);
+            }
+        }
+
         public void login(string ulo_host, string username, string password)
         {
             // Workaround for invalid certificate
@@ -568,8 +754,7 @@ namespace ULOControls
             {
                 mediafilename_adjusted = regexLogin.Replace(mediafilename, "snapshot.jpg");
             }
-
-            //Console.WriteLine("Original: '" + mediafilename + "'; Adjusted: '" + mediafilename_adjusted + "';");
+            
             return mediafilename_adjusted;
         }
 
