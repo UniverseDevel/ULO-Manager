@@ -38,8 +38,8 @@ namespace ULOController
             public const string CurrentSnapshot = "currentsnapshot";
             public const string DownloadVideos = "downloadvideos";
             public const string DownloadSnapshots = "downloadsnapshots";
-            public const string CheckAvailability = "checkavailability";
             public const string TestAvailability = "testavailability";
+            public const string CheckAvailability = "checkavailability";
         }
 
         public class DeletePeriodMap

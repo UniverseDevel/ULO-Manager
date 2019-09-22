@@ -218,118 +218,130 @@ namespace ULOControls
 
         public void checkAvailability(string if_true, string if_false, string operation, string host1, string host2, string host3, string host4, string host5)
         {
-            // Check for device availability and set proper mode
-            writeLog(tempOutFile, "", true);
-            writeLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
+            try
+            {
+                // Check for device availability and set proper mode
+                writeLog(tempOutFile, "", true);
+                writeLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
 
-            string[] hosts = new string[] { };
-            bool result = false;
-            bool result_step = false;
-
-            switch (operation)
-            {
-                case Operation.And:
-                    result_step = true;
-                    break;
-                case Operation.Or:
-                    result_step = false;
-                    break;
-                default:
-                    throw new Exception("Operation '" + operation + "' is not supported.");
-            }
-
-            if (host1 != String.Empty)
-            {
-                Array.Resize(ref hosts, hosts.Length + 1);
-                hosts[hosts.Length - 1] = host1;
-            }
-            if (host2 != String.Empty)
-            {
-                Array.Resize(ref hosts, hosts.Length + 1);
-                hosts[hosts.Length - 1] = host2;
-            }
-            if (host3 != String.Empty)
-            {
-                Array.Resize(ref hosts, hosts.Length + 1);
-                hosts[hosts.Length - 1] = host3;
-            }
-            if (host4 != String.Empty)
-            {
-                Array.Resize(ref hosts, hosts.Length + 1);
-                hosts[hosts.Length - 1] = host4;
-            }
-            if (host5 != String.Empty)
-            {
-                Array.Resize(ref hosts, hosts.Length + 1);
-                hosts[hosts.Length - 1] = host5;
-            }
-
-            foreach (string host in hosts)
-            {
-                result = ping(host, false);
-
-                if (configuration.ShowPingResults)
-                {
-                    writeLog(tempOutFile, "Host:                    " + host, true);
-                    writeLog(tempOutFile, "Operation:               " + operation, true);
-                    writeLog(tempOutFile, "Result:                  " + result, true);
-                    writeLog(tempOutFile, "Result step before eval: " + result_step, true);
-                }
+                string[] hosts = new string[] { };
+                bool result = false;
+                bool result_step = false;
 
                 switch (operation)
                 {
                     case Operation.And:
-                        if (result && result_step) { result_step = true; } else { result_step = false; }
+                        result_step = true;
                         break;
                     case Operation.Or:
-                        if (result || result_step) { result_step = true; } else { result_step = false; }
+                        result_step = false;
                         break;
                     default:
                         throw new Exception("Operation '" + operation + "' is not supported.");
                 }
 
-                if (configuration.ShowPingResults)
+                if (host1 != String.Empty)
                 {
-                    writeLog(tempOutFile, "Result step after eval:  " + result_step, true);
-                    writeLog(tempOutFile, "===============================================", true);
+                    Array.Resize(ref hosts, hosts.Length + 1);
+                    hosts[hosts.Length - 1] = host1;
+                }
+                if (host2 != String.Empty)
+                {
+                    Array.Resize(ref hosts, hosts.Length + 1);
+                    hosts[hosts.Length - 1] = host2;
+                }
+                if (host3 != String.Empty)
+                {
+                    Array.Resize(ref hosts, hosts.Length + 1);
+                    hosts[hosts.Length - 1] = host3;
+                }
+                if (host4 != String.Empty)
+                {
+                    Array.Resize(ref hosts, hosts.Length + 1);
+                    hosts[hosts.Length - 1] = host4;
+                }
+                if (host5 != String.Empty)
+                {
+                    Array.Resize(ref hosts, hosts.Length + 1);
+                    hosts[hosts.Length - 1] = host5;
+                }
+
+                foreach (string host in hosts)
+                {
+                    result = ping(host, false);
+
+                    if (configuration.ShowPingResults)
+                    {
+                        writeLog(tempOutFile, "Host:                    " + host, true);
+                        writeLog(tempOutFile, "Operation:               " + operation, true);
+                        writeLog(tempOutFile, "Result:                  " + result, true);
+                        writeLog(tempOutFile, "Result step before eval: " + result_step, true);
+                    }
+
+                    switch (operation)
+                    {
+                        case Operation.And:
+                            if (result && result_step) { result_step = true; } else { result_step = false; }
+                            break;
+                        case Operation.Or:
+                            if (result || result_step) { result_step = true; } else { result_step = false; }
+                            break;
+                        default:
+                            throw new Exception("Operation '" + operation + "' is not supported.");
+                    }
+
+                    if (configuration.ShowPingResults)
+                    {
+                        writeLog(tempOutFile, "Result step after eval:  " + result_step, true);
+                        writeLog(tempOutFile, "===============================================", true);
+                    }
+                }
+
+                if (result_step)
+                {
+                    switch (operation)
+                    {
+                        case Operation.And:
+                            writeLog(tempOutFile, "All devices are available.", true);
+                            break;
+                        case Operation.Or:
+                            writeLog(tempOutFile, "At least one device is available.", true);
+                            break;
+                        default:
+                            throw new Exception("Operation '" + operation + "' is not supported.");
+                    }
+
+                    // Set mode based on provided value
+                    writeLog(tempOutFile, "Setting camera to '" + if_true + "' mode.", true);
+                    setMode(if_true);
+                }
+                else
+                {
+                    switch (operation)
+                    {
+                        case Operation.And:
+                            writeLog(tempOutFile, "At least one device is not available.", true);
+                            break;
+                        case Operation.Or:
+                            writeLog(tempOutFile, "All devices are not available.", true);
+                            break;
+                        default:
+                            throw new Exception("Operation '" + operation + "' is not supported.");
+                    }
+
+                    // Set mode based on provided value
+                    writeLog(tempOutFile, "Setting camera to '" + if_false + "' mode.", true);
+                    setMode(if_false);
                 }
             }
-
-            if (result_step)
-            {
-                switch (operation)
+            catch (Exception ex) {
+                try
                 {
-                    case Operation.And:
-                        writeLog(tempOutFile, "All devices are available.", true);
-                        break;
-                    case Operation.Or:
-                        writeLog(tempOutFile, "At least one device is available.", true);
-                        break;
-                    default:
-                        throw new Exception("Operation '" + operation + "' is not supported.");
+                    setMode(if_false);
                 }
+                catch (Exception exi) { }
 
-                // Set mode based on provided value
-                writeLog(tempOutFile, "Setting camera to '" + if_true + "' mode.", true);
-                setMode(if_true);
-            }
-            else
-            {
-                switch (operation)
-                {
-                    case Operation.And:
-                        writeLog(tempOutFile, "At least one device is not available.", true);
-                        break;
-                    case Operation.Or:
-                        writeLog(tempOutFile, "All devices are not available.", true);
-                        break;
-                    default:
-                        throw new Exception("Operation '" + operation + "' is not supported.");
-                }
-
-                // Set mode based on provided value
-                writeLog(tempOutFile, "Setting camera to '" + if_false + "' mode.", true);
-                setMode(if_false);
+                throw;
             }
         }
 
@@ -610,7 +622,7 @@ namespace ULOControls
                 {
                     if (stop_processing)
                     {
-                        throw new Exception(ex.Message);
+                        throw;
                     }
                     fileStats.failed = 1;
                     writeLog(tempOutFile, "Failed. (Error: " + ex.Message + ")", true);
