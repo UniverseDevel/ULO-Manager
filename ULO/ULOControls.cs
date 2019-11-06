@@ -1826,6 +1826,9 @@ namespace ULOControls
 
                 switch (result)
                 {
+                    case 5:
+                        error_msg = "Error connecting to remote share due to access denied (code: '" + result + "').";
+                        break;
                     case 53:
                         error_msg = "Error connecting to remote share due to bad network path (code: '" + result + "').";
                         break;
