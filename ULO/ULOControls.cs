@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace ULOControls
 {
@@ -539,6 +540,7 @@ namespace ULOControls
             }
 
             // Get list of folders
+            // index = callAPI("/api/v1/files/media", "GET", "", "$.files.[*].files"); // TODO: JSON to string array
             string response = httpCall(host + "/media/", "GET", String.Empty, BearerAuth(token));
             index = response.Split(new string[] { "<a " }, StringSplitOptions.None);
             regex = new Regex(@"(\/media\/\d+/)");
@@ -620,12 +622,31 @@ namespace ULOControls
                 }
                 catch (Exception ex)
                 {
+                    fileStats.failed = 1;
+                    writeLog(tempOutFile, "Failed. (Error: " + ex.Message.Trim() + ")", true);
+
                     if (stop_processing)
                     {
                         throw;
                     }
-                    fileStats.failed = 1;
-                    writeLog(tempOutFile, "Failed. (Error: " + ex.Message + ")", true);
+                    else
+                    {
+                        string errorOutput = String.Empty;
+                        errorOutput += DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine;
+                        errorOutput += "HelpLink   = " + ex.HelpLink + Environment.NewLine;
+                        errorOutput += "Message    = " + ex.Message + Environment.NewLine;
+                        errorOutput += "Source     = " + ex.Source + Environment.NewLine;
+                        errorOutput += "StackTrace = " + ex.StackTrace + Environment.NewLine;
+                        errorOutput += "TargetSite = " + ex.TargetSite + Environment.NewLine;
+
+                        if (configuration.showTrace)
+                        {
+                            Console.WriteLine(String.Empty);
+                            Console.WriteLine(errorOutput);
+                        }
+
+                        writeLog(tempErrFile, errorOutput, false, true);
+                    }
                 }
 
                 totalStats.fileSize = totalStats.fileSize + fileStats.fileSize;
@@ -1380,17 +1401,43 @@ namespace ULOControls
             }
         }
 
+        private class WebClientWithTimeout : WebClient
+        {
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                WebRequest wr = base.GetWebRequest(address);
+                wr.Timeout = 5000; // timeout in milliseconds (ms)
+                return wr;
+            }
+        }
+
         private string downloadFile(string url, string authorization)
         {
             string destination = Path.GetTempFileName();
 
-            using (WebClient client = new WebClient())
+            using (WebClient client = new WebClientWithTimeout())
             {
                 if (authorization != String.Empty)
                 {
                     client.Headers.Add("Authorization", authorization);
                 }
+                Stream stream = client.OpenRead(host + url);
+                Int64 web_file_size = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
                 client.DownloadFile(host + url, destination);
+                Int64 local_file_size = new FileInfo(destination).Length;
+                stream.Close();
+
+                // Check if file was downloaded correctly
+                if (web_file_size != local_file_size)
+                {
+                    try
+                    {
+                        File.Delete(destination);
+                    }
+                    catch (Exception ex) { }
+
+                    throw new Exception("Downloaded file size does not match original file size. (Original: " + web_file_size + "; Downloaded: " + local_file_size + ")");
+                }
             }
 
             return destination;
