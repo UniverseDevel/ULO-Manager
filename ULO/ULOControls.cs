@@ -522,9 +522,9 @@ namespace ULOControls
             Regex regex = null;
             Match match = null;
             string[] index = new string[] { };
-            string[] folders = new string[] { };
             string[] mediafiles = new string[] { };
             string mediatype_extension = null;
+            string response = String.Empty;
 
             // Set values based on mediatype
             switch (mediatype)
@@ -540,34 +540,15 @@ namespace ULOControls
             }
 
             // Get list of folders
-            // index = callAPI("/api/v1/files/media", "GET", "", "$.files.[*].files"); // TODO: JSON to string array
-            string response = httpCall(host + "/media/", "GET", String.Empty, BearerAuth(token));
-            index = response.Split(new string[] { "<a " }, StringSplitOptions.None);
-            regex = new Regex(@"(\/media\/\d+/)");
+            index = getJsonStringArray(callAPI("/api/v1/files/media", "GET", "", "$"), "$.files.[*].files");
+            regex = new Regex(@"(media\/\d+/video_\d+_\d+." + mediatype_extension + ")");
             foreach (string part in index)
             {
                 match = regex.Match(part);
                 if (match.Success)
                 {
-                    Array.Resize(ref folders, folders.Length + 1);
-                    folders[folders.Length - 1] = match.Value;
-                }
-            }
-
-            // Get list of media files
-            foreach (string folder in folders)
-            {
-                response = httpCall(host + folder, "GET", String.Empty, BearerAuth(token));
-                index = response.Split(new string[] { "<a " }, StringSplitOptions.None);
-                regex = new Regex(@"(\/media\/\d+/video_\d+_\d+." + mediatype_extension + ")");
-                foreach (string part in index)
-                {
-                    match = regex.Match(part);
-                    if (match.Success)
-                    {
-                        Array.Resize(ref mediafiles, mediafiles.Length + 1);
-                        mediafiles[mediafiles.Length - 1] = match.Value;
-                    }
+                    Array.Resize(ref mediafiles, mediafiles.Length + 1);
+                    mediafiles[mediafiles.Length - 1] = match.Value;
                 }
             }
 
@@ -1277,6 +1258,16 @@ namespace ULOControls
             }
         }
 
+        private string[] getJsonStringArray(string json, string path)
+        {
+            return getJson(json, path).ToObject<string[]>();
+        }
+
+        private int[] getJsonIntArray(string json, string path)
+        {
+            return getJson(json, path).ToObject<int[]>();
+        }
+
         private string getJsonString(string json, string path)
         {
             return (string)getJson(json, path);
@@ -1871,40 +1862,24 @@ namespace ULOControls
             {
                 string error_msg = String.Empty;
 
-                switch (result)
+                try
                 {
-                    case 5:
-                        error_msg = "Error connecting to remote share due to access denied (code: '" + result + "').";
-                        break;
-                    case 53:
-                        error_msg = "Error connecting to remote share due to bad network path (code: '" + result + "').";
-                        break;
-                    case 54:
-                        error_msg = "Error connecting to remote share due to busy network (code: '" + result + "').";
-                        break;
-                    case 65:
-                        error_msg = "Error connecting to remote share due to denied network access (code: '" + result + "').";
-                        break;
-                    case 86:
-                        error_msg = "Error connecting to remote share due to invalid password (code: '" + result + "').";
-                        break;
-                    case 1219:
-                        error_msg = "Error connecting to remote share due to connection already existing (code: '" + result + "'). Hint: If you use same connection within windows, this error will occure. If you use IP in windows, try using host in this connection and vice versa.";
-                        break;
-                    case 2202:
-                        error_msg = "Error connecting to remote share due to invalid username (code: '" + result + "').";
-                        break;
-                    default:
-                        error_msg = "Error connecting to remote share with unknown code " + result + ".";
-                        break;
+                    string hint = String.Empty;
+
+                    switch (result)
+                    {
+                        case 1219:
+                            hint = " Hint: If you use same connection within windows, this error will occure. If you use IP in windows, try using host in this connection and vice versa.";
+                            break;
+                    }
+
+                    error_msg = new Win32Exception(result).Message + ". (Code: " + result + ")" + hint;
                 }
-                /*
-                Private Const ERROR_BAD_NETPATH = 53
-                Private Const ERROR_NETWORK_ACCESS_DENIED = 65
-                Private Const ERROR_INVALID_PASSWORD = 86
-                Private Const ERROR_NETWORK_BUSY = 54
-                Const ERROR_BAD_USERNAME = 2202
-                */
+                catch (Exception ex)
+                {
+                    error_msg = "Error connecting to remote share with unknown code " + result + ".";
+                }
+
                 throw new Win32Exception(result, error_msg);
             }
         }
