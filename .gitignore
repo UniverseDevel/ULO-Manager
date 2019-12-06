@@ -5,3 +5,8 @@
 /.vs/ULO Controller/v15
 /ULOController/bin/Release/ULOControls.err
 /ULOController/bin/Release/ULOControls.out
+/ULOController/bin/Release/ULOControls.conf
+/ULOController/bin/Release/Newtonsoft.Json.xml
+/ULOController/bin/Release/AForge.xml
+/ULOController/bin/Release/AForge.Video.xml
+/ULOController/bin/Release/AForge.dll

@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace ULOControls
 {
@@ -53,11 +52,14 @@ namespace ULOControls
         public string currentVersion = String.Empty;
         public int ping_timeout = 5000;
 
+        public Uri uri = null;
+
         public Configuration configuration = new Configuration();
 
         private void clear()
         {
             //response = String.Empty;
+            uri = null;
             host = String.Empty;
             token = String.Empty;
             session_start = DateTime.Now;
@@ -82,7 +84,7 @@ namespace ULOControls
             public bool showArguments = readConfigBool(ConfigParams.ShowArguments, false);
             public bool showTrace = readConfigBool(ConfigParams.ShowTrace, false);
             public bool showSkipped = readConfigBool(ConfigParams.ShowSkipped, false);
-            public bool ShowPingResults = readConfigBool(ConfigParams.ShowPingResults, false);
+            public bool showPingResults = readConfigBool(ConfigParams.ShowPingResults, false);
             public bool suppressLogHandling = readConfigBool(ConfigParams.SuppressLogHandling, false);
         }
 
@@ -272,7 +274,7 @@ namespace ULOControls
                 {
                     result = ping(host, false);
 
-                    if (configuration.ShowPingResults)
+                    if (configuration.showPingResults)
                     {
                         writeLog(tempOutFile, "Host:                    " + host, true);
                         writeLog(tempOutFile, "Operation:               " + operation, true);
@@ -292,7 +294,7 @@ namespace ULOControls
                             throw new Exception("Operation '" + operation + "' is not supported.");
                     }
 
-                    if (configuration.ShowPingResults)
+                    if (configuration.showPingResults)
                     {
                         writeLog(tempOutFile, "Result step after eval:  " + result_step, true);
                         writeLog(tempOutFile, "===============================================", true);
@@ -357,7 +359,8 @@ namespace ULOControls
             {
                 ulo_host = "https://" + ulo_host;
             }
-            host = "https://" + new Uri(ulo_host).Host;
+            uri = new Uri(ulo_host);
+            host = "https://" + uri.Host;
             string response = httpCall(host + "/api/v1/login", "POST", "{ \"iOSAgent\": false }", BasicAuth(username, password));
             session_start = DateTime.Now;
             token = getJsonString(response, "token");
@@ -1819,6 +1822,17 @@ namespace ULOControls
             {
                 return String.Empty;
             }
+        }
+
+        public void writeConfig()
+        {
+            // Generate configuration file contents
+            string cfgText = String.Empty;
+            foreach (FieldInfo fieldInfo in configuration.GetType().GetFields())
+            {
+                cfgText += fieldInfo.Name + "=" + fieldInfo.GetValue(configuration).ToString().ToLower() + Environment.NewLine;
+            }
+            File.WriteAllText(confFile, cfgText);
         }
 
         private static void getStackCallers()
