@@ -14,10 +14,10 @@ arg5=$9
 usage () {
         echo "Usage: ./ulo.sh <ulo_host> <ulo_user> <ulo_pass> <action> <arg 1> <arg N>"
         echo "Action:"
-        echo "  callapi <API path> <call method [GET|PUT|POST|DELETE|...]> <body this might be needed by API but is undocumented> <jq JSON parse or . for all>"
-        echo "  currentsnapshot <path where to download>"
+		echo "  currentsnapshot <path where to download>"
         echo "  downloadvideos <path where to download>"
         echo "  downloadsnapshots <path where to download>"
+		echo "  callapi <API path> <call method [GET|PUT|POST|DELETE|...]> <body this might be needed by API but is undocumented> <JQ JSON filter or . for all>"
 }
 
 if [[ -z "${action}" ]]; then
@@ -31,26 +31,37 @@ if [[ "$?" == "1" ]]; then
         exit 1
 fi
 
+which wget 2>&1 1>/dev/null
+if [[ "$?" == "1" ]]; then
+        echo "ERROR: WGET binary is not installed."
+        exit 1
+fi
+
 auth="Basic $(echo -n ${username}:${password} | base64)"
 password="******" # We don't have to hold password anymore
 output=""
 
 # Usage:
-# Online JQ tester: https://jqplay.org/
-# callapi "${path}" "${method}" "${body}" "${json}"
+# callapi "${path}" "${method}" "${body}" "${json_filter}"
 # echo "${output}"
+#
+# json_filter - filter in JSON structure, dot (.) can be used to output everything
+#               otherwise filter is constructed from element names connected via pipe (|).
+#               Detailed documentation how to use syntax in json_filter is here:
+#               https://stedolan.github.io/jq/manual/#Basicfilters
+#               and online evaluator is here: https://jqplay.org/
 callapi () {
         local path=$1
         local method=$2
         local body=$3
-        local json=$4
+        local json_filter=$4
         local web_output=$(curl -s "http://${host}${path}" -X ${method} -d "${body}" -H "Content-Type: application/json" -H "Authorization: ${auth}")
 
         jq -e . >/dev/null 2>&1 <<<"${web_output}" # Check if returned value is valid JSON
         if [[ "$?" != "0" ]]; then
                 output="${web_output}"
         else
-                output=$(echo "${web_output}" | jq -r "${json}")
+                output=$(echo "${web_output}" | jq -r "${json_filter}")
         fi
 }
 
@@ -85,7 +96,6 @@ login
 
 case "${action}" in
         callapi)
-                # User call
                 callapi "${arg1}" "${arg2}" "${arg3}" "${arg4}"
                 echo "${output}"
                 ;;

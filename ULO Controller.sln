@@ -13,6 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{E1271B02-3AE
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shell script", "Shell script", "{B4D5C35E-090A-42AD-8D79-A7C4B1EF0209}"
+	ProjectSection(SolutionItems) = preProject
+		ULO\ulo.sh = ULO\ulo.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -211,6 +211,13 @@ namespace ULOController
             Console.WriteLine(@"           8. host5 - hostname of device you want to check if available");
             Console.WriteLine(@"                      (optional)");
             Console.WriteLine(@"");
+            Console.WriteLine(@"   " + Actions.CallAPI + @" - Call API with custom parameters");
+            Console.WriteLine(@"       Arguments:");
+            Console.WriteLine(@"           1. api path - path to API module");
+            Console.WriteLine(@"           2. method - call method [GET|PUT|POST|DELETE|...]");
+            Console.WriteLine(@"           3. body - body this might be needed by API but is undocumented");
+            Console.WriteLine(@"           4. json path - JSON path or $ for all");
+            Console.WriteLine(@"");
             Console.WriteLine(@"Examples:");
             Console.WriteLine(@"    - Download video files");
             Console.WriteLine(@"        ./" + product_filename + @" ""192.168.0.10"" ""test"" ""123!Abc"" ""downloadvideos""");

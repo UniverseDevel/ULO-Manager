@@ -153,6 +153,13 @@ Actions:
            8. host5 - hostname of device you want to check if available
                       (optional)
 
+   callapi - Call API with custom parameters
+       Arguments:
+           1. api path - path to API module
+           2. method - call method [GET|PUT|POST|DELETE|...]
+           3. body - body this might be needed by API but is undocumented
+           4. json path - JSON path or $ for all
+
 Examples:
     - Download video files
         ./ULOController "192.168.0.10" "test" "123!Abc" "downloadvideos"
