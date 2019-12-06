@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -540,7 +541,7 @@ namespace ULOControls
             }
 
             // Get list of folders
-            index = getJsonStringArray(callAPI("/api/v1/files/media", "GET", "", "$"), "$.files.[*].files");
+            index = getJsonStringArray(callAPI("/api/v1/files/media", "GET", "", "$"), "$.files[*].files[*]");
             regex = new Regex(@"(media\/\d+/video_\d+_\d+." + mediatype_extension + ")");
             foreach (string part in index)
             {
@@ -548,7 +549,7 @@ namespace ULOControls
                 if (match.Success)
                 {
                     Array.Resize(ref mediafiles, mediafiles.Length + 1);
-                    mediafiles[mediafiles.Length - 1] = match.Value;
+                    mediafiles[mediafiles.Length - 1] = "/" + match.Value;
                 }
             }
 
@@ -1240,52 +1241,75 @@ namespace ULOControls
             return (Math.Sign(byteCount) * num).ToString() + " " + suf[place];
         }
 
-        private JToken getJson(string json, string path)
+        private IEnumerable<JToken> getJson(string json, string path)
         {
-            return JObject.Parse(json).SelectToken(path, false);
+            return JObject.Parse(json).SelectTokens(path, false);
         }
 
         private string getJsonObject(string json, string path)
         {
-            JToken _token = getJson(json, path);
-            if (_token == null)
+            IEnumerable<JToken> _tokens = getJson(json, path);
+
+            if (_tokens == null)
             {
                 return String.Empty;
             }
             else
             {
-                return _token.ToString();
+                IEnumerator<JToken> iter = _tokens.GetEnumerator();
+                iter.MoveNext();
+                return iter.Current.ToString();
             }
         }
 
         private string[] getJsonStringArray(string json, string path)
         {
-            return getJson(json, path).ToObject<string[]>();
+            string[] cobject = new string[] { };
+            foreach (JToken jobject in getJson(json, path))
+            {
+                Array.Resize(ref cobject, cobject.Length + 1);
+                cobject[cobject.Length - 1] = Convert.ToString(jobject);
+            }
+            return cobject;
         }
 
         private int[] getJsonIntArray(string json, string path)
         {
-            return getJson(json, path).ToObject<int[]>();
+            int[] cobject = new int[] { };
+            foreach (JToken jobject in getJson(json, path))
+            {
+                Array.Resize(ref cobject, cobject.Length + 1);
+                cobject[cobject.Length - 1] = Convert.ToInt32(jobject);
+            }
+            return cobject;
         }
 
         private string getJsonString(string json, string path)
         {
-            return (string)getJson(json, path);
+            IEnumerator<JToken> iter = getJson(json, path).GetEnumerator();
+            iter.MoveNext();
+            return Convert.ToString(iter.Current);
         }
 
         private DateTime getJsonDateTime(string json, string path)
         {
-            return Convert.ToDateTime(getJson(json, path));
+            IEnumerator<JToken> iter = getJson(json, path).GetEnumerator();
+            iter.MoveNext();
+            return Convert.ToDateTime(iter.Current);
         }
 
         private int getJsonInt(string json, string path)
         {
-            return (int)getJson(json, path);
+            IEnumerator<JToken> iter = getJson(json, path).GetEnumerator();
+            iter.MoveNext();
+            return Convert.ToInt32(iter.Current);
         }
 
         private bool getJsonBool(string json, string path)
         {
-            return (bool)getJson(json, path);
+            IEnumerator<JToken> iter = getJson(json, path).GetEnumerator();
+            iter.MoveNext();
+            return Convert.ToBoolean(iter.Current);
         }
 
         private bool isJson(string text)
@@ -1452,7 +1476,7 @@ namespace ULOControls
              */
             if (json_path != String.Empty)
             {
-                output = getJsonObject(response, json_path);;
+                output = getJsonObject(response, json_path);
             }
 
             return output;
