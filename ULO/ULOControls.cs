@@ -1647,7 +1647,7 @@ namespace ULOControls
                         {
                             Directory.CreateDirectory(archivePath);
                         }
-                        File.Move(outFile, archivePath + "\\" + filesName + "_" + filesTimestamp + ".err");
+                        File.Move(errFile, archivePath + "\\" + filesName + "_" + filesTimestamp + ".err");
                     }
                 }
 
