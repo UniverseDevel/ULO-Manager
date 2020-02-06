@@ -9,7 +9,7 @@ arg1="${5}"
 arg2="${6}"
 arg3="${7}"
 arg4="${8}"
-arg5="${9}"
+#arg5="${9}"
 
 usage() {
   echo "Usage: ./ulo.sh <ulo_host> <ulo_user> <ulo_pass> <action> <arg 1> <arg N>"
@@ -25,12 +25,12 @@ if [[ -z "${action}" ]]; then
   exit 0
 fi
 
-if ! command -v jq 2>&1 1>/dev/null; then
+if ! command -v jq 1>/dev/null 2>&1; then
   echo "ERROR: JQ binary is not installed."
   exit 1
 fi
 
-if ! command -v wget 2>&1 1>/dev/null; then
+if ! command -v wget 1>/dev/null 2>&1; then
   echo "ERROR: WGET binary is not installed."
   exit 1
 fi
@@ -53,7 +53,9 @@ callapi() {
   local method="${2}"
   local body="${3}"
   local json_filter="${4}"
-  local web_output="$(curl -s "http://${host}${path}" -X "${method}" -d "${body}" -H "Content-Type: application/json" -H "Authorization: ${auth}")"
+  local web_output=""
+
+  web_output="$(curl -s "http://${host}${path}" -X "${method}" -d "${body}" -H "Content-Type: application/json" -H "Authorization: ${auth}")"
 
   # Check if returned value is valid JSON
   if ! jq -e . >/dev/null 2>&1 <<<"${web_output}"; then
@@ -79,7 +81,7 @@ downloadmedia() {
   local init="none"
 
   echo "${output}" | grep "${extension}" | while read -r video; do
-    video_path="$(realpath $(realpath "${path_to}")/$(dirname "${video}" | sed 's/media//'))"
+    video_path="$(realpath "$(realpath "${path_to}")/$(dirname "${video}" | sed 's/media//')")"
     if [[ "${init}" != "${video_path}" ]]; then
       echo "Storing media files to: ${video_path}"
       local init="${video_path}"
