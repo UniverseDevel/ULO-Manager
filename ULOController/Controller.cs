@@ -61,7 +61,6 @@ namespace ULOController
         {
             string usage = String.Empty;
             /* Length limit - mind the variables, their values and escape symbols */
-            /*                  |------------------------------------------------------------------------------| */
             usage += product_title + @" v" + product_version + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"Usage:" + Environment.NewLine;
@@ -274,7 +273,6 @@ namespace ULOController
             usage += @"      when at least one user is logged in to ULO no matter where." + Environment.NewLine;
             usage += @"    - In version 10.1308 and maybe earlier, ULO stores WiFi passwords in" + Environment.NewLine;
             usage += @"      plain text inside its system log which is accessible if requested." + Environment.NewLine;
-            /*                  |------------------------------------------------------------------------------| */
 
             return usage;
         }
@@ -631,8 +629,9 @@ namespace ULOController
 
         private static void exceptionHandler(Exception ex)
         {
+            string timestamp = DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]");
             string errorOutput = String.Empty;
-            errorOutput += DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine;
+            errorOutput += timestamp + Environment.NewLine;
             errorOutput += "HelpLink   = " + ex.HelpLink + Environment.NewLine;
             errorOutput += "Message    = " + ex.Message + Environment.NewLine;
             errorOutput += "Source     = " + ex.Source + Environment.NewLine;
@@ -644,8 +643,9 @@ namespace ULOController
                 Console.WriteLine(String.Empty);
                 Console.WriteLine(errorOutput);
             }
-            
+
             ulo.writeLog(ULO.tempErrFile, errorOutput, false, true);
+            ulo.writeLog(ULO.tempOutFile, timestamp + " ERROR: " + ex.Message, false, true);
 
             //throw ex;
         }

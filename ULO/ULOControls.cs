@@ -1909,6 +1909,9 @@ namespace ULOControls
                         case 1219:
                             hint = " Hint: If you use same connection within windows, this error will occure. If you use IP in windows, try using host in this connection and vice versa.";
                             break;
+                        case 1312:
+                            hint = " Hint: Windows is caching credentials after NFS connection that are no longer valid. Running tasks with NFS too often result in this error, once in a 30 minutes seems to be fine.";
+                            break;
                     }
 
                     error_msg = new Win32Exception(result).Message + ". (Code: " + result + ")" + hint;

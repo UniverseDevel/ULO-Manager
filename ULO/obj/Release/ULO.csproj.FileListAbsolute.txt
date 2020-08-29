@@ -5,4 +5,5 @@ W:\Visual Studio\Projects\ULO Controller\ULO\bin\Release\ULOControls.dll
 W:\Visual Studio\Projects\ULO Controller\ULO\bin\Release\ULOControls.pdb
 W:\Visual Studio\Projects\ULO Controller\ULO\obj\Release\ULOControls.dll
 W:\Visual Studio\Projects\ULO Controller\ULO\obj\Release\ULOControls.pdb
-W:\Visual Studio\Projects\ULO Controller\ULO\obj\Release\ULO.csprojResolveAssemblyReference.cache
+W:\Visual Studio\Projects\ULO Controller\ULO\obj\Release\ULO.csprojAssemblyReference.cache
+W:\Visual Studio\Projects\ULO Controller\ULO\obj\Release\ULO.csproj.CopyComplete
