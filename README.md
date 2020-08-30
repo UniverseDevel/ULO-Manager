@@ -4,10 +4,9 @@ Some time ago I have been playing around with ULO to create C# library that will
 
 Ok, now when story time is over, lets get to technicalities.
 
-GitHub project: https://github.com/UniverseDevel/ULO-Controller
-ULO Controller application: https://github.com/UniverseDevel/ULO-Controller/blob/master/ULOController/bin/Release
-ULO library: https://github.com/UniverseDevel/ULO-Controller/tree/master/ULO/bin/Release
-ULO shell script: https://github.com/UniverseDevel/ULO-Controller/blob/master/ULO/ulo.sh
+ULO Controller application: [ULOController/bin/Release](ULOController/bin/Release)
+ULO library: [ULO/bin/Release](ULO/bin/Release)
+ULO shell script: [ULO/ulo.sh](ULO/ulo.sh)
 
 Bare in mind, that I am learning C# and this is not a professional product and there is no warranty that it will work. Using this tool is purely at your own risk. Also I have to state that I am in no way affialiated with Mu Design Sàrl. Also, this tool is not aimed for beginner users, it might require a little knowledge of C#, JSONPath, API, networking or Windows CMD usage.
 
@@ -40,8 +39,8 @@ There is also advanced function 'callapi' which allows you to directly call ULOs
 
 ./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/media' 'GET' '' '.'
 
-More info about JQ JSON Filter can be found here: https://stedolan.github.io/jq/manual/#Basicfilters
-Online evaluator is here: https://jqplay.org/
+More info about JQ JSON Filter can be found here: [https://stedolan.github.io/jq/manual/#Basicfilters](https://stedolan.github.io/jq/manual/#Basicfilters)
+Online evaluator is here: [https://jqplay.org/](https://jqplay.org/)
 Simply use dot (.) for full output if you are not sure.
 
 == How to use ULO Controller library
@@ -84,8 +83,8 @@ There is also advanced function 'callapi' which allows you to directly call ULOs
 ./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/delete?removeType=1' 'DELETE' '' '$'
 ./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/system/log' 'GET' '' '$'
 
-More info about JSON Path can be found here: https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
-Online evaluator is here: https://jsonpath.com/
+More info about JSON Path can be found here: [https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html](https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html)
+Online evaluator is here: [https://jsonpath.com/](https://jsonpath.com/)
 Simply use dolar sign ($) for full output if you are not sure.
 
 == API notes
