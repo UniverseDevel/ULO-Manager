@@ -91,29 +91,29 @@ Simply use dolar sign ($) for full output if you are not sure.
 
 Here is also few API URLs that I snatched and there are many, many more when using ULO upside down:
 
-http://192.168.0.10/api/v1/login - POST - Login (created Bearer token to be used for all other calls)
-http://192.168.0.10/api/v1/time - PUT - ULOs current time
-http://192.168.0.10/api/v1/state - GET - Power information
-http://192.168.0.10/api/v1/accessEverywhere - GET - ULO device information
-http://192.168.0.10/api/v1/backgroundImage - POST - Get current snapshot from ULO to be used as background
-http://192.168.0.10/api/v1/config - GET - List of configured parameters
-http://192.168.0.10/api/v1/config/language/languages - GET - List of available languages
-http://192.168.0.10/api/v1/users - GET - List of all users
-http://192.168.0.10/api/v1/config/time/countries - GET - List of avaialble countries
-http://192.168.0.10/api/v1/config/time/zones - GET - List of available time zones
-http://192.168.0.10/api/v1/config/wifi/networks - GET - Available WiFi networks
-http://192.168.0.10/api/v1/system/log - GET - System log
-http://192.168.0.10/api/v1/users/1 - GET - Information about user with ID 1 (usually Admin)
-http://192.168.0.10/api/v1/files/stats - GET - Statistic about stoarge
-http://192.168.0.10/api/v1/interface/CheckVersionOnCloud - POST - Initiate check for update
-http://192.168.0.10/api/v1/files/media - GET - Get list of all media files in all dierctories
-http://192.168.0.10/api/v1/files/media?type=snapshot - GET - Get list of media files in all dierctories filtered to snapshots
-http://192.168.0.10/api/v1/files/media?type=video - GET - Get list of media files in all dierctories filtered to video
-http://192.168.0.10/api/v1/files/media/20190623 - GET - Get list of all media files in directory for specific day
-http://192.168.0.10/api/v1/files/media/20190623/snapshotCount - GET - Number of snapshots in this path
-http://192.168.0.10/api/v1/files/delete?removeType=6 - DELETE - Delete files on local storage - 0: Oldest day; 1: Oldest week; 2: Oldest year; 3: Last day; 4: Last week; 5: Last year; 6: All time
-ws://192.168.0.10/api/v1/live - Binary stream - Live feed, currently unsupported by Controller
-http://192.168.0.10/api/v1/logout - POST - Logout (invalidate Bearer token used)
+http://192.168.0.10/api/v1/login - POST - Login (created Bearer token to be used for all other calls)  
+http://192.168.0.10/api/v1/time - PUT - ULOs current time  
+http://192.168.0.10/api/v1/state - GET - Power information  
+http://192.168.0.10/api/v1/accessEverywhere - GET - ULO device information  
+http://192.168.0.10/api/v1/backgroundImage - POST - Get current snapshot from ULO to be used as background  
+http://192.168.0.10/api/v1/config - GET - List of configured parameters  
+http://192.168.0.10/api/v1/config/language/languages - GET - List of available languages  
+http://192.168.0.10/api/v1/users - GET - List of all users  
+http://192.168.0.10/api/v1/config/time/countries - GET - List of avaialble countries  
+http://192.168.0.10/api/v1/config/time/zones - GET - List of available time zones  
+http://192.168.0.10/api/v1/config/wifi/networks - GET - Available WiFi networks  
+http://192.168.0.10/api/v1/system/log - GET - System log  
+http://192.168.0.10/api/v1/users/1 - GET - Information about user with ID 1 (usually Admin)  
+http://192.168.0.10/api/v1/files/stats - GET - Statistic about stoarge  
+http://192.168.0.10/api/v1/interface/CheckVersionOnCloud - POST - Initiate check for update  
+http://192.168.0.10/api/v1/files/media - GET - Get list of all media files in all dierctories  
+http://192.168.0.10/api/v1/files/media?type=snapshot - GET - Get list of media files in all dierctories filtered to snapshots  
+http://192.168.0.10/api/v1/files/media?type=video - GET - Get list of media files in all dierctories filtered to video  
+http://192.168.0.10/api/v1/files/media/20190623 - GET - Get list of all media files in directory for specific day  
+http://192.168.0.10/api/v1/files/media/20190623/snapshotCount - GET - Number of snapshots in this path  
+http://192.168.0.10/api/v1/files/delete?removeType=6 - DELETE - Delete files on local storage - 0: Oldest day; 1: Oldest week; 2: Oldest year; 3: Last day; 4: Last week; 5: Last year; 6: All time  
+ws://192.168.0.10/api/v1/live - Binary stream - Live feed, currently unsupported by Controller  
+http://192.168.0.10/api/v1/logout - POST - Logout (invalidate Bearer token used)  
 
 Hope this stuff helps at least somone.
 
