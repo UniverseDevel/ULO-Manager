@@ -29,9 +29,9 @@ Basic usage:
 ./ulo.sh <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>
 
 Here is the list of all commands in example how to use them:
-./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'currentsnapshot' './current'
-./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadsnapshots' './snapshot'
-./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadvideos' './video'
+./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'currentsnapshot' './current'  
+./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadsnapshots' './snapshot'  
+./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadvideos' './video'  
 
 There is also advanced function 'callapi' which allows you to directly call ULOs API and provides you with response:
 
@@ -55,33 +55,33 @@ Basic usage:
 
 Here is the list of all commands in example how to use them:
 
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getmode'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'setmode' 'standard'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'ispowered'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getbattery'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'iscard'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getcardspace'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getdiskspace'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'movetocard'
-./ULOController.exe '192.168.0.10' 'ulo_admin@example.com' 'uloAdminPassword123!' 'cleandiskspace' 'all'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadlog' 'nfs' '\\192.168.0.11\ulo\_logs' '480' 'nfs_user' 'nfsPassword123!'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'currentsnapshot' 'nfs' '\\192.168.0.11\ulo\_current' 'nfs_user' 'nfsPassword123!'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadvideos' 'nfs' '\\192.168.0.11\ulo\_videos' '1' '480' 'nfs_user' 'nfsPassword123!'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadsnapshots' 'nfs' '\\192.168.0.11\ulo\_snapshots' '1' '480' 'nfs_user' 'nfsPassword123!'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'testavailability' '192.168.0.1'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'checkavailability' 'standard' 'alert' 'or' '192.168.0.1' '192.168.0.2' '192.168.0.3' '192.168.0.4' '192.168.0.5'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getmode'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'setmode' 'standard'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'ispowered'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getbattery'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'iscard'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getcardspace'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getdiskspace'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'movetocard'  
+./ULOController.exe '192.168.0.10' 'ulo_admin@example.com' 'uloAdminPassword123!' 'cleandiskspace' 'all'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadlog' 'nfs' '\\192.168.0.11\ulo\_logs' '480' 'nfs_user' 'nfsPassword123!'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'currentsnapshot' 'nfs' '\\192.168.0.11\ulo\_current' 'nfs_user' 'nfsPassword123!'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadvideos' 'nfs' '\\192.168.0.11\ulo\_videos' '1' '480' 'nfs_user' 'nfsPassword123!'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadsnapshots' 'nfs' '\\192.168.0.11\ulo\_snapshots' '1' '480' 'nfs_user' 'nfsPassword123!'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'testavailability' '192.168.0.1'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'checkavailability' 'standard' 'alert' 'or' '192.168.0.1' '192.168.0.2' '192.168.0.3' '192.168.0.4' '192.168.0.5'  
 
 There is also advanced function 'callapi' which allows you to directly call ULOs API and provides you with response:
 
 ./ULOController.exe <ulo_host> <ulo_user> <ulo_pass> 'callapi' <API path> <call method [GET|PUT|POST|DELETE|...]> <body this might be needed by API but is undocumented> <JSON path or $ for all>
 
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/mode' 'GET' '' '$'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/state' 'GET' '' '$'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/THIS_DOES_NOT_EXIST' 'GET' '' ''
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/stats' 'GET' '' 'internal.freeMB'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/interface/CheckVersionOnCloud' 'POST' '{}' 'status'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/delete?removeType=1' 'DELETE' '' '$'
-./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/system/log' 'GET' '' '$'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/mode' 'GET' '' '$'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/state' 'GET' '' '$'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/THIS_DOES_NOT_EXIST' 'GET' '' ''  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/stats' 'GET' '' 'internal.freeMB'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/interface/CheckVersionOnCloud' 'POST' '{}' 'status'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/delete?removeType=1' 'DELETE' '' '$'  
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/system/log' 'GET' '' '$'  
 
 More info about JSON Path can be found here: [https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html](https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html)  
 Online evaluator is here: [https://jsonpath.com/](https://jsonpath.com/)  
