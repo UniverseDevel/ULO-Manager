@@ -111,7 +111,7 @@ namespace ULOController
                 tbOutput.Text = String.Empty;
                 try
                 {
-                    string execCmd = "'" + tbHost.Text + "' '" + tbUsername.Text + "' '" + tbPassword.Text + "' '" + cbAction.Items[cbAction.SelectedIndex].ToString() + "' '" + tbArg1.Text + "' '" + tbArg2.Text + "' '" + tbArg3.Text + "' '" + tbArg4.Text + "' '" + tbArg5.Text + "' '" + tbArg6.Text + "' '" + tbArg7.Text + "' '" + tbArg8.Text + "'";
+                    string execCmd = "\"" + tbHost.Text + "\" \"" + tbUsername.Text + "\" \"" + tbPassword.Text + "\" \"" + cbAction.Items[cbAction.SelectedIndex].ToString() + "\" \"" + tbArg1.Text + "\" \"" + tbArg2.Text + "\" \"" + tbArg3.Text + "\" \"" + tbArg4.Text + "\" \"" + tbArg5.Text + "\" \"" + tbArg6.Text + "\" \"" + tbArg7.Text + "\" \"" + tbArg8.Text + "\"";
                     Process process = new Process();
                     process.StartInfo.FileName = product_location + @"\" + product_filename + ".exe";
                     process.StartInfo.Arguments = execCmd;

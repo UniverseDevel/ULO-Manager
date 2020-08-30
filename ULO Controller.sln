@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ULOController", "ULOController\ULOController.csproj", "{B0836722-573D-4D47-8FE9-414FBE812D4A}"
 EndProject
@@ -10,7 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{E1271B02-3AEF-4F93-9D55-A0D7D0925D17}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG = CHANGELOG
+		HELP_LIBRARY.md = HELP_LIBRARY.md
+		HELP_SHELL.md = HELP_SHELL.md
 		README.md = README.md
+		SECURITY_WARNING.md = SECURITY_WARNING.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shell script", "Shell script", "{B4D5C35E-090A-42AD-8D79-A7C4B1EF0209}"

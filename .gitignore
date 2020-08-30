@@ -10,3 +10,8 @@
 /ULOController/bin/Release/AForge.xml
 /ULOController/bin/Release/AForge.Video.xml
 /ULOController/bin/Release/AForge.dll
+/.idea
+/ULO/bin/Debug
+/ULO/obj/Debug
+/ULOController/bin/Debug
+/ULOController/obj/Debug

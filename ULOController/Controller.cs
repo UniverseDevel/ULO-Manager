@@ -326,7 +326,7 @@ namespace ULOController
                             {
                                 case Actions.DownloadLog:
                                     // Destination password
-                                    if (index == 8) { revised_output = password_stars; }
+                                    if (index == 9) { revised_output = password_stars; }
                                     break;
                                 case Actions.CurrentSnapshot:
                                     // Destination password

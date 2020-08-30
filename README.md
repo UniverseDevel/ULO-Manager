@@ -1,213 +1,124 @@
 ```
-ULO Controller v1.0.0.0
+Hello everyone,
 
-Usage:
-   ./ULOController <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>
+Some time ago I have been playing around with ULO to create C# library that will allow me to use ULOs API, which for now is still undocumented by author. The main reason for me was, to create a tool that will allow me to download video files from ULOs memory to my network storage, set ulo mode and all this to be an open source project for people to use. Once I found that files can be accessed from web, I know there is a way how to programatically access these files as well. From web browsers network monitor I was able to scrape a lot for API calls in the background to get a little idea, how ULO works behind the scenes. ULO seems to use OAuth 2.0 authentication which in exchange for username and password will return Bearer token which can be then used for all other calls into this API until logged out or timmed out. API seems to be REST API and uses JSON for most of its communication. Not only that but once you are logged in and session exists, you can access web files via apache file index. Once I had a working prototype, I started to play around and created whole solution for downloading, storing and upkeeping media files from ULO. Currently this library supports upload to NFS, FTP and storing on local filesystem as well. It is also possible to set retention to remove old media files. When I had working library like that, I decided that I will also create a little console binary that can use this library with as little effort as possible for such tool. My first problem with ULO (well, lets say major technical problem as there were many other minor issues) was, that it was turning alert mode off on its own and even support confirmed that this can happen when ULO reboots, but they don't have any complains from other users about this so they cannot confirm if this is an real issue, but they will look into it. This was year and a half ago and fix never came as the problem is happening till this day. Therefore, I used ULOs API to set correct mode based on availability of my phone on network via contoller binary and windows scheduler. I wish they had kept their promise and brought ULO as open platform, we would have fixed the problems on our own by now.
 
-Actions:
-   getmode - Get current ULO camera mode
-       Arguments:
-           None
+Ok, now when story time is over, lets get to technicalities.
 
-   setmode - Set ULO camera mode
-       Arguments:
-           1. mode - camera recording mode
-               a) standard - ULO awake and not recording
-               b) spy - ULO awake and recording
-               c) alert - ULO asleep and recording
+GitHub project: https://github.com/UniverseDevel/ULO-Controller
+ULO Controller application: https://github.com/UniverseDevel/ULO-Controller/blob/master/ULOController/bin/Release
+ULO library: https://github.com/UniverseDevel/ULO-Controller/tree/master/ULO/bin/Release
+ULO shell script: https://github.com/UniverseDevel/ULO-Controller/blob/master/ULO/ulo.sh
 
-   ispowered - Get info if ULO is powered by electricity from plug
-       Arguments:
-           None
+Bare in mind, that I am learning C# and this is not a professional product and there is no warranty that it will work. Using this tool is purely at your own risk. Also I have to state that I am in no way affialiated with Mu Design Sàrl. Also, this tool is not aimed for beginner users, it might require a little knowledge of C#, JSONPath, API, networking or Windows CMD usage.
 
-   getbattery - Get battery capacity
-       Arguments:
-           None
+All usernames, passwords or IP addresses below are examples and should not be concidered to be default or safe.
 
-   iscard - Get info if SD card is inserted into ULO
-       Arguments:
-           None
+== Security WARNING
 
-   getcardspace - Get SD card free capacity
-       Arguments:
-           None
+Before considering putting ULO into your network read this as a security warning.
 
-   getdiskspace - Get internal memory free capacity
-       Arguments:
-           None
+[SECURITY_WARNING.md](SECURITY_WARNING.md)
 
-   movetocard - Move files from internal memory to SD card
-       Arguments:
-           None
-                  NOTE: ULO cannot record during this activity.
+== How to use ULO shell script
 
-   cleandiskspace - Clean files on internal memory
-       Arguments:
-           1. period - how old/new files should be deleted
-                       NOTE: This action requires admin account and ULO cannot
-                             record during this activity.
-               a) oldestday - Oldest day
-               b) oldestweek - Oldest week
-               c) oldestyear - Oldest year
-               d) latestday - Latest day
-               e) latestweek - Latest week
-               f) latestyear - Latest year
-               g) all - All
+Full help file: [HELP_SHELL.md](HELP_SHELL.md)
 
-   downloadlog - Download ULO log into specified location
-       Arguments:
-           1. destination type - local, nfs, ftp
-           2. destination path - location where snapshot files should be moved
-                                 NOTE: Alwayse use absolute paths! Destination
-                                       folder must already exist!
-               a) local - "<drive>:\<path>\"
-               b) nfs - "\\<host>\<path>" (Required: username, password)
-               c) ftp - "ftp://<host>:<port>/<path>" (Required: username,
-                        password)
-           3. retention - how old uploaded files should be removed in hours;
-                          if set to 0, no age limit will be used and all
-                          files will be kept
-           4. username
-           5. password
+./ulo.sh - show help information with all commands and arguments, this is your main go to place for basic usage
 
-   currentsnapshot - Download current snapshot seen by ULO into specified
-                     location, if snapshot with same name exists it
-                     is overwritten
-       Arguments:
-           1. destination type - local, nfs, ftp
-           2. destination path - location where snapshot files should be moved
-                                 NOTE: Alwayse use absolute paths! Destination
-                                       folder must already exist!
-               a) local - "<drive>:\<path>\"
-               b) nfs - "\\<host>\<path>" (Required: username, password)
-               c) ftp - "ftp://<host>:<port>/<path>" (Required: username,
-                        password)
-           3. username
-           4. password
+Basic usage:
 
-   downloadvideos - Download all available videos stored in ULO into specified
-                    location, if video with same name exists it is skipped
-       Arguments:
-           1. destination type - local, nfs, ftp
-           2. destination path - location where video files should be moved
-                                 NOTE: Alwayse use absolute paths! Destination
-                                       folder must already exist!
-               a) local - "<drive>:\<path>\"
-               b) nfs - "\\<host>\<path>" (Required: username, password)
-               c) ftp - "ftp://<host>:<port>/<path>" (Required: username,
-                        password)
-           3. age - how old files should be downloaded in hours; if set
-                    to 0, no age limit will be used and all files will
-                    be downloaded
-           4. retention - how old uploaded files should be removed in hours;
-                          if set to 0, no age limit will be used and all
-                          files will be kept
-           4. username
-           5. password
+./ulo.sh <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>
 
-   downloadsnapshots - Download all available snapshots stored in ULO into
-                       specified location, if snapshot with same name exists it
-                       is skipped
-       Arguments:
-           1. destination type - local, nfs, ftp
-           2. destination path - location where snapshot files should be moved
-                                 NOTE: Alwayse use absolute paths! Destination
-                                       folder must already exist!
-               a) local - "<drive>:\<path>\"
-               b) nfs - "\\<host>\<path>" (Required: username, password)
-               c) ftp - "ftp://<host>:<port>/<path>" (Required: username,
-                        password)
-           3. age - how old files should be downloaded in hours; if set
-                    to 0, no age limit will be used and all files will
-                    be downloaded
-           4. retention - how old uploaded files should be removed in hours;
-                          if set to 0, no age limit will be used and all
-                          files will be kept
-           4. username
-           5. password
+Here is the list of all commands in example how to use them:
+./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'currentsnapshot' './current'
+./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadsnapshots' './snapshot'
+./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadvideos' './video'
 
-   testavailability - Test for device availability
-       Arguments:
-           1. host - hostname of device you want to check if available
+There is also advanced function 'callapi' which allows you to directly call ULOs API and provides you with response:
 
-   checkavailability - Check for device availability and set proper mode
-       Arguments:
-           1. mode if true - camera recording mode if conditions are met
-               a) standard - ULO awake and not recording
-               b) spy - ULO awake and recording
-               c) alert - ULO asleep and recording
-           2. mode if false - camera recording mode if conditions are not met
-               a) standard - ULO awake and not recording
-               b) spy - ULO awake and recording
-               c) alert - ULO asleep and recording
-           3. operation - operation to determine how to check devices
-               a) and - All devices available to be true
-               b) or - Any device available to be true
-           4. host1 - hostname of device you want to check if available
-           5. host2 - hostname of device you want to check if available
-                      (optional)
-           6. host3 - hostname of device you want to check if available
-                      (optional)
-           7. host4 - hostname of device you want to check if available
-                      (optional)
-           8. host5 - hostname of device you want to check if available
-                      (optional)
+./ulo.sh <ulo_host> <ulo_user> <ulo_pass> 'callapi' <API path> <call method [GET|PUT|POST|DELETE|...]> <body this might be needed by API but is undocumented> <JQ JSON filter or . for all>
 
-   callapi - Call API with custom parameters
-       Arguments:
-           1. api path - path to API module
-           2. method - call method [GET|PUT|POST|DELETE|...]
-           3. body - body this might be needed by API but is undocumented
-           4. json path - JSON path or $ for all
+./ulo.sh '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/media' 'GET' '' '.'
 
-Examples:
-    - Download video files
-        ./ULOController "192.168.0.10" "test" "123!Abc" "downloadvideos"
-         "local" "C:\ulo\" "24" "48"
+More info about JQ JSON Filter can be found here: https://stedolan.github.io/jq/manual/#Basicfilters
+Online evaluator is here: https://jqplay.org/
+Simply use dot (.) for full output if you are not sure.
 
-Library configuration (optional):
-   By creating a text file with name "ULOControls.conf" in same directory as ULO
-   library, you can change some library behavior or enable debug options. Each
-   parameter can be set to either true or false, there can be only one parameter
-   per line and there should be equal sign (=) between parameter name and value.
-   Default values are false.
-       1. writeLog - write output into log file
-       2. showArguments - incoming arguments will be written to console
-       3. showTrace - error trace will be written to console
-       4. showSkipped - skipped files will be written to log and console
-       5. showPingResults - availability check will show more information
-       6. suppressLogHandling - log handler will stop chronologically push logs
-                                into single log file
+== How to use ULO Controller library
 
-Examples:
-    writeLog=true
-    showArguments=false
+Full help file: [HELP_LIBRARY.md](HELP_LIBRARY.md)
 
-Notes from working with ULO:
-    - When using this tool, ULO usualy wakes up unless it is in Alert mode.
-    - Transfer speeds usualy depends on WiFi signal strength or ULOs
-      processing power. Due to way how we access files there is not much space
-      to make this process faster in this code.
-    - Files from ULO memory can be emptied only in standard mode.
-    - This tool properly logs in and logs out into ULO; because of this,
-      if you use same user for browser access this user will be logged
-      out along with this tool at the end of execution.
-    - It is advised to create new user without admin privileges to use this
-      tool, unless you need to perform tasks that require them. For now
-      it seems that ULO can create mutiple users, but they sometimes have
-      problems to log in.
-    - If mutiple activities are performed at a same time or their execution
-      might overlap, it is advised to create separate ULO users for such
-      activities.
-    - NFS cannot be both used in Windows and used by script, if used so,
-      one or the other might stop working after some time.
-    - FTP upload supports anonymouse login.
-    - FTP is very permission sensitive, wrongly set permissions may lead to
-      some features returning errors.
-    - ULO can perform unintended self reeboots which always reset current
-      camera mode to standard and therefore ULO will stop recodring.
-    - In version 10.1308 and maybe earlier, there is a bug where anyone who
-      knows about ULO can access all ULO files even when not logged in to ULO,
-      when at least one user is logged in to ULO no matter where.
-    - In version 10.1308 and maybe earlier, ULO stores WiFi passwords in
-      plain text inside its system log which is accessible if requested.
+./ULOController.exe - show help information with all commands and arguments, this is your main go to place for basic usage (doubleclicking it from explorer will open GUI application)
+
+Basic usage:
+
+./ULOController.exe <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>
+
+Here is the list of all commands in example how to use them:
+
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getmode'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'setmode' 'standard'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'ispowered'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getbattery'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'iscard'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getcardspace'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'getdiskspace'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'movetocard'
+./ULOController.exe '192.168.0.10' 'ulo_admin@example.com' 'uloAdminPassword123!' 'cleandiskspace' 'all'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadlog' 'nfs' '\\192.168.0.11\ulo\_logs' '480' 'nfs_user' 'nfsPassword123!'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'currentsnapshot' 'nfs' '\\192.168.0.11\ulo\_current' 'nfs_user' 'nfsPassword123!'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadvideos' 'nfs' '\\192.168.0.11\ulo\_videos' '1' '480' 'nfs_user' 'nfsPassword123!'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'downloadsnapshots' 'nfs' '\\192.168.0.11\ulo\_snapshots' '1' '480' 'nfs_user' 'nfsPassword123!'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'testavailability' '192.168.0.1'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'checkavailability' 'standard' 'alert' 'or' '192.168.0.1' '192.168.0.2' '192.168.0.3' '192.168.0.4' '192.168.0.5'
+
+There is also advanced function 'callapi' which allows you to directly call ULOs API and provides you with response:
+
+./ULOController.exe <ulo_host> <ulo_user> <ulo_pass> 'callapi' <API path> <call method [GET|PUT|POST|DELETE|...]> <body this might be needed by API but is undocumented> <JSON path or $ for all>
+
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/mode' 'GET' '' '$'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/state' 'GET' '' '$'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/THIS_DOES_NOT_EXIST' 'GET' '' ''
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/stats' 'GET' '' 'internal.freeMB'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/interface/CheckVersionOnCloud' 'POST' '{}' 'status'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/files/delete?removeType=1' 'DELETE' '' '$'
+./ULOController.exe '192.168.0.10' 'ulo_user@example.com' 'uloUserPassword123!' 'callapi' '/api/v1/system/log' 'GET' '' '$'
+
+More info about JSON Path can be found here: https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
+Online evaluator is here: https://jsonpath.com/
+Simply use dolar sign ($) for full output if you are not sure.
+
+== API notes
+
+Here is also few API URLs that I snatched and there are many, many more when using ULO upside down:
+
+http://192.168.0.10/api/v1/login - POST - Login (created Bearer token to be used for all other calls)
+http://192.168.0.10/api/v1/time - PUT - ULOs current time
+http://192.168.0.10/api/v1/state - GET - Power information
+http://192.168.0.10/api/v1/accessEverywhere - GET - ULO device information
+http://192.168.0.10/api/v1/backgroundImage - POST - Get current snapshot from ULO to be used as background
+http://192.168.0.10/api/v1/config - GET - List of configured parameters
+http://192.168.0.10/api/v1/config/language/languages - GET - List of available languages
+http://192.168.0.10/api/v1/users - GET - List of all users
+http://192.168.0.10/api/v1/config/time/countries - GET - List of avaialble countries
+http://192.168.0.10/api/v1/config/time/zones - GET - List of available time zones
+http://192.168.0.10/api/v1/config/wifi/networks - GET - Available WiFi networks
+http://192.168.0.10/api/v1/system/log - GET - System log
+http://192.168.0.10/api/v1/users/1 - GET - Information about user with ID 1 (usually Admin)
+http://192.168.0.10/api/v1/files/stats - GET - Statistic about stoarge
+http://192.168.0.10/api/v1/interface/CheckVersionOnCloud - POST - Initiate check for update
+http://192.168.0.10/api/v1/files/media - GET - Get list of all media files in all dierctories
+http://192.168.0.10/api/v1/files/media?type=snapshot - GET - Get list of media files in all dierctories filtered to snapshots
+http://192.168.0.10/api/v1/files/media?type=video - GET - Get list of media files in all dierctories filtered to video
+http://192.168.0.10/api/v1/files/media/20190623 - GET - Get list of all media files in directory for specific day
+http://192.168.0.10/api/v1/files/media/20190623/snapshotCount - GET - Number of snapshots in this path
+http://192.168.0.10/api/v1/files/delete?removeType=6 - DELETE - Delete files on local storage - 0: Oldest day; 1: Oldest week; 2: Oldest year; 3: Last day; 4: Last week; 5: Last year; 6: All time
+ws://192.168.0.10/api/v1/live - Binary stream - Live feed, currently unsupported by Controller
+http://192.168.0.10/api/v1/logout - POST - Logout (invalidate Bearer token used)
+
+Hope this stuff helps at least somone.
+
+Have a nice day,
+Martin
+```
