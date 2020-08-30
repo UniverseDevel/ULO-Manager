@@ -644,8 +644,8 @@ namespace ULOController
                 Console.WriteLine(errorOutput);
             }
 
-            ulo.writeLog(ULO.tempErrFile, errorOutput, false, true);
-            ulo.writeLog(ULO.tempOutFile, timestamp + " ERROR: " + ex.Message, false, true);
+            ulo.writeLog(ULO.tempErrFile, errorOutput, true, true);
+            ulo.writeLog(ULO.tempOutFile, timestamp + " ERROR: " + ex.Message, true, true);
 
             //throw ex;
         }
