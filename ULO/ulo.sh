@@ -216,6 +216,10 @@ callapi() {
   else
     output="$(echo "${web_output}" | jq -r "${json_filter}" | sed 's/^null$//')"
   fi
+
+  if [[ "${action}" == "callapi" ]]; then
+    echo "${output}"
+  fi
 }
 
 login() {
@@ -555,7 +559,6 @@ login
 case "${action}" in
   callapi)
     callapi "${arg1}" "${arg2}" "${arg3}" "${arg4}" "${arg5}" "${arg6}" "${arg7}" "${arg8}"
-    echo "${output}"
     ;;
   getmode)
     getmode
@@ -604,7 +607,7 @@ case "${action}" in
     ;;
   *)
     # Unknown action
-    echo "ERROR: Action \"${action}\" is unknown."
+    echo "ERROR: Action '${action}' is unknown."
     logout
     exit 1
     ;;
