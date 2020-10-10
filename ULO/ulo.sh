@@ -399,7 +399,7 @@ downloadmedia() {
     esac
   done
 
-  if [[ "${action_name}" == "downloadvideos" ]] || [[ "${action_name}" == "downloadsnapshots" ]]; then
+  if [[ "${action_name}" == "downloadlog" ]] || [[ "${action_name}" == "downloadvideos" ]] || [[ "${action_name}" == "downloadsnapshots" ]]; then
     echo "Retention clean-up..."
     if [[ "${retention}" != "0" ]] && [[ -n "${retention}" ]]; then
       echo "Retention clean-up of files in directory '${path_to}' started..."
@@ -444,28 +444,28 @@ checkavailability() {
   esac
 
   if [[ -n "${host1}" ]]; then
-    hosts+=(host1)
+    hosts+=("${host1}")
   fi
   if [[ -n "${host2}" ]]; then
-    hosts+=(host2)
+    hosts+=("${host2}")
   fi
   if [[ -n "${host3}" ]]; then
-    hosts+=(host3)
+    hosts+=("${host3}")
   fi
   if [[ -n "${host4}" ]]; then
-    hosts+=(host4)
+    hosts+=("${host4}")
   fi
   if [[ -n "${host5}" ]]; then
-    hosts+=(host5)
+    hosts+=("${host5}")
   fi
 
   if [[ "${#hosts[@]}" == "0" ]]; then
     throw "At least one host has to be provided."
   fi
 
-  for host in "${hosts[@]}"
+  for host_item in "${hosts[@]}"
   do
-    result="$(ping_host "${host}")"
+    result="$(ping_host "${host_item}")"
 
     case "${operation}" in
       and)
@@ -534,9 +534,9 @@ throw() {
 }
 
 ping_host() {
-  local host="${1}"
+  local host_to_ping="${1}"
 
-  if timeout 5 ping -c 1 "${host}"; then
+  if timeout 5 ping -c 1 "${host_to_ping}" >/dev/null 2>&1; then
     echo "true"
   else
     echo "false"
@@ -580,7 +580,7 @@ case "${action}" in
     cleandiskspace "${arg1}"
     ;;
   downloadlog)
-    downloadmedia "${action}" ".zip" "${arg1}"
+    downloadmedia "${action}" ".zip" "${arg1}" "${arg2}"
     ;;
   currentsnapshot)
     downloadmedia "${action}" ".jpg" "${arg1}"
