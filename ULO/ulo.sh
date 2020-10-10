@@ -55,7 +55,7 @@ usage() {
   echo "  movetocard - Move files from internal memory to SD card"
   echo "      Arguments:"
   echo "          None"
-  echo "              NOTE: ULO cannot record during this activity."
+  echo "                 NOTE: ULO cannot record during this activity."
   echo
   echo "  cleandiskspace - Clean files on internal memory"
   echo "      Arguments:"
@@ -75,6 +75,9 @@ usage() {
   echo "          1. destination path - location where snapshot files should be moved"
   echo "                                NOTE: Alwayse use absolute paths! Destination"
   echo "                                      folder must already exist!"
+  echo "          2. retention - how old uploaded files should be removed in hours;"
+  echo "                         if set to 0, no age limit will be used and all"
+  echo "                         files will be kept"
   echo
   echo "  currentsnapshot - Download current snapshot seen by ULO into specified"
   echo "                    location, if snapshot with same name exists it"
@@ -90,6 +93,9 @@ usage() {
   echo "          1. destination path - location where snapshot files should be moved"
   echo "                                NOTE: Alwayse use absolute paths! Destination"
   echo "                                      folder must already exist!"
+  echo "          2. retention - how old uploaded files should be removed in hours;"
+  echo "                         if set to 0, no age limit will be used and all"
+  echo "                         files will be kept"
   echo
   echo "  downloadsnapshots - Download all available snapshots stored in ULO into"
   echo "                      specified location, if snapshot with same name exists it"
@@ -98,6 +104,9 @@ usage() {
   echo "          1. destination path - location where snapshot files should be moved"
   echo "                                NOTE: Alwayse use absolute paths! Destination"
   echo "                                      folder must already exist!"
+  echo "          2. retention - how old uploaded files should be removed in hours;"
+  echo "                         if set to 0, no age limit will be used and all"
+  echo "                         files will be kept"
   echo
   echo "  testavailability - Test for device availability"
   echo "      Arguments:"
@@ -344,6 +353,7 @@ downloadmedia() {
   local action_name="${1}"
   local extension="${2}"
   local path_to="${3}"
+  local retention="${4}"
   local init="none"
 
   local media_path=""
@@ -388,6 +398,16 @@ downloadmedia() {
         ;;
     esac
   done
+
+  if [[ "${action_name}" == "downloadvideos" ]] || [[ "${action_name}" == "downloadsnapshots" ]]; then
+    echo "Retention clean-up..."
+    if [[ "${retention}" != "0" ]] && [[ -n "${retention}" ]]; then
+      echo "Retention clean-up of files in directory '${path_to}' started..."
+      find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" -print -delete
+      echo "Retention clean-up of empty directories at '${path_to}' started..."
+      find "${path_to}" -type d -empty -print -delete
+    fi
+  fi
 }
 
 testavailability() {
@@ -566,10 +586,10 @@ case "${action}" in
     downloadmedia "${action}" ".jpg" "${arg1}"
     ;;
   downloadvideos)
-    downloadmedia "${action}" ".mp4" "${arg1}"
+    downloadmedia "${action}" ".mp4" "${arg1}" "${arg2}"
     ;;
   downloadsnapshots)
-    downloadmedia "${action}" ".jpg" "${arg1}"
+    downloadmedia "${action}" ".jpg" "${arg1}" "${arg2}"
     ;;
   testavailability)
     testavailability "${arg1}"

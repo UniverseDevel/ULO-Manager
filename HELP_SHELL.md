@@ -59,6 +59,9 @@ Actions:
           1. destination path - location where snapshot files should be moved
                                 NOTE: Alwayse use absolute paths! Destination
                                       folder must already exist!
+          2. retention - how old uploaded files should be removed in hours;
+                         if set to 0, no age limit will be used and all
+                         files will be kept
 
   currentsnapshot - Download current snapshot seen by ULO into specified
                     location, if snapshot with same name exists it
@@ -74,6 +77,9 @@ Actions:
           1. destination path - location where snapshot files should be moved
                                 NOTE: Alwayse use absolute paths! Destination
                                       folder must already exist!
+          2. retention - how old uploaded files should be removed in hours;
+                         if set to 0, no age limit will be used and all
+                         files will be kept
 
   downloadsnapshots - Download all available snapshots stored in ULO into
                       specified location, if snapshot with same name exists it
@@ -82,6 +88,9 @@ Actions:
           1. destination path - location where snapshot files should be moved
                                 NOTE: Alwayse use absolute paths! Destination
                                       folder must already exist!
+          2. retention - how old uploaded files should be removed in hours;
+                         if set to 0, no age limit will be used and all
+                         files will be kept
 
   testavailability - Test for device availability
       Arguments:
