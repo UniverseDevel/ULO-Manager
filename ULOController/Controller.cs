@@ -44,6 +44,8 @@ namespace ULOController
             public const string DownloadSnapshots = "downloadsnapshots";
             public const string TestAvailability = "testavailability";
             public const string CheckAvailability = "checkavailability";
+            // WebSocket live feed
+            public const string LiveFeed = "livefeed";
         }
 
         public class DeletePeriodMap
@@ -67,6 +69,16 @@ namespace ULOController
             usage += @"   ./" + product_filename + @" <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"Actions:" + Environment.NewLine;
+            usage += @"   " + Actions.LiveFeed + @" - Show current live feed from camera (GUI only)" + Environment.NewLine;
+            usage += @"       Arguments:" + Environment.NewLine;
+            usage += @"           1. store feed - 0 (off) / 1 (on) [Default: 0]" + Environment.NewLine;
+            usage += @"           2. destination path - location where recorded files should be" + Environment.NewLine;
+            usage += @"                                 stored [Default: <executable location>/media]" + Environment.NewLine;
+            usage += @"           3. maximum file size - size in MB above which recorded file" + Environment.NewLine;
+            usage += @"                                  will be split [Default: 100]" + Environment.NewLine;
+            usage += @"           4. retention - number of split files that wont be automatically" + Environment.NewLine;
+            usage += @"                          deleted [Default: 5]" + Environment.NewLine;
+            usage += @"" + Environment.NewLine;
             usage += @"   " + Actions.GetMode + @" - Get current ULO camera mode" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           None" + Environment.NewLine;
@@ -620,6 +632,8 @@ namespace ULOController
 
                     ulo.checkAvailability(mode_if_true, mode_if_false, operation, arg4, arg5, arg6, arg7, arg8);
                     break;
+                case Actions.LiveFeed:
+                    throw new Exception("Live feed is GUI only feature.");
                 default:
                     throw new Exception("Action '" + action + "' is not supported.");
             }

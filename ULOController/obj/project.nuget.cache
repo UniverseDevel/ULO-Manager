@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "5asaj3JJagSYkHPWDrh7M3ht4ZX8WuM9HoWHZoeQFHFkXexg+6M1tVXpYhmHGkRjA5PVdiK/KA3AYScBLlmrPg==",
+  "success": true,
+  "projectFilePath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULOController\\ULOController.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\websocketsharp\\1.0.3-rc11\\websocketsharp.1.0.3-rc11.nupkg.sha512"
+  ],
+  "logs": []
+}

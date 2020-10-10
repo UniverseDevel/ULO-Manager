@@ -5,6 +5,16 @@ Usage:
    ./ULOController <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>
 
 Actions:
+   livefeed - Show current live feed from camera (GUI only)
+       Arguments:
+           1. store feed - 0 (off) / 1 (on) [Default: 0]
+           2. destination path - location where recorded files should be
+                                 stored [Default: <executable location>/media]
+           3. maximum file size - size in MB above which recorded file
+                                  will be split [Default: 100]
+           4. retention - number of split files that wont be automatically
+                          deleted [Default: 5]
+
    getmode - Get current ULO camera mode
        Arguments:
            None
@@ -211,3 +221,4 @@ Notes from working with ULO:
       when at least one user is logged in to ULO no matter where.
     - In version 10.1308 and maybe earlier, ULO stores WiFi passwords in
       plain text inside its system log which is accessible if requested.
+```

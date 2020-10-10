@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "GefoZAgpIqAZ8HXi4aYSw70P0jWty4dDxtBHTHDSAHbnuLV9TETODF3u7v3wyhGWhT5fq3adrD+ABwsicI0L2Q==",
+  "success": true,
+  "projectFilePath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\ULO.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

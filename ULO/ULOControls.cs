@@ -38,7 +38,7 @@ namespace ULOControls
         public static readonly int processId = Process.GetCurrentProcess().Id;
         public static readonly string filesName = "ULOControls";
         public static readonly string timeFormat = "yyyyMMdd_HHmmss";
-        public static readonly string filesTimestamp = DateTime.Now.ToString(timeFormat);
+        public static readonly string filesTimestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
         public static readonly string tempOutFile = product_location + "\\" + filesName + "_" + filesTimestamp + "_" + processId.ToString() + ".out.tmp";
         public static readonly string tempErrFile = product_location + "\\" + filesName + "_" + filesTimestamp + "_" + processId.ToString() + ".err.tmp";
         public static readonly string outFile = product_location + "\\" + filesName + ".out";
@@ -349,7 +349,7 @@ namespace ULOControls
             }
         }
 
-        public void login(string ulo_host, string username, string password)
+        public string login(string ulo_host, string username, string password)
         {
             // Workaround for invalid certificate
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
@@ -368,6 +368,8 @@ namespace ULOControls
 
             // Check version support
             is_supported = checkVersion();
+
+            return token;
         }
 
         public void logout()

@@ -2,7 +2,6 @@ W:\Visual Studio\Projects\ULO Controller\ULOController\obj\Release\ULOController
 W:\Visual Studio\Projects\ULO Controller\ULOController\obj\Release\ULOController.csproj.GenerateResource.Cache
 W:\Visual Studio\Projects\ULO Controller\ULOController\obj\Release\ULOController.csproj.CoreCompileInputs.cache
 W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\Newtonsoft.Json.dll
-W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\Newtonsoft.Json.xml
 W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\ULOControls.dll
 W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\ULOControls.pdb
 W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\ULOController.exe.config
@@ -11,9 +10,6 @@ W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\ULOController
 W:\Visual Studio\Projects\ULO Controller\ULOController\obj\Release\ULOController.exe
 W:\Visual Studio\Projects\ULO Controller\ULOController\obj\Release\ULOController.pdb
 W:\Visual Studio\Projects\ULO Controller\ULOController\obj\Release\ULOController.ControllerGUI.resources
-W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\AForge.dll
-W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\AForge.Video.dll
-W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\AForge.xml
-W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\AForge.Video.xml
 W:\Visual Studio\Projects\ULO Controller\ULOController\obj\Release\ULOController.csprojAssemblyReference.cache
 W:\Visual Studio\Projects\ULO Controller\ULOController\obj\Release\ULOController.csproj.CopyComplete
+W:\Visual Studio\Projects\ULO Controller\ULOController\bin\Release\websocket-sharp.dll

@@ -15,3 +15,6 @@
 /ULO/obj/Debug
 /ULOController/bin/Debug
 /ULOController/obj/Debug
+/ULOController/bin/Release/*.mov
+/ULOController/bin/Release/*.mp4
+/ULOController/bin/Release/media

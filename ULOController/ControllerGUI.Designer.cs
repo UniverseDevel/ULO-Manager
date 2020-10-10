@@ -36,13 +36,6 @@
             this.tbUsername = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tbPassword = new System.Windows.Forms.TextBox();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tbOutput = new System.Windows.Forms.TextBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.pbLiveFeed = new System.Windows.Forms.PictureBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tbUsage = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.tbArg1 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -70,14 +63,19 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLiveFeed)).BeginInit();
-            this.tabPage3.SuspendLayout();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tbUsage = new System.Windows.Forms.TextBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tbOutput = new System.Windows.Forms.TextBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -140,86 +138,6 @@
             this.tbPassword.Size = new System.Drawing.Size(249, 20);
             this.tbPassword.TabIndex = 8;
             this.tbPassword.UseSystemPasswordChar = true;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(0, 261);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(686, 302);
-            this.tabControl1.TabIndex = 9;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.tbOutput);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(678, 276);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Output";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tbOutput
-            // 
-            this.tbOutput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbOutput.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbOutput.Location = new System.Drawing.Point(3, 3);
-            this.tbOutput.Multiline = true;
-            this.tbOutput.Name = "tbOutput";
-            this.tbOutput.ReadOnly = true;
-            this.tbOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbOutput.Size = new System.Drawing.Size(672, 270);
-            this.tbOutput.TabIndex = 1;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.pbLiveFeed);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(678, 276);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Live feed";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // pbLiveFeed
-            // 
-            this.pbLiveFeed.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbLiveFeed.Location = new System.Drawing.Point(3, 3);
-            this.pbLiveFeed.Name = "pbLiveFeed";
-            this.pbLiveFeed.Size = new System.Drawing.Size(672, 270);
-            this.pbLiveFeed.TabIndex = 3;
-            this.pbLiveFeed.TabStop = false;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.tbUsage);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(678, 276);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Usage";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // tbUsage
-            // 
-            this.tbUsage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbUsage.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbUsage.Location = new System.Drawing.Point(3, 3);
-            this.tbUsage.Multiline = true;
-            this.tbUsage.Name = "tbUsage";
-            this.tbUsage.ReadOnly = true;
-            this.tbUsage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbUsage.Size = new System.Drawing.Size(672, 270);
-            this.tbUsage.TabIndex = 0;
             // 
             // label5
             // 
@@ -503,11 +421,95 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Configuration";
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.tbUsage);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(678, 276);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Usage";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tbUsage
+            // 
+            this.tbUsage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbUsage.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbUsage.Location = new System.Drawing.Point(3, 3);
+            this.tbUsage.Multiline = true;
+            this.tbUsage.Name = "tbUsage";
+            this.tbUsage.ReadOnly = true;
+            this.tbUsage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbUsage.Size = new System.Drawing.Size(672, 270);
+            this.tbUsage.TabIndex = 0;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(678, 276);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Live feed";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.tbOutput);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(678, 276);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Output";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tbOutput
+            // 
+            this.tbOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbOutput.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbOutput.Location = new System.Drawing.Point(3, 3);
+            this.tbOutput.Multiline = true;
+            this.tbOutput.Name = "tbOutput";
+            this.tbOutput.ReadOnly = true;
+            this.tbOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbOutput.Size = new System.Drawing.Size(672, 270);
+            this.tbOutput.TabIndex = 1;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Location = new System.Drawing.Point(0, 261);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(686, 302);
+            this.tabControl1.TabIndex = 9;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.BackColor = System.Drawing.Color.IndianRed;
+            this.btnCancel.Location = new System.Drawing.Point(551, 232);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(121, 23);
+            this.btnCancel.TabIndex = 38;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Visible = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // ControllerGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 562);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
@@ -519,19 +521,17 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ULO Controller";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ControllerGUI_FormClosed);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbLiveFeed)).EndInit();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -545,13 +545,6 @@
         private System.Windows.Forms.TextBox tbUsername;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbPassword;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.PictureBox pbLiveFeed;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TextBox tbUsage;
-        private System.Windows.Forms.TextBox tbOutput;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbArg1;
         private System.Windows.Forms.Label label6;
@@ -579,5 +572,12 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TextBox tbUsage;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.TextBox tbOutput;
     }
 }

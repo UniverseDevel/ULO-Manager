@@ -1,19 +1,30 @@
-﻿using AForge.Video;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using ULOControls;
+using WebSocketSharp;
 using static ULOController.Controller;
 
 namespace ULOController
 {
     public partial class ControllerGUI : Form
     {
+        private long maxFileSize = 100 * (long)Math.Pow(1024, 2); // bytes
+        private string storagePath = product_location + "\\media";
+        private string videoFile = String.Empty;
+        private int fileRetention = 5;
+        private WebSocket ws;
+        private bool fileReset = false;
+
+        private string generate_video_filename()
+        {
+            return storagePath + "\\video-" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".mp4";
+        }
+
         ULO ulo = new ULO();
-        MJPEGStream stream = null;
         bool init = false;
         bool stream_running = false;
 
@@ -23,10 +34,11 @@ namespace ULOController
         {
             init = true;
             InitializeComponent();
-            
+
             tbUsage.Text = usage();
             
             cbAction.Items.Add(Actions.CallAPI);
+            cbAction.Items.Add(Actions.LiveFeed);
             cbAction.Items.Add(Actions.CheckAvailability);
             cbAction.Items.Add(Actions.CleanDiskSpace);
             cbAction.Items.Add(Actions.CurrentSnapshot);
@@ -50,7 +62,6 @@ namespace ULOController
 
             setCfgValues();
 
-            tabControl1.TabPages.RemoveByKey("tabPage2"); // TODO remove when/if Live Feed is implemented
             init = false;
         }
 
@@ -64,41 +75,84 @@ namespace ULOController
             cfg_suppressLogHandling.Checked = ulo.configuration.suppressLogHandling;
         }
 
-        private void startStream()
+        private void addLine(string text)
         {
-            stream.Start();
-            stream_running = true;
+            this.Invoke((MethodInvoker)(() => tbOutput.Select(tbOutput.TextLength + 1, 0)));
+            this.Invoke((MethodInvoker)(() => tbOutput.SelectedText = Environment.NewLine + text));
         }
 
-        private void stopStream()
+        private void AppendAllBytes(string path, byte[] bytes)
         {
-            stream.Stop();
-            stream_running = false;
-        }
-
-        private void stream_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {
-            Bitmap bmp = (Bitmap)eventArgs.Frame.Clone();
-            pbLiveFeed.Image = bmp;
-        }
-
-        private void btnExecute_Click(object sender, EventArgs e)
-        {
-            if (!stream_running)
+            FileInfo fi = new FileInfo(path);
+            if (!Directory.Exists(fi.DirectoryName))
             {
-                try
+                Directory.CreateDirectory(fi.DirectoryName);
+            }
+
+            using (var stream = new FileStream(path, FileMode.Append))
+            {
+                stream.Write(bytes, 0, bytes.Length);
+            }
+
+            if (fi.Length > maxFileSize)
+            {
+                videoFile = generate_video_filename();
+                addLine("Maximum file size reached, starting new video file.");
+                addLine("Video location: " + videoFile);
+                playVideo(bytes);
+
+                fileReset = true;
+                ws.Close();
+                ws.Connect();
+                fileReset = false;
+
+                DirectoryInfo info = new DirectoryInfo(fi.DirectoryName);
+                FileInfo[] files = info.GetFiles("video-*.mp4");
+                Array.Sort(files, delegate (FileInfo f1, FileInfo f2)
                 {
-                    stream = new MJPEGStream("ws://" + tbHost.Text + "/api/v1/live");
-                    stream.Login = tbUsername.Text;
-                    stream.Password = tbPassword.Text;
-                    stream.NewFrame += stream_NewFrame;
-                    startStream();
-                }
-                catch (Exception ex)
+                    return f2.CreationTime.CompareTo(f1.CreationTime);
+                });
+                int counter = 0;
+                foreach (FileInfo file in files)
                 {
-                    writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: " + ex);
+                    counter++;
+                    if (counter > fileRetention)
+                    {
+                        try
+                        {
+                            file.Delete();
+                        }
+                        catch { }
+                    }
                 }
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            cancelStream();
+        }
+
+        private void cancelStream()
+        {
+            try
+            {
+                //TODO
+            }
+            catch (Exception ex) { }
+            ws.Close(CloseStatusCode.Normal);
+        }
+
+        private void playVideo(byte[] bytes)
+        {
+            using (Stream ms = new MemoryStream(bytes))
+            {
+                //TODO
+            }
+        }
+
+        private void btnExecute_Click(object sender_main, EventArgs e_main)
+        {
 
             if (tbHost.Text != String.Empty && tbUsername.Text != String.Empty && tbPassword.Text != String.Empty && cbAction.Items[cbAction.SelectedIndex].ToString() != String.Empty)
             {
@@ -107,34 +161,140 @@ namespace ULOController
                 Properties.Settings.Default.password = tbPassword.Text;
                 Properties.Settings.Default.Save();
 
-                btnExecute.Enabled = false;
                 tbOutput.Text = String.Empty;
-                try
-                {
-                    string execCmd = "\"" + tbHost.Text + "\" \"" + tbUsername.Text + "\" \"" + tbPassword.Text + "\" \"" + cbAction.Items[cbAction.SelectedIndex].ToString() + "\" \"" + tbArg1.Text + "\" \"" + tbArg2.Text + "\" \"" + tbArg3.Text + "\" \"" + tbArg4.Text + "\" \"" + tbArg5.Text + "\" \"" + tbArg6.Text + "\" \"" + tbArg7.Text + "\" \"" + tbArg8.Text + "\"";
-                    Process process = new Process();
-                    process.StartInfo.FileName = product_location + @"\" + product_filename + ".exe";
-                    process.StartInfo.Arguments = execCmd;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.RedirectStandardError = true;
-                    process.OutputDataReceived += text_Received;
-                    process.ErrorDataReceived += text_Received;
-                    process.Start();
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
 
-                    while (processExists(process.Id))
+                if (cbAction.Items[cbAction.SelectedIndex].ToString() == Actions.LiveFeed)
+                {
+                    if (!stream_running)
                     {
-                        Thread.Sleep(100);
+                        bool record = false;
+                        if (tbArg1.Text != String.Empty)
+                        {
+                            record = Convert.ToBoolean(Convert.ToInt32(tbArg1.Text));
+                        }
+                        if (tbArg2.Text != String.Empty)
+                        {
+                            storagePath = tbArg2.Text;
+                        }
+                        if (tbArg3.Text != String.Empty)
+                        {
+                            maxFileSize = Convert.ToInt32(tbArg3.Text) * (long)Math.Pow(1024, 2);
+                        }
+                        if (tbArg4.Text != String.Empty)
+                        {
+                            fileRetention = Convert.ToInt32(tbArg4.Text);
+                        }
+                        videoFile = generate_video_filename();
+
+                        try
+                        {
+                            string[] protocols = new string[] { "mudesign.ulo.mp4" };
+                            ws = new WebSocket(new Uri("ws://" + tbHost.Text + "/api/v1/live").AbsoluteUri, protocols);
+                            //ws.Log.Level = WebSocketSharp.LogLevel.Trace;
+                            //ws.Log.File = ULO.errFile;
+                            //ws.SetProxy("http://" + tbHost.Text, tbUsername.Text, tbPassword.Text);
+                            //ws.SetCredentials(tbUsername.Text, tbPassword.Text, true);
+                            ws.Origin = "http://" + tbHost.Text;
+                            ws.EnableRedirection = true;
+                            ws.EmitOnPing = true;
+                            ws.OnOpen += (sender, e) =>
+                            {
+                                addLine("Connection opened.");
+                                addLine("Video location: " + videoFile);
+                                stream_running = true;
+                                if (!fileReset)
+                                {
+                                    this.Invoke((MethodInvoker)(() =>
+                                    {
+                                        btnExecute.Enabled = false;
+                                        btnCancel.Visible = true;
+                                    }));
+                                }
+                            };
+                            ws.OnMessage += (sender, e) =>
+                            {
+                                if (e.IsText)
+                                {
+                                    addLine("Text message received: " + e.Data + ".");
+                                    return;
+                                }
+                                if (e.IsBinary)
+                                {
+                                    addLine("Binary message received of size: " + e.RawData.Length + ".");
+                                    if (record)
+                                    {
+                                        AppendAllBytes(videoFile, e.RawData);
+                                    }
+                                    playVideo(e.RawData);
+                                    return;
+                                }
+                                if (e.IsPing)
+                                {
+                                    //addLine("Ping received.");
+                                    return;
+                                }
+                            };
+                            ws.OnError += (sender, e) =>
+                            {
+                                addLine("ERROR: " + e.Message + ".");
+                                throw e.Exception;
+                            };
+                            ws.OnClose += (sender, e) =>
+                            {
+                                addLine("Connection closed.");
+                                addLine("Reason: " + e.Reason);
+                                addLine("WasClean: " + e.WasClean);
+                                stream_running = false;
+                                if (!fileReset)
+                                {
+                                    this.Invoke((MethodInvoker)(() =>
+                                    {
+                                        btnExecute.Enabled = true;
+                                        btnCancel.Visible = false;
+                                    }));
+                                }
+                            };
+
+                            ws.Connect();
+                        }
+                        catch (Exception ex)
+                        {
+                            writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: " + ex);
+                        }
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: " + ex);
+                    btnExecute.Enabled = false;
+
+                    try
+                    {
+                        string execCmd = "\"" + tbHost.Text + "\" \"" + tbUsername.Text + "\" \"" + tbPassword.Text + "\" \"" + cbAction.Items[cbAction.SelectedIndex].ToString() + "\" \"" + tbArg1.Text + "\" \"" + tbArg2.Text + "\" \"" + tbArg3.Text + "\" \"" + tbArg4.Text + "\" \"" + tbArg5.Text + "\" \"" + tbArg6.Text + "\" \"" + tbArg7.Text + "\" \"" + tbArg8.Text + "\"";
+                        Process process = new Process();
+                        process.StartInfo.FileName = product_location + @"\" + product_filename + ".exe";
+                        process.StartInfo.Arguments = execCmd;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.RedirectStandardOutput = true;
+                        process.StartInfo.RedirectStandardError = true;
+                        process.OutputDataReceived += text_Received;
+                        process.ErrorDataReceived += text_Received;
+                        process.Start();
+                        process.BeginOutputReadLine();
+                        process.BeginErrorReadLine();
+
+                        while (processExists(process.Id))
+                        {
+                            Thread.Sleep(100);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: " + ex);
+                    }
+
+                    btnExecute.Enabled = true;
                 }
-                btnExecute.Enabled = true;
             }
             else
             {
@@ -215,8 +375,7 @@ namespace ULOController
         {
             if (stream_running)
             {
-                stopStream();
-                pbLiveFeed.Image = null;
+                cancelStream();
             }
             ulo.handleTempLogs();
             Application.Exit();
