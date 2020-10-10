@@ -427,6 +427,7 @@ checkavailability() {
   local host5="${8}"
 
   local hosts=()
+  local host_item=""
   local result=""
   local result_step="false"
 
