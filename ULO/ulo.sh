@@ -391,7 +391,11 @@ downloadmedia() {
       echo "Storing media files to: ${media_path}"
       local init="${media_path}"
     fi
-    wget -c -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q --show-progress
+    if [[ -t 1 ]]; then
+      wget -c -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q --show-progress
+    else
+      wget -c -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q
+    fi
     case "${action_name}" in
       currentsnapshot)
         mv "${media_path}/loginPicture.jpg" "${media_path}/snapshot.jpg"
