@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 #set -x
 
+SCRIPT_NAME="$(basename "$0")"
+VERSION="v1.0.0.0"
+
 host="${1}"
 username="${2}"
 password="${3}"
@@ -15,10 +18,10 @@ arg7="${11}"
 arg8="${12}"
 
 usage() {
-  echo "ULO Controller v1.0.0.0"
+  echo "ULO Controller ${VERSION}"
   echo
   echo "Usage:"
-  echo "  ./ulo.sh <ulo_host> <ulo_user> <ulo_pass> <action> <arg 1> <arg N>"
+  echo "  ./${SCRIPT_NAME} <ulo_host> <ulo_user> <ulo_pass> <action> <arg 1> <arg N>"
   echo
   echo "Actions:"
   echo "  getmode - Get current ULO camera mode"
@@ -144,7 +147,7 @@ usage() {
   echo
   echo "Examples:"
   echo "  - Download video files"
-  echo "      ./ulo.sh '192.168.0.10' 'test' '123!Abc' 'downloadvideos' '/tmp/ulovideo'"
+  echo "      ./${SCRIPT_NAME} '192.168.0.10' 'test' '123!Abc' 'downloadvideos' '/tmp/ulovideo'"
   echo
   echo "Notes from working with ULO:"
   echo "    - When using this tool, ULO usualy wakes up unless it is in Alert mode."
@@ -191,6 +194,18 @@ password="******" # We don't have to hold password anymore
 output=""
 
 # FUNCTIONS --------------------------------------------------------------------------------
+
+is_running() {
+  local running_count="0"
+
+  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v "grep" | wc -l)"
+
+  if [[ "${running_count}" != "0" ]]; then
+    ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v "grep"
+
+    throw "Other process already running (count: ${running_count})."
+  fi
+}
 
 # Usage:
 # callapi "${path}" "${method}" "${body}" "${json_filter}"
@@ -360,8 +375,9 @@ downloadmedia() {
   local retention="${4}"
   local init="none"
 
+  local real_path_to=""
+  local real_path_media=""
   local media_path=""
-  local media_url_path=""
 
   if [[ ! -d "${path_to}" ]]; then
     throw "Path '${path_to}' does not exist."
@@ -390,16 +406,38 @@ downloadmedia() {
   esac
 
   echo "${output}" | grep "${extension}" | while read -r media; do
-    media_path="$(realpath "$(realpath "${path_to}")/$(dirname "${media}" | sed 's/media//')")"
+    real_path_to="$(realpath "${path_to}")"
+    real_path_media="$(realpath "${real_path_to}${media//media//}")"
+    media_path="$(dirname "${real_path_media}")"
+
     if [[ "${init}" != "${media_path}" ]]; then
       echo "Storing media files to: ${media_path}"
       local init="${media_path}"
     fi
-    if [[ -t 1 ]]; then
-      wget -c -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q --show-progress
+
+    case "${action_name}" in
+      currentsnapshot)
+        # Do not perform check, overwrite is needed
+        ;;
+      *)
+        # If file exists, skip
+        if [[ -f "${real_path_media}" ]]; then
+          #echo "File '${real_path_media}' already exists, skipping..."
+          continue;
+        fi
+        ;;
+    esac
+
+    if [[ "${media_path}" != "" ]]; then
+      if [[ -t 1 ]]; then
+        wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q --show-progress
+      else
+        wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q
+      fi
     else
-      wget -c -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q
+      throw "Unable to get media path."
     fi
+
     case "${action_name}" in
       currentsnapshot)
         mv "${media_path}/loginPicture.jpg" "${media_path}/snapshot.jpg"
@@ -409,6 +447,8 @@ downloadmedia() {
 
   if [[ "${action_name}" == "downloadlog" ]] || [[ "${action_name}" == "downloadvideos" ]] || [[ "${action_name}" == "downloadsnapshots" ]]; then
     echo "Retention clean-up..."
+    #echo "Retention clean-up of empty files in directory '${path_to}' started..."
+    #find "${path_to}" -mindepth 1 -name "*${extension}" -type f -size 0 -print -delete
     if [[ "${retention}" != "0" ]] && [[ -n "${retention}" ]]; then
       echo "Retention clean-up of files in directory '${path_to}' started..."
       find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" -print -delete
@@ -553,6 +593,8 @@ ping_host() {
 }
 
 # MAIN CODE --------------------------------------------------------------------------------
+
+is_running
 
 login
 
