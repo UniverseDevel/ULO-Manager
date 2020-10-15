@@ -375,9 +375,11 @@ downloadmedia() {
   local retention="${4}"
   local init="none"
 
+  local media_trim=""
   local real_path_to=""
   local real_path_media=""
   local media_path=""
+  local media_name=""
 
   if [[ ! -d "${path_to}" ]]; then
     throw "Path '${path_to}' does not exist."
@@ -406,9 +408,20 @@ downloadmedia() {
   esac
 
   echo "${output}" | grep "${extension}" | while read -r media; do
+    media_trim="${media//media/}"
     real_path_to="$(realpath "${path_to}")"
-    real_path_media="$(realpath "${real_path_to}${media//media//}")"
-    media_path="$(dirname "${real_path_media}")"
+    media_path="$(dirname "${real_path_to}${media_trim}")"
+    mkdir -p "${media_path}" 2>/dev/null
+    real_path_media="$(realpath "${real_path_to}${media_trim}")"
+    media_name="$(basename "${real_path_media}")"
+
+    #echo "======================================"
+    #echo "media=${media}"
+    #echo "media_trim=${media_trim}"
+    #echo "real_path_to=${real_path_to}"
+    #echo "media_path=${media_path}"
+    #echo "real_path_media=${real_path_media}"
+    #echo "media_name=${media_name}"
 
     if [[ "${init}" != "${media_path}" ]]; then
       echo "Storing media files to: ${media_path}"
@@ -430,9 +443,9 @@ downloadmedia() {
 
     if [[ "${media_path}" != "" ]]; then
       if [[ -t 1 ]]; then
-        wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q --show-progress
+        { wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q --show-progress && echo "OK"; } || echo "FAILED"
       else
-        wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q
+        { wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q && echo "OK: ${media_name}"; } || echo "FAILED: ${media_name}"
       fi
     else
       throw "Unable to get media path."
