@@ -408,7 +408,7 @@ downloadmedia() {
   esac
 
   echo "${output}" | grep "${extension}" | while read -r media; do
-    media_trim="${media//media/}"
+    media_trim="/${media//media\//}"
     real_path_to="$(realpath "${path_to}")"
     media_path="$(dirname "${real_path_to}${media_trim}")"
     mkdir -p "${media_path}" 2>/dev/null
