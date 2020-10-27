@@ -464,9 +464,9 @@ downloadmedia() {
     #find "${path_to}" -mindepth 1 -name "*${extension}" -type f -size 0 -print -delete
     if [[ "${retention}" != "0" ]] && [[ -n "${retention}" ]]; then
       echo "Retention clean-up of files in directory '${path_to}' started..."
-      find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" -print -delete
+      find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" -print -delete | sort
       echo "Retention clean-up of empty directories at '${path_to}' started..."
-      find "${path_to}" -type d -empty -print -delete
+      find "${path_to}" -type d -empty -print -delete | sort
     fi
   fi
 }
