@@ -447,6 +447,10 @@ downloadmedia() {
       else
         { wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q && echo "OK: ${media_name}"; } || echo "FAILED: ${media_name}"
       fi
+
+      if [[ "$(du -k "${media_path}" | cut -f1)" == "0" ]];then
+        echo -e "ERROR: Downloaded file '${media_path}' has length of 0 bytes."
+      fi
     else
       throw "Unable to get media path."
     fi
