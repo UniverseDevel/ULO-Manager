@@ -132,7 +132,7 @@ namespace ULOController
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           1. destination type - " + ULO.DestinationType.Local + @", " + ULO.DestinationType.NFS + @", " + ULO.DestinationType.FTP + Environment.NewLine;
             usage += @"           2. destination path - location where snapshot files should be moved" + Environment.NewLine;
-            usage += @"                                 NOTE: Always use absolute paths! Destination" + Environment.NewLine;
+            usage += @"                                 NOTE: Alwayse use absolute paths! Destination" + Environment.NewLine;
             usage += @"                                       folder must already exist!" + Environment.NewLine;
             usage += @"               a) " + ULO.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
             usage += @"               b) " + ULO.DestinationType.NFS + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
@@ -150,7 +150,7 @@ namespace ULOController
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           1. destination type - " + ULO.DestinationType.Local + @", " + ULO.DestinationType.NFS + @", " + ULO.DestinationType.FTP + Environment.NewLine;
             usage += @"           2. destination path - location where snapshot files should be moved" + Environment.NewLine;
-            usage += @"                                 NOTE: Always use absolute paths! Destination" + Environment.NewLine;
+            usage += @"                                 NOTE: Alwayse use absolute paths! Destination" + Environment.NewLine;
             usage += @"                                       folder must already exist!" + Environment.NewLine;
             usage += @"               a) " + ULO.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
             usage += @"               b) " + ULO.DestinationType.NFS + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
@@ -164,7 +164,7 @@ namespace ULOController
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           1. destination type - " + ULO.DestinationType.Local + @", " + ULO.DestinationType.NFS + @", " + ULO.DestinationType.FTP + Environment.NewLine;
             usage += @"           2. destination path - location where video files should be moved" + Environment.NewLine;
-            usage += @"                                 NOTE: Always use absolute paths! Destination" + Environment.NewLine;
+            usage += @"                                 NOTE: Alwayse use absolute paths! Destination" + Environment.NewLine;
             usage += @"                                       folder must already exist!" + Environment.NewLine;
             usage += @"               a) " + ULO.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
             usage += @"               b) " + ULO.DestinationType.NFS + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
@@ -185,7 +185,7 @@ namespace ULOController
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           1. destination type - " + ULO.DestinationType.Local + @", " + ULO.DestinationType.NFS + @", " + ULO.DestinationType.FTP + Environment.NewLine;
             usage += @"           2. destination path - location where snapshot files should be moved" + Environment.NewLine;
-            usage += @"                                 NOTE: Always use absolute paths! Destination" + Environment.NewLine;
+            usage += @"                                 NOTE: Alwayse use absolute paths! Destination" + Environment.NewLine;
             usage += @"                                       folder must already exist!" + Environment.NewLine;
             usage += @"               a) " + ULO.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
             usage += @"               b) " + ULO.DestinationType.NFS + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
@@ -258,8 +258,8 @@ namespace ULOController
             usage += @"    " + ULO.ConfigParams.ShowArguments + @"=false" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"Notes from working with ULO:" + Environment.NewLine;
-            usage += @"    - When using this tool, ULO usually wakes up unless it is in Alert mode." + Environment.NewLine;
-            usage += @"    - Transfer speeds usually depends on WiFi signal strength or ULOs" + Environment.NewLine;
+            usage += @"    - When using this tool, ULO usualy wakes up unless it is in Alert mode." + Environment.NewLine;
+            usage += @"    - Transfer speeds usualy depends on WiFi signal strength or ULOs" + Environment.NewLine;
             usage += @"      processing power. Due to way how we access files there is not much space" + Environment.NewLine;
             usage += @"      to make this process faster in this code." + Environment.NewLine;
             usage += @"    - Files from ULO memory can be emptied only in standard mode." + Environment.NewLine;
@@ -268,9 +268,9 @@ namespace ULOController
             usage += @"      out along with this tool at the end of execution." + Environment.NewLine;
             usage += @"    - It is advised to create new user without admin privileges to use this" + Environment.NewLine;
             usage += @"      tool, unless you need to perform tasks that require them. For now" + Environment.NewLine;
-            usage += @"      it seems that ULO can create multiple users, but they sometimes have" + Environment.NewLine;
+            usage += @"      it seems that ULO can create mutiple users, but they sometimes have" + Environment.NewLine;
             usage += @"      problems to log in." + Environment.NewLine;
-            usage += @"    - If multiple activities are performed at a same time or their execution" + Environment.NewLine;
+            usage += @"    - If mutiple activities are performed at a same time or their execution" + Environment.NewLine;
             usage += @"      might overlap, it is advised to create separate ULO users for such" + Environment.NewLine;
             usage += @"      activities." + Environment.NewLine;
             usage += @"    - NFS cannot be both used in Windows and used by script, if used so," + Environment.NewLine;
@@ -278,15 +278,13 @@ namespace ULOController
             usage += @"    - FTP upload supports anonymouse login." + Environment.NewLine;
             usage += @"    - FTP is very permission sensitive, wrongly set permissions may lead to" + Environment.NewLine;
             usage += @"      some features returning errors." + Environment.NewLine;
-            usage += @"    - ULO can perform unintended self reboots which always reset current" + Environment.NewLine;
-            usage += @"      camera mode to standard and therefore ULO will stop recording." + Environment.NewLine;
+            usage += @"    - ULO can perform unintended self reeboots which always reset current" + Environment.NewLine;
+            usage += @"      camera mode to standard and therefore ULO will stop recodring." + Environment.NewLine;
             usage += @"    - In version 10.1308 and maybe earlier, there is a bug where anyone who" + Environment.NewLine;
             usage += @"      knows about ULO can access all ULO files even when not logged in to ULO," + Environment.NewLine;
             usage += @"      when at least one user is logged in to ULO no matter where." + Environment.NewLine;
             usage += @"    - In version 10.1308 and maybe earlier, ULO stores WiFi passwords in" + Environment.NewLine;
             usage += @"      plain text inside its system log which is accessible if requested." + Environment.NewLine;
-            usage += @"    - There is a possibility of ULOs video recording to stop working correctly," + Environment.NewLine;
-            usage += @"      in this case ULO will create a video file but it will have 0 bytes." + Environment.NewLine;
 
             return usage;
         }
