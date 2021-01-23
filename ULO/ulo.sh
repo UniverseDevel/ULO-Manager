@@ -4,26 +4,42 @@
 SCRIPT_NAME="$(basename "$0")"
 VERSION="v1.0.0.0"
 
-host="${1}"
-username="${2}"
-password="${3}"
-action="${4}"
-arg1="${5}"
-arg2="${6}"
-arg3="${7}"
-arg4="${8}"
-arg5="${9}"
-arg6="${10}"
-arg7="${11}"
-arg8="${12}"
+write() {
+  local message="${1}"
+
+  if [[ "${quiet}" == "0" ]]; then
+    echo -e "${message}"
+  fi
+}
+
+throw() {
+  local error="${1}"
+
+  if [[ -z "${error}" ]]; then
+    error="No error message provided."
+  fi
+
+  write "ERROR: ${error}"
+  exit 1
+}
 
 usage() {
   echo "ULO Controller ${VERSION}"
   echo
   echo "Usage:"
-  echo "  ./${SCRIPT_NAME} <ulo_host> <ulo_user> <ulo_pass> <action> <arg 1> <arg N>"
+  echo "  ./${SCRIPT_NAME} [-qh] <ulo_host> <ulo_user> <ulo_pass> <action> <arg 1> <arg N>"
+  echo
+  echo "Arguments:"
+  echo "  -h - Help, you are reading it now"
+  echo "  -q - Quiet mode, suppress most of the outputs"
   echo
   echo "Actions:"
+  echo "  checkulo - Check if ULO has any of known problems"
+  echo "      Arguments:"
+  echo "          1. video destination path - path to downloaded videos"
+  echo "                      NOTE: If this argument is not provided or path does not exist"
+  echo "                             or is empty, script will assume video recording is working."
+  echo
   echo "  getmode - Get current ULO camera mode"
   echo "      Arguments:"
   echo "          None"
@@ -76,7 +92,7 @@ usage() {
   echo "  downloadlog - Download ULO log into specified location"
   echo "      Arguments:"
   echo "          1. destination path - location where snapshot files should be moved"
-  echo "                                NOTE: Alwayse use absolute paths! Destination"
+  echo "                                NOTE: Always use absolute paths! Destination"
   echo "                                      folder must already exist!"
   echo "          2. retention - how old uploaded files should be removed in hours;"
   echo "                         if set to 0, no age limit will be used and all"
@@ -87,14 +103,14 @@ usage() {
   echo "                    is overwritten"
   echo "      Arguments:"
   echo "          1. destination path - location where snapshot files should be moved"
-  echo "                                NOTE: Alwayse use absolute paths! Destination"
+  echo "                                NOTE: Always use absolute paths! Destination"
   echo "                                      folder must already exist!"
   echo
   echo "  downloadvideos - Download all available videos stored in ULO into specified"
   echo "                   location, if video with same name exists it is skipped"
   echo "      Arguments:"
   echo "          1. destination path - location where snapshot files should be moved"
-  echo "                                NOTE: Alwayse use absolute paths! Destination"
+  echo "                                NOTE: Always use absolute paths! Destination"
   echo "                                      folder must already exist!"
   echo "          2. retention - how old uploaded files should be removed in hours;"
   echo "                         if set to 0, no age limit will be used and all"
@@ -105,7 +121,7 @@ usage() {
   echo "                      is skipped"
   echo "      Arguments:"
   echo "          1. destination path - location where snapshot files should be moved"
-  echo "                                NOTE: Alwayse use absolute paths! Destination"
+  echo "                                NOTE: Always use absolute paths! Destination"
   echo "                                      folder must already exist!"
   echo "          2. retention - how old uploaded files should be removed in hours;"
   echo "                         if set to 0, no age limit will be used and all"
@@ -150,8 +166,8 @@ usage() {
   echo "      ./${SCRIPT_NAME} '192.168.0.10' 'test' '123!Abc' 'downloadvideos' '/tmp/ulovideo'"
   echo
   echo "Notes from working with ULO:"
-  echo "    - When using this tool, ULO usualy wakes up unless it is in Alert mode."
-  echo "    - Transfer speeds usualy depends on WiFi signal strength or ULOs"
+  echo "    - When using this tool, ULO usually wakes up unless it is in Alert mode."
+  echo "    - Transfer speeds usually depends on WiFi signal strength or ULOs"
   echo "      processing power. Due to way how we access files there is not much space"
   echo "      to make this process faster in this code."
   echo "    - Files from ULO memory can be emptied only in standard mode."
@@ -160,32 +176,91 @@ usage() {
   echo "      out along with this tool at the end of execution."
   echo "    - It is advised to create new user without admin privileges to use this"
   echo "      tool, unless you need to perform tasks that require them. For now"
-  echo "      it seems that ULO can create mutiple users, but they sometimes have"
+  echo "      it seems that ULO can create multiple users, but they sometimes have"
   echo "      problems to log in."
-  echo "    - If mutiple activities are performed at a same time or their execution"
+  echo "    - If multiple activities are performed at a same time or their execution"
   echo "      might overlap, it is advised to create separate ULO users for such"
   echo "      activities."
-  echo "    - ULO can perform unintended self reeboots which always reset current"
-  echo "      camera mode to standard and therefore ULO will stop recodring."
+  echo "    - ULO can perform unintended self reboots which always reset current"
+  echo "      camera mode to standard and therefore ULO will stop recording."
   echo "    - In version 10.1308 and maybe earlier, there is a bug where anyone who"
   echo "      knows about ULO can access all ULO files even when not logged in to ULO,"
   echo "      when at least one user is logged in to ULO no matter where."
   echo "    - In version 10.1308 and maybe earlier, ULO stores WiFi passwords in"
   echo "      plain text inside its system log which is accessible if requested."
+  echo "    - There is a possibility of ULOs video recording to stop working correctly,"
+  echo "      in this case ULO will create a video file but it will have 0 bytes."
 }
+
+# ARGUMENTS --------------------------------------------------------------------------------
+
+quiet="0"
+
+opt_count="0"
+while getopts "q:h" opt; do
+  case "${opt}" in
+    q)
+      quiet="1"
+      opt_count="$(( opt_count + 1 ))"
+      ;;
+    h)
+      usage
+      opt_count="$(( opt_count + 1 ))"
+      exit 0
+      ;;
+    *)
+      # DO NOTHING
+      ;;
+  esac
+done
+shift "${opt_count}"
+
+wget_args_def="-q --show-progress"
+find_args_def="-print"
+if [[ "${quiet}" == "1" ]]; then
+  wget_args_def="-q"
+  find_args_def=""
+fi
+read -r -a wget_args <<<"${wget_args_def}"
+read -r -a find_args <<<"${find_args_def}"
+
+host="${1}"
+username="${2}"
+password="${3}"
+action="${4}"
+arg1="${5}"
+arg2="${6}"
+arg3="${7}"
+arg4="${8}"
+arg5="${9}"
+arg6="${10}"
+arg7="${11}"
+arg8="${12}"
+
+# CHECKS --------------------------------------------------------------------------------
 
 if [[ -z "${action}" ]]; then
   usage
   exit 0
 fi
 
-if ! command -v jq 1>/dev/null 2>&1; then
-  echo "ERROR: JQ binary is not installed."
-  exit 1
-fi
+binary_list=( \
+  'jq' \
+  'wget' \
+  'timeout' \
+  'curl' \
+  'ping' \
+)
+binaries_missing="0"
+for cmd in "${binary_list[@]}"
+do
+  if ! command -v "${cmd}" 1>/dev/null 2>&1; then
+    write "ERROR: Binary '${cmd}' is not installed."
+    binaries_missing=$(( binaries_missing + 1 ))
+  fi
+done
 
-if ! command -v wget 1>/dev/null 2>&1; then
-  echo "ERROR: WGET binary is not installed."
+if [[ "${binaries_missing}" != "0" ]]; then
   exit 1
 fi
 
@@ -249,6 +324,67 @@ logout() {
   auth=""
 }
 
+checkulo() {
+  local path_to_video="${1}"
+
+  # Assume that ULO has a problem until proven otherwise
+  PING_CHECK="1"
+  WEB_CHECK="1"
+  FILE_CHECK="1"
+
+  # Check if ULOs is pingable
+  if timeout --preserve-status --kill-after=5s 2s ping -c 1 "${host}" >/dev/null 2>&1; then
+    PING_CHECK="0"
+  else
+    write "WARNING: Unable to ping ULO."
+  fi
+
+  # Check if ULOs web is loading
+  if wget -q --spider "${host}"; then
+    WEB_CHECK="0"
+  else
+    write "WARNING: Unable to reach ULO web interface."
+  fi
+
+  # Check if ULOs download folder does not contain too many empty files in succession
+  if [[ -z "${path_to_video}" ]]; then
+    FILE_CHECK="0"
+  else
+    if [[ ! -d "${path_to_video}" ]]; then
+      FILE_CHECK="0"
+    else
+      if [[ "$(find "${path_to_video}" -mindepth 1 -name "*.mp4" -type f -print | wc -l)" == "0" ]]; then
+        FILE_CHECK="0"
+      else
+        readarray -d ' ' -t video_files < <(find "${path_to_video}" -mindepth 1 -name "*.mp4" -type f -print | tail -n 3 | tr '\n' ' ')
+
+        file_size="0"
+        for file in "${video_files[@]}"
+        do
+          file_size=$(( file_size + $(stat -c%s "${file}") ))
+        done
+
+        if [[ "${file_size}" != "0" ]]; then
+          FILE_CHECK="0"
+        else
+          write "WARNING: ULO has a possible problem with recording."
+        fi
+      fi
+    fi
+  fi
+
+  # Validate previous checks to determine if ULO has problems or not
+  CHECKS=$(( PING_CHECK + WEB_CHECK + FILE_CHECK ))
+  if [[ "${CHECKS}" == "0" ]]; then
+    write "ULO seems to be without known problems."
+  else
+    write
+    throw "ULO seems to have some problems."
+  fi
+
+  exit 0
+}
+
 getmode() {
   callapi "/api/v1/mode" "GET" "" ".mode"
 
@@ -263,7 +399,7 @@ setmode() {
   if [[ "${output}" != "${mode}" ]]; then
     throw "Mode change failed."
   else
-    echo "Success."
+    write "Success."
   fi
 }
 
@@ -310,11 +446,11 @@ movetocard() {
 
   setmode "${mode}" >/dev/null
 
-  error="$(echo "${callapi_output}" | jq -r ".error" | sed 's/^null$//')"
+  error="$(write "${callapi_output}" | jq -r ".error" | sed 's/^null$//')"
   if [[ -n "${error}" ]]; then
     throw "${error}"
   else
-    echo "${callapi_output}" | jq -r ".status" | sed 's/^null$//'
+    write "${callapi_output}" | jq -r ".status" | sed 's/^null$//'
   fi
 }
 
@@ -364,7 +500,7 @@ cleandiskspace() {
   if [[ -n "${error}" ]]; then
     throw "${error}"
   else
-    echo "${callapi_output}" | jq -r ".status" | sed 's/^null$//'
+    write "${callapi_output}" | jq -r ".status" | sed 's/^null$//'
   fi
 }
 
@@ -424,7 +560,7 @@ downloadmedia() {
     #echo "media_name=${media_name}"
 
     if [[ "${init}" != "${media_path}" ]]; then
-      echo "Storing media files to: ${media_path}"
+      write "Storing media files to: ${media_path}"
       local init="${media_path}"
     fi
 
@@ -435,7 +571,7 @@ downloadmedia() {
       *)
         # If file exists, skip
         if [[ -f "${real_path_media}" ]]; then
-          #echo "File '${real_path_media}' already exists, skipping..."
+          #write "File '${real_path_media}' already exists, skipping..."
           continue;
         fi
         ;;
@@ -443,13 +579,13 @@ downloadmedia() {
 
     if [[ "${media_path}" != "" ]]; then
       if [[ -t 1 ]]; then
-        { wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q --show-progress && echo "OK"; } || echo "FAILED"
+        { timeout --preserve-status --kill-after=5s 1m wget "${wget_args[@]}" -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate && write "OK"; } || write "FAILED"
       else
-        { wget -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate -q && echo "OK: ${media_name}"; } || echo "FAILED: ${media_name}"
+        { timeout --preserve-status --kill-after=5s 1m wget -q -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate && write "OK: ${media_name}"; } || write "FAILED: ${media_name}"
       fi
 
-      if [[ "$(du -k "${media_path}" | cut -f1)" == "0" ]];then
-        echo -e "ERROR: Downloaded file '${media_path}' has length of 0 bytes."
+      if [[ "$(du -k "${media_path}" | cut -f1)" == "0" ]]; then
+        write -e "ERROR: Downloaded file '${media_path}' has length of 0 bytes."
       fi
     else
       throw "Unable to get media path."
@@ -463,14 +599,14 @@ downloadmedia() {
   done
 
   if [[ "${action_name}" == "downloadlog" ]] || [[ "${action_name}" == "downloadvideos" ]] || [[ "${action_name}" == "downloadsnapshots" ]]; then
-    echo "Retention clean-up..."
-    #echo "Retention clean-up of empty files in directory '${path_to}' started..."
-    #find "${path_to}" -mindepth 1 -name "*${extension}" -type f -size 0 -print -delete
+    write "Retention clean-up..."
+    #write "Retention clean-up of empty files in directory '${path_to}' started..."
+    #find "${path_to}" -mindepth 1 -name "*${extension}" -type f -size 0 "${find_args[@]}" -delete
     if [[ "${retention}" != "0" ]] && [[ -n "${retention}" ]]; then
-      echo "Retention clean-up of files in directory '${path_to}' started..."
-      find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" -print -delete | sort
-      echo "Retention clean-up of empty directories at '${path_to}' started..."
-      find "${path_to}" -type d -empty -print -delete | sort
+      write "Retention clean-up of files in directory '${path_to}' started..."
+      find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" "${find_args[@]}" -delete | sort
+      write "Retention clean-up of empty directories at '${path_to}' started..."
+      find "${path_to}" -type d -empty "${find_args[@]}" -delete | sort
     fi
   fi
 }
@@ -558,51 +694,40 @@ checkavailability() {
   if [[ "${result_step}" == "true" ]]; then
     case "${operation}" in
       and)
-        echo "All devices are available."
+        write "All devices are available."
         ;;
       or)
-        echo "At least one device is available."
+        write "At least one device is available."
         ;;
       *)
         setmode "${if_false}"
         throw "Operation '${operation}' is not supported."
         ;;
     esac
-    echo "Setting camera to '${if_true}' mode."
+    write "Setting camera to '${if_true}' mode."
     setmode "${if_true}"
   else
     case "${operation}" in
       and)
-        echo "At least one device is not available."
+        write "At least one device is not available."
         ;;
       or)
-        echo "All devices are not available."
+        write "All devices are not available."
         ;;
       *)
         setmode "${if_false}"
         throw "Operation '${operation}' is not supported."
         ;;
     esac
-    echo "Setting camera to '${if_false}' mode."
+    write "Setting camera to '${if_false}' mode."
     setmode "${if_false}"
   fi
-}
-
-throw() {
-  local error="${1}"
-
-  if [[ -z "${error}" ]]; then
-    error="No error message provided."
-  fi
-
-  echo -e "ERROR: ${error}"
-  exit 1
 }
 
 ping_host() {
   local host_to_ping="${1}"
 
-  if timeout 5 ping -c 1 "${host_to_ping}" >/dev/null 2>&1; then
+  if timeout 5s ping -c 1 "${host_to_ping}" >/dev/null 2>&1; then
     echo "true"
   else
     echo "false"
@@ -613,11 +738,14 @@ ping_host() {
 
 is_running
 
-login
+[[ "${action}" != "checkulo" ]] && login
 
 case "${action}" in
   callapi)
     callapi "${arg1}" "${arg2}" "${arg3}" "${arg4}" "${arg5}" "${arg6}" "${arg7}" "${arg8}"
+    ;;
+  checkulo)
+    checkulo "${arg1}"
     ;;
   getmode)
     getmode
@@ -666,10 +794,10 @@ case "${action}" in
     ;;
   *)
     # Unknown action
-    echo "ERROR: Action '${action}' is unknown."
+    write "ERROR: Action '${action}' is unknown."
     logout
     exit 1
     ;;
 esac
 
-logout
+[[ "${action}" != "checkulo" ]] && logout
