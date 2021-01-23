@@ -57,7 +57,7 @@ Actions:
   downloadlog - Download ULO log into specified location
       Arguments:
           1. destination path - location where snapshot files should be moved
-                                NOTE: Alwayse use absolute paths! Destination
+                                NOTE: Always use absolute paths! Destination
                                       folder must already exist!
           2. retention - how old uploaded files should be removed in hours;
                          if set to 0, no age limit will be used and all
@@ -68,14 +68,14 @@ Actions:
                     is overwritten
       Arguments:
           1. destination path - location where snapshot files should be moved
-                                NOTE: Alwayse use absolute paths! Destination
+                                NOTE: Always use absolute paths! Destination
                                       folder must already exist!
 
   downloadvideos - Download all available videos stored in ULO into specified
                    location, if video with same name exists it is skipped
       Arguments:
           1. destination path - location where snapshot files should be moved
-                                NOTE: Alwayse use absolute paths! Destination
+                                NOTE: Always use absolute paths! Destination
                                       folder must already exist!
           2. retention - how old uploaded files should be removed in hours;
                          if set to 0, no age limit will be used and all
@@ -86,7 +86,7 @@ Actions:
                       is skipped
       Arguments:
           1. destination path - location where snapshot files should be moved
-                                NOTE: Alwayse use absolute paths! Destination
+                                NOTE: Always use absolute paths! Destination
                                       folder must already exist!
           2. retention - how old uploaded files should be removed in hours;
                          if set to 0, no age limit will be used and all
@@ -131,8 +131,8 @@ Examples:
       ./ulo.sh '192.168.0.10' 'test' '123!Abc' 'downloadvideos' '/tmp/ulovideo'
 
 Notes from working with ULO:
-    - When using this tool, ULO usualy wakes up unless it is in Alert mode.
-    - Transfer speeds usualy depends on WiFi signal strength or ULOs
+    - When using this tool, ULO usually wakes up unless it is in Alert mode.
+    - Transfer speeds usually depends on WiFi signal strength or ULOs
       processing power. Due to way how we access files there is not much space
       to make this process faster in this code.
     - Files from ULO memory can be emptied only in standard mode.
@@ -141,16 +141,18 @@ Notes from working with ULO:
       out along with this tool at the end of execution.
     - It is advised to create new user without admin privileges to use this
       tool, unless you need to perform tasks that require them. For now
-      it seems that ULO can create mutiple users, but they sometimes have
+      it seems that ULO can create multiple users, but they sometimes have
       problems to log in.
-    - If mutiple activities are performed at a same time or their execution
+    - If multiple activities are performed at a same time or their execution
       might overlap, it is advised to create separate ULO users for such
       activities.
-    - ULO can perform unintended self reeboots which always reset current
-      camera mode to standard and therefore ULO will stop recodring.
+    - ULO can perform unintended self reboots which always reset current
+      camera mode to standard and therefore ULO will stop recording.
     - In version 10.1308 and maybe earlier, there is a bug where anyone who
       knows about ULO can access all ULO files even when not logged in to ULO,
       when at least one user is logged in to ULO no matter where.
     - In version 10.1308 and maybe earlier, ULO stores WiFi passwords in
       plain text inside its system log which is accessible if requested.
+    - There is a possibility of ULOs video recording to stop working correctly,
+      in this case ULO will create a video file but it will have 0 bytes.
 ```
