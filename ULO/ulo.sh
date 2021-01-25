@@ -736,7 +736,7 @@ ping_host() {
 
 # MAIN CODE --------------------------------------------------------------------------------
 
-is_running
+[[ "${action}" != "checkulo" ]] && is_running
 
 [[ "${action}" != "checkulo" ]] && login
 
