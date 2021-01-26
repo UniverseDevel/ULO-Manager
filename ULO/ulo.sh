@@ -273,10 +273,10 @@ output=""
 is_running() {
   local running_count="0"
 
-  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v "grep" | wc -l)"
+  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v 'grep' | grep -v 'checkulo' | wc -l)"
 
   if [[ "${running_count}" != "0" ]]; then
-    ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v "grep"
+    ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v 'grep' | grep -v 'checkulo'
 
     throw "Other process already running (count: ${running_count})."
   fi
