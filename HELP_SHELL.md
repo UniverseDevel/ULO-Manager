@@ -9,6 +9,10 @@ Arguments:
   -q - Quiet mode, suppress most of the outputs
 
 Actions:
+  isrunning - Check if other instance of skript is running
+      Arguments:
+          None
+
   checkulo - Check if ULO has any of known problems
       Arguments:
           1. video destination path - path to downloaded videos

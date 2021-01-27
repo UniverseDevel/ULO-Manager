@@ -34,6 +34,10 @@ usage() {
   echo "  -q - Quiet mode, suppress most of the outputs"
   echo
   echo "Actions:"
+  echo "  isrunning - Check if other instance of skript is running"
+  echo "      Arguments:"
+  echo "          None"
+  echo
   echo "  checkulo - Check if ULO has any of known problems"
   echo "      Arguments:"
   echo "          1. video destination path - path to downloaded videos"
@@ -237,6 +241,8 @@ arg6="${10}"
 arg7="${11}"
 arg8="${12}"
 
+nologin=('isrunning' 'checkulo')
+
 # CHECKS --------------------------------------------------------------------------------
 
 if [[ -z "${action}" ]]; then
@@ -252,8 +258,7 @@ binary_list=( \
   'ping' \
 )
 binaries_missing="0"
-for cmd in "${binary_list[@]}"
-do
+for cmd in "${binary_list[@]}"; do
   if ! command -v "${cmd}" 1>/dev/null 2>&1; then
     write "ERROR: Binary '${cmd}' is not installed."
     binaries_missing=$(( binaries_missing + 1 ))
@@ -270,13 +275,27 @@ output=""
 
 # FUNCTIONS --------------------------------------------------------------------------------
 
-is_running() {
+arraycontains() {
+  local match="${1}"
+  local array="${2}"
+
+  for action_name in "${array[@]}"; do
+    if [[ "${action_name}" == "${match}" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+isrunning() {
   local running_count="0"
 
-  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v 'grep' | grep -v 'checkulo' | wc -l)"
+  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning' | wc -l)"
 
   if [[ "${running_count}" != "0" ]]; then
-    ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v 'grep' | grep -v 'checkulo'
+    if [[ "${quiet}" == "0" ]]; then
+      ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning'
+    fi
 
     throw "Other process already running (count: ${running_count})."
   fi
@@ -359,8 +378,7 @@ checkulo() {
         readarray -d ' ' -t video_files < <(find "${path_to_video}" -mindepth 1 -name "*.mp4" -type f -print | tail -n 3 | tr '\n' ' ')
 
         file_size="0"
-        for file in "${video_files[@]}"
-        do
+        for file in "${video_files[@]}"; do
           file_size=$(( file_size + $(stat -c%s "${file}") ))
         done
 
@@ -601,12 +619,12 @@ downloadmedia() {
   if [[ "${action_name}" == "downloadlog" ]] || [[ "${action_name}" == "downloadvideos" ]] || [[ "${action_name}" == "downloadsnapshots" ]]; then
     write "Retention clean-up..."
     #write "Retention clean-up of empty files in directory '${path_to}' started..."
-    #find "${path_to}" -mindepth 1 -name "*${extension}" -type f -size 0 "${find_args[@]}" -delete
+    #timeout --preserve-status --kill-after=5s 1m find "${path_to}" -mindepth 1 -name "*${extension}" -type f -size 0 "${find_args[@]}" -delete
     if [[ "${retention}" != "0" ]] && [[ -n "${retention}" ]]; then
       write "Retention clean-up of files in directory '${path_to}' started..."
-      find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" "${find_args[@]}" -delete | sort
+      timeout --preserve-status --kill-after=5s 1m find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" "${find_args[@]}" -delete | sort
       write "Retention clean-up of empty directories at '${path_to}' started..."
-      find "${path_to}" -type d -empty "${find_args[@]}" -delete | sort
+      timeout --preserve-status --kill-after=5s 1m find "${path_to}" -type d -empty "${find_args[@]}" -delete | sort
     fi
   fi
 }
@@ -665,8 +683,7 @@ checkavailability() {
     throw "At least one host has to be provided."
   fi
 
-  for host_item in "${hosts[@]}"
-  do
+  for host_item in "${hosts[@]}"; do
     result="$(ping_host "${host_item}")"
 
     case "${operation}" in
@@ -736,9 +753,14 @@ ping_host() {
 
 # MAIN CODE --------------------------------------------------------------------------------
 
-[[ "${action}" != "checkulo" ]] && is_running
+if ! arraycontains "${action}" "${nologin[@]}"; then
+  isrunning
+fi
 
-[[ "${action}" != "checkulo" ]] && login
+
+if ! arraycontains "${action}" "${nologin[@]}"; then
+  login
+fi
 
 case "${action}" in
   callapi)
@@ -746,6 +768,9 @@ case "${action}" in
     ;;
   checkulo)
     checkulo "${arg1}"
+    ;;
+  isrunning)
+    isrunning
     ;;
   getmode)
     getmode
@@ -800,4 +825,6 @@ case "${action}" in
     ;;
 esac
 
-[[ "${action}" != "checkulo" ]] && logout
+if ! arraycontains "${action}" "${nologin[@]}"; then
+  logout
+fi
