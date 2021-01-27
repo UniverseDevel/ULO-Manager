@@ -277,7 +277,8 @@ output=""
 
 arraycontains() {
   local match="${1}"
-  local array="${2}"
+  shift
+  local array=( $@ )
 
   for action_name in "${array[@]}"; do
     if [[ "${action_name}" == "${match}" ]]; then
