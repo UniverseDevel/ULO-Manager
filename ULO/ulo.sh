@@ -376,7 +376,7 @@ checkulo() {
       if [[ "$(find "${path_to_video}" -mindepth 1 -name "*.mp4" -type f -print | wc -l)" == "0" ]]; then
         FILE_CHECK="0"
       else
-        readarray -d ' ' -t video_files < <(find "${path_to_video}" -mindepth 1 -name "*.mp4" -type f -print | tail -n 3 | tr '\n' ' ')
+        readarray -d ' ' -t video_files < <(find "${path_to_video}" -mindepth 1 -name "*.mp4" -type f -print | sort | tail -n 3 | tr '\n' ' ')
 
         file_size="0"
         for file in "${video_files[@]}"; do
