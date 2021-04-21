@@ -625,7 +625,7 @@ downloadmedia() {
       write "Retention clean-up of files in directory '${path_to}' started..."
       timeout --preserve-status --kill-after=5s 1m find "${path_to}" -mindepth 1 -name "*${extension}" -type f -mtime +"${retention}" "${find_args[@]}" -delete | sort
       write "Retention clean-up of empty directories at '${path_to}' started..."
-      timeout --preserve-status --kill-after=5s 1m find "${path_to}" -type d -empty "${find_args[@]}" -delete | sort
+      timeout --preserve-status --kill-after=5s 1m find "${path_to}" -mindepth 1 -type d -empty "${find_args[@]}" -delete | sort
     fi
   fi
 }
