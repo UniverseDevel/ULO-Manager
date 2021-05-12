@@ -291,11 +291,13 @@ arraycontains() {
 isrunning() {
   local running_count="0"
 
-  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning' | wc -l)"
+  # Check if skript is running using the same user as multiple sessions are possible but only one per user,
+  # actions checkulo and isrunning do not login to ULO so they can run as much as they want
+  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning' | wc -l)"
 
   if [[ "${running_count}" != "0" ]]; then
     if [[ "${quiet}" == "0" ]]; then
-      ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning'
+      ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning'
     fi
 
     throw "Other process already running (count: ${running_count})."
