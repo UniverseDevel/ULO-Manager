@@ -2,8 +2,8 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
 /.vs/ULO Controller/v15
+/.vs/ULO Controller/v16
 /ULOController/bin/Release/ULOControls.err
 /ULOController/bin/Release/ULOControls.out
 /ULOController/bin/Release/ULOControls.conf
