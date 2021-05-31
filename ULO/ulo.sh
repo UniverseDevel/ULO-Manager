@@ -19,8 +19,43 @@ throw() {
     error="No error message provided."
   fi
 
+  add_consecutive_errors
+
   write "ERROR: ${error}"
   exit 1
+}
+
+code_throw() {
+  local expected_exit_code="${1}"
+  local error="${2}"
+
+  if [[ -z "${error}" ]]; then
+    error="No error message provided."
+  fi
+
+  if [[ "${exit_code}" != "${expected_exit_code}" ]]; then
+    add_consecutive_errors
+
+    write "ERROR: ${error}"
+    exit 1
+  fi
+}
+
+add_consecutive_errors() {
+  local cef_file="${consecutive_errors_file/\*/${action}}"
+  if [[ ! -f "${cef_file}" ]]; then
+    echo -n "0" > "${cef_file}"
+  fi
+  local consecutive_error_count="0"
+  consecutive_error_count="$(cat "${cef_file}")"
+
+  (( consecutive_error_count++ ))
+  echo -n "${consecutive_error_count}" > "${cef_file}"
+}
+
+reset_consecutive_errors() {
+  local cef_file="${consecutive_errors_file/\*/${action}}"
+  echo -n "0" > "${cef_file}"
 }
 
 usage() {
@@ -256,12 +291,13 @@ binary_list=( \
   'timeout' \
   'curl' \
   'ping' \
+  'read' \
 )
 binaries_missing="0"
 for cmd in "${binary_list[@]}"; do
   if ! command -v "${cmd}" 1>/dev/null 2>&1; then
     write "ERROR: Binary '${cmd}' is not installed."
-    binaries_missing=$(( binaries_missing + 1 ))
+    (( binaries_missing++ ))
   fi
 done
 
@@ -269,16 +305,22 @@ if [[ "${binaries_missing}" != "0" ]]; then
   exit 1
 fi
 
+# VARIABLES --------------------------------------------------------------------------------
+
 auth="Basic $(echo -n "${username}":"${password}" | base64)"
 password="******" # We don't have to hold password anymore
 output=""
+exit_code="0"
+is_logged_in="0"
+consecutive_errors_file="/tmp/ulo_cef.*.tmp"
 
 # FUNCTIONS --------------------------------------------------------------------------------
 
 arraycontains() {
   local match="${1}"
   shift
-  local array=( $@ )
+  local array=""
+  read -r -a array <<< "$@"
 
   for action_name in "${array[@]}"; do
     if [[ "${action_name}" == "${match}" ]]; then
@@ -321,7 +363,8 @@ callapi() {
   local web_output=""
 
   web_output="$(curl -s "http://${host}${path}" -X "${method}" -d "${body}" -H "Content-Type: application/json" -H "Authorization: ${auth}")"
-
+  exit_code="$?"
+  
   # Check if returned value is valid JSON
   if ! jq -e . >/dev/null 2>&1 <<<"${web_output}"; then
     output="${web_output}"
@@ -336,14 +379,20 @@ callapi() {
 
 login() {
   callapi "/api/v1/login" "POST" "{ \"iOSAgent\": false }" ".token"
+  code_throw "0" "Login failed."
+  is_logged_in="1"
 
   auth="Bearer ${output}"
 }
 
 logout() {
-  callapi "/api/v1/logout" "POST" "{}" "."
+  if [[ "${is_logged_in}" == "1" ]]; then
+    callapi "/api/v1/logout" "POST" "{}" "."
+    code_throw "0" "Logout failed."
+    is_logged_in="0"
 
-  auth=""
+    auth=""
+  fi
 }
 
 checkulo() {
@@ -353,6 +402,7 @@ checkulo() {
   PING_CHECK="1"
   WEB_CHECK="1"
   FILE_CHECK="1"
+  CEF_CHECK="1"
 
   # Check if ULOs is pingable
   if timeout --preserve-status --kill-after=5s 2s ping -c 1 "${host}" >/dev/null 2>&1; then
@@ -394,8 +444,16 @@ checkulo() {
     fi
   fi
 
+  # Check if there are mutiple consecutive errors being generated
+  # shellcheck disable=SC2086
+  if [[ "$(grep -vE "^[0-5]$" ${consecutive_errors_file/ /\\ } | wc -l)" == "0" ]]; then
+    CEF_CHECK="0"
+  else
+    write "WARNING: Consecutive errors were found."
+  fi
+
   # Validate previous checks to determine if ULO has problems or not
-  CHECKS=$(( PING_CHECK + WEB_CHECK + FILE_CHECK ))
+  CHECKS=$(( PING_CHECK + WEB_CHECK + FILE_CHECK + CEF_CHECK ))
   if [[ "${CHECKS}" == "0" ]]; then
     write "ULO seems to be without known problems."
   else
@@ -408,6 +466,7 @@ checkulo() {
 
 getmode() {
   callapi "/api/v1/mode" "GET" "" ".mode"
+  code_throw "0" "Obtaining mode failed."
 
   echo "${output}"
 }
@@ -416,6 +475,7 @@ setmode() {
   local mode="${1}"
 
   callapi "/api/v1/mode" "PUT" "{ \"mode\": \"${mode}\" }" ".mode"
+  code_throw "0" "Mode change failed."
 
   if [[ "${output}" != "${mode}" ]]; then
     throw "Mode change failed."
@@ -426,30 +486,35 @@ setmode() {
 
 ispowered() {
   callapi "/api/v1/state" "GET" "" ".plugged"
+  code_throw "0" "Obtaining powered state failed."
 
   echo "${output}"
 }
 
 getbattery() {
   callapi "/api/v1/state" "GET" "" ".batteryLevel"
+  code_throw "0" "Obtaining battery state failed."
 
   echo "${output}"
 }
 
 iscard() {
   callapi "/api/v1/files/stats" "GET" "" ".sdcard.inserted"
+  code_throw "0" "Obtaining card state failed."
 
   echo "${output}"
 }
 
 getcardspace() {
   callapi "/api/v1/files/stats" "GET" "" ".sdcard.freeMB"
+  code_throw "0" "Obtaining card space failed."
 
   echo "${output}"
 }
 
 getdiskspace() {
   callapi "/api/v1/files/stats" "GET" "" ".internal.freeMB"
+  code_throw "0" "Obtaining disk space failed."
 
   echo "${output}"
 }
@@ -463,6 +528,7 @@ movetocard() {
   setmode "standard" >/dev/null
 
   callapi "/api/v1/files/backup?filename=all" "PUT" "{\"running\": true}" "."
+  code_throw "0" "Moving files to card failed."
   callapi_output="${output}"
 
   setmode "${mode}" >/dev/null
@@ -513,6 +579,7 @@ cleandiskspace() {
   setmode "standard" >/dev/null
 
   callapi "/api/v1/files/delete?removeType=${period}" "DELETE" "" "."
+  code_throw "0" "Cleaning disk space failed."
   callapi_output="${output}"
 
   setmode "${mode}" >/dev/null
@@ -563,6 +630,7 @@ downloadmedia() {
       throw "Action '${action_name}' is not supported."
       ;;
   esac
+  code_throw "0" "Downloading media failed."
 
   echo "${output}" | grep "${extension}" | while read -r media; do
     media_trim="/${media//media\//}"
@@ -760,7 +828,6 @@ if ! arraycontains "${action}" "${nologin[@]}"; then
   isrunning
 fi
 
-
 if ! arraycontains "${action}" "${nologin[@]}"; then
   login
 fi
@@ -768,6 +835,7 @@ fi
 case "${action}" in
   callapi)
     callapi "${arg1}" "${arg2}" "${arg3}" "${arg4}" "${arg5}" "${arg6}" "${arg7}" "${arg8}"
+    code_throw "0" "API call failed."
     ;;
   checkulo)
     checkulo "${arg1}"
@@ -828,6 +896,6 @@ case "${action}" in
     ;;
 esac
 
-if ! arraycontains "${action}" "${nologin[@]}"; then
-  logout
-fi
+logout
+
+reset_consecutive_errors
