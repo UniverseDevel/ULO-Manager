@@ -42,6 +42,10 @@ code_throw() {
 }
 
 add_consecutive_errors() {
+  if [[ "${action}" == "checkulo" ]]; then
+    return 0
+  fi
+
   local cef_file="${consecutive_errors_file/\*/${action}}"
   if [[ ! -f "${cef_file}" ]]; then
     echo -n "0" > "${cef_file}"
@@ -54,6 +58,10 @@ add_consecutive_errors() {
 }
 
 reset_consecutive_errors() {
+  if [[ "${action}" == "checkulo" ]]; then
+    return 0
+  fi
+
   local cef_file="${consecutive_errors_file/\*/${action}}"
   echo -n "0" > "${cef_file}"
 }
