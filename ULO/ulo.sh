@@ -368,6 +368,7 @@ callapi() {
   local method="${2}"
   local body="${3}"
   local json_filter="${4}"
+  local show_output="${5}"
   local web_output=""
 
   web_output="$(curl -s "http://${host}${path}" -X "${method}" -d "${body}" -H "Content-Type: application/json" -H "Authorization: ${auth}")"
@@ -377,10 +378,10 @@ callapi() {
   if ! jq -e . >/dev/null 2>&1 <<<"${web_output}"; then
     output="${web_output}"
   else
-    output="$(echo "${web_output}" | jq -r "${json_filter}" | sed 's/^null$//')"
+    output="$(echo "${web_output}" | jq -r "try ${json_filter}" | sed 's/^null$//')"
   fi
 
-  if [[ "${action}" == "callapi" ]]; then
+  if [[ "${show_output}" == "true" ]]; then
     echo "${output}"
   fi
 }
@@ -842,7 +843,7 @@ fi
 
 case "${action}" in
   callapi)
-    callapi "${arg1}" "${arg2}" "${arg3}" "${arg4}" "${arg5}" "${arg6}" "${arg7}" "${arg8}"
+    callapi "${arg1}" "${arg2}" "${arg3}" "${arg4}" "true"
     code_throw "0" "API call failed."
     ;;
   checkulo)
