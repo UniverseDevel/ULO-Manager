@@ -46,7 +46,7 @@ add_consecutive_errors() {
     return 0
   fi
 
-  local cef_file="${consecutive_errors_file/\*/${action}}"
+  local cef_file="${ulo_consecutive_errors_file/\*/${action}}"
   if [[ ! -f "${cef_file}" ]]; then
     echo -n "0" > "${cef_file}"
   fi
@@ -62,7 +62,7 @@ reset_consecutive_errors() {
     return 0
   fi
 
-  local cef_file="${consecutive_errors_file/\*/${action}}"
+  local cef_file="${ulo_consecutive_errors_file/\*/${action}}"
   echo -n "0" > "${cef_file}"
 }
 
@@ -285,6 +285,7 @@ arg7="${11}"
 arg8="${12}"
 
 nologin=('isrunning' 'checkulo')
+valid_state=('standard' 'alert' 'spy')
 
 # CHECKS --------------------------------------------------------------------------------
 
@@ -320,7 +321,10 @@ password="******" # We don't have to hold password anymore
 output=""
 exit_code="0"
 is_logged_in="0"
-consecutive_errors_file="/tmp/ulo_cef.*.tmp"
+
+ulo_tmp_folder="/tmp"
+ulo_consecutive_errors_file="${ulo_tmp_folder}/ulo_cef.*.tmp"
+ulo_state_file="${ulo_tmp_folder}/ulo_state.tmp"
 
 # FUNCTIONS --------------------------------------------------------------------------------
 
@@ -455,7 +459,7 @@ checkulo() {
 
   # Check if there are mutiple consecutive errors being generated
   # shellcheck disable=SC2086
-  if [[ "$(grep -vE "^[0-5]$" ${consecutive_errors_file/ /\\ } | wc -l)" == "0" ]]; then
+  if [[ "$(grep -vE "^[0-5]$" ${ulo_consecutive_errors_file/ /\\ } | wc -l)" == "0" ]]; then
     CEF_CHECK="0"
   else
     write "WARNING: Consecutive errors were found."
@@ -477,6 +481,12 @@ getmode() {
   callapi "/api/v1/mode" "GET" "" ".mode"
   code_throw "0" "Obtaining mode failed."
 
+  if arraycontains "${output}" "${valid_state[@]}"; then
+    echo -n "${output}" >"${ulo_state_file}"
+  else
+    echo -n "error" >"${ulo_state_file}"
+  fi
+
   echo "${output}"
 }
 
@@ -485,6 +495,12 @@ setmode() {
 
   callapi "/api/v1/mode" "PUT" "{ \"mode\": \"${mode}\" }" ".mode"
   code_throw "0" "Mode change failed."
+
+  if arraycontains "${output}" "${valid_state[@]}"; then
+    echo -n "${output}" >"${ulo_state_file}"
+  else
+    echo -n "error" >"${ulo_state_file}"
+  fi
 
   if [[ "${output}" != "${mode}" ]]; then
     throw "Mode change failed."
