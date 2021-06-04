@@ -418,7 +418,7 @@ checkulo() {
   CEF_CHECK="1"
 
   # Check if ULOs is pingable
-  if timeout --preserve-status --kill-after=5s 2s ping -c 1 "${host}" >/dev/null 2>&1; then
+  if timeout --preserve-status --kill-after=2s 10s ping -c 1 "${host}" >/dev/null 2>&1; then
     PING_CHECK="0"
   else
     write "WARNING: Unable to ping ULO."
@@ -840,7 +840,7 @@ checkavailability() {
 ping_host() {
   local host_to_ping="${1}"
 
-  if timeout 5s ping -c 1 "${host_to_ping}" >/dev/null 2>&1; then
+  if timeout --preserve-status --kill-after=2s 5s ping -c 1 "${host_to_ping}" >/dev/null 2>&1; then
     echo "true"
   else
     echo "false"
