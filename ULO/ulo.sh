@@ -839,12 +839,17 @@ checkavailability() {
 
 ping_host() {
   local host_to_ping="${1}"
+  local ping_counter=0
 
-  if timeout --preserve-status --kill-after=2s 5s ping -c 1 "${host_to_ping}" >/dev/null 2>&1; then
-    echo "true"
-  else
-    echo "false"
-  fi
+  while ! timeout --preserve-status --kill-after=2s 5s ping -c 1 "${host_to_ping}" >/dev/null 2>&1; do
+    (( ping_counter++ ))
+    if [[ "${ping_counter}" -ge "4" ]]; then
+      echo "false"
+      exit
+    fi
+  done
+
+  echo "true"
 }
 
 # MAIN CODE --------------------------------------------------------------------------------
