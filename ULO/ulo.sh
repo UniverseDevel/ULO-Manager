@@ -493,19 +493,25 @@ getmode() {
 setmode() {
   local mode="${1}"
 
-  callapi "/api/v1/mode" "PUT" "{ \"mode\": \"${mode}\" }" ".mode"
-  code_throw "0" "Mode change failed."
-
-  if arraycontains "${output}" "${valid_state[@]}"; then
-    echo -n "${output}" >"${ulo_state_file}"
-  else
-    echo -n "error" >"${ulo_state_file}"
-  fi
+  output="$(getmode)"
 
   if [[ "${output}" != "${mode}" ]]; then
-    throw "Mode change failed."
+    callapi "/api/v1/mode" "PUT" "{ \"mode\": \"${mode}\" }" ".mode"
+    code_throw "0" "Mode change failed."
+
+    if arraycontains "${output}" "${valid_state[@]}"; then
+      echo -n "${output}" >"${ulo_state_file}"
+    else
+      echo -n "error" >"${ulo_state_file}"
+    fi
+
+    if [[ "${output}" != "${mode}" ]]; then
+      throw "Mode change failed."
+    else
+      write "Success."
+    fi
   else
-    write "Success."
+    echo "Mode is already at desired setting."
   fi
 }
 
