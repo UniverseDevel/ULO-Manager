@@ -375,7 +375,7 @@ callapi() {
   local show_output="${5}"
   local web_output=""
 
-  web_output="$(curl -s "http://${host}${path}" -X "${method}" -d "${body}" -H "Content-Type: application/json" -H "Authorization: ${auth}")"
+  web_output="$(timeout --preserve-status --kill-after=2s 30s curl -s "http://${host}${path}" -X "${method}" -d "${body}" -H "Content-Type: application/json" -H "Authorization: ${auth}")"
   exit_code="$?"
   
   # Check if returned value is valid JSON
