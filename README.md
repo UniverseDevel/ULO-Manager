@@ -8,7 +8,7 @@ ULO Controller application: [ULOController/bin/Release](ULOController/bin/Releas
 ULO library: [ULO/bin/Release](ULO/bin/Release)  
 ULO shell script: [ULO/ulo.sh](ULO/ulo.sh)  
 
-Bare in mind, that I am learning C# and this is not a professional product and there is no warranty that it will work. Using this tool is purely at your own risk. Also I have to state that I am in no way affialiated with Mu Design Sàrl. Also, this tool is not aimed for beginner users, it might require a little knowledge of C#, JSONPath, API, networking or Windows CMD usage.
+Bare in mind, that I am learning C# and this is not a professional product and there is no warranty that it will work. Using this tool is purely at your own risk. Also I have to state that I am in no way affialiated with Mu Design Sï¿½rl. Also, this tool is not aimed for beginner users, it might require a little knowledge of C#, JSONPath, API, networking or Windows CMD usage.
 
 All usernames, passwords or IP addresses below are examples and should not be concidered to be default or safe.
 

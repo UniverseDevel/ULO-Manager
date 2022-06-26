@@ -1,56 +1,56 @@
 {
   "version": 3,
   "targets": {
-    ".NETFramework,Version=v2.0": {
-      "Newtonsoft.Json/12.0.3": {
+    ".NETFramework,Version=v4.6.1": {
+      "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/net20/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/net20/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {}
         }
       }
     },
-    ".NETFramework,Version=v2.0/win": {
-      "Newtonsoft.Json/12.0.3": {
+    ".NETFramework,Version=v4.6.1/win": {
+      "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/net20/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/net20/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {}
         }
       }
     },
-    ".NETFramework,Version=v2.0/win-x64": {
-      "Newtonsoft.Json/12.0.3": {
+    ".NETFramework,Version=v4.6.1/win-x64": {
+      "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/net20/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/net20/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {}
         }
       }
     },
-    ".NETFramework,Version=v2.0/win-x86": {
-      "Newtonsoft.Json/12.0.3": {
+    ".NETFramework,Version=v4.6.1/win-x86": {
+      "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/net20/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/net20/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Newtonsoft.Json/12.0.3": {
-      "sha512": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+    "Newtonsoft.Json/13.0.1": {
+      "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
       "type": "package",
-      "path": "newtonsoft.json/12.0.3",
+      "path": "newtonsoft.json/13.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -69,65 +69,58 @@
         "lib/netstandard1.3/Newtonsoft.Json.xml",
         "lib/netstandard2.0/Newtonsoft.Json.dll",
         "lib/netstandard2.0/Newtonsoft.Json.xml",
-        "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.dll",
-        "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.xml",
-        "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll",
-        "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
-        "newtonsoft.json.12.0.3.nupkg.sha512",
+        "newtonsoft.json.13.0.1.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
       ]
     }
   },
   "projectFileDependencyGroups": {
-    ".NETFramework,Version=v2.0": [
-      "Newtonsoft.Json >= 12.0.3"
+    ".NETFramework,Version=v4.6.1": [
+      "Newtonsoft.Json >= 13.0.1"
     ]
   },
   "packageFolders": {
     "C:\\Users\\Martin Suchy\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\ULO.csproj",
+      "projectUniqueName": "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj",
       "projectName": "ULO",
-      "projectPath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\ULO.csproj",
+      "projectPath": "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj",
       "packagesPath": "C:\\Users\\Martin Suchy\\.nuget\\packages\\",
-      "outputPath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\obj\\",
+      "outputPath": "W:\\Projects\\.NET\\ULO Controller\\ULO\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
-        "C:\\Microsoft\\Xamarin\\NuGet\\"
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback"
       ],
       "configFilePaths": [
         "C:\\Users\\Martin Suchy\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
       "originalTargetFrameworks": [
-        "net20"
+        "net461"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://www.nuget.org/api/v2/": {}
       },
       "frameworks": {
-        "net20": {
+        "net461": {
           "projectReferences": {}
         }
       }
     },
     "frameworks": {
-      "net20": {
+      "net461": {
         "dependencies": {
           "Newtonsoft.Json": {
             "target": "Package",
-            "version": "[12.0.3, )"
+            "version": "[13.0.1, )"
           }
         }
       }

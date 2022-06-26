@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using LibVLCSharp.Shared;
 using ULOControls;
 using WebSocketSharp;
 using static ULOController.Controller;
@@ -18,6 +19,11 @@ namespace ULOController
         private int fileRetention = 5;
         private WebSocket ws;
         private bool fileReset = false;
+        
+        private readonly LibVLC _libVlc; // https://code.videolan.org/mfkl/libvlcsharp-samples
+        private MemoryStream _memoryStreamVlc;
+        private StreamMediaInput _streamMediaInputVlc;
+        private Media _mediaVlc;
 
         private string generate_video_filename()
         {
@@ -34,6 +40,13 @@ namespace ULOController
         {
             init = true;
             InitializeComponent();
+
+            // LibVLC initiation
+            Core.Initialize();
+            _libVlc = new LibVLC();
+            videoView1.MediaPlayer = new MediaPlayer(_libVlc);
+            videoView1.MediaPlayer.Volume = 50;
+            videoView1.BackgroundImage = null;
 
             tbUsage.Text = usage();
             
@@ -99,7 +112,6 @@ namespace ULOController
                 videoFile = generate_video_filename();
                 addLine("Maximum file size reached, starting new video file.");
                 addLine("Video location: " + videoFile);
-                playVideo(bytes);
 
                 fileReset = true;
                 ws.Close();
@@ -137,18 +149,10 @@ namespace ULOController
         {
             try
             {
-                //TODO
+                // TODO
             }
             catch (Exception ex) { }
             ws.Close(CloseStatusCode.Normal);
-        }
-
-        private void playVideo(byte[] bytes)
-        {
-            using (Stream ms = new MemoryStream(bytes))
-            {
-                //TODO
-            }
         }
 
         private void btnExecute_Click(object sender_main, EventArgs e_main)
@@ -200,7 +204,10 @@ namespace ULOController
                             ws.OnOpen += (sender, e) =>
                             {
                                 addLine("Connection opened.");
-                                addLine("Video location: " + videoFile);
+                                if (record)
+                                {
+                                    addLine("Video location: " + videoFile);
+                                }
                                 stream_running = true;
                                 if (!fileReset)
                                 {
@@ -225,7 +232,13 @@ namespace ULOController
                                     {
                                         AppendAllBytes(videoFile, e.RawData);
                                     }
-                                    playVideo(e.RawData);
+                                    /*
+                                    https://github.com/jeremyVignelles/libvlcsharp-nonfree-samples/blob/main/
+                                    _memoryStreamVlc = new MemoryStream(e.RawData);
+                                    _streamMediaInputVlc = new StreamMediaInput(_memoryStreamVlc);
+                                    _mediaVlc = new Media(_libVlc, _streamMediaInputVlc);
+                                    if (videoView1.MediaPlayer != null) videoView1.MediaPlayer.Play(_mediaVlc);
+                                    */
                                     return;
                                 }
                                 if (e.IsPing)

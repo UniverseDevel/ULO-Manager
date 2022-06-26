@@ -1,48 +1,46 @@
 {
   "format": 1,
   "restore": {
-    "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\ULO.csproj": {}
+    "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj": {}
   },
   "projects": {
-    "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\ULO.csproj": {
+    "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\ULO.csproj",
+        "projectUniqueName": "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj",
         "projectName": "ULO",
-        "projectPath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\ULO.csproj",
+        "projectPath": "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj",
         "packagesPath": "C:\\Users\\Martin Suchy\\.nuget\\packages\\",
-        "outputPath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULO\\obj\\",
+        "outputPath": "W:\\Projects\\.NET\\ULO Controller\\ULO\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback"
         ],
         "configFilePaths": [
           "C:\\Users\\Martin Suchy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
         ],
         "originalTargetFrameworks": [
-          "net20"
+          "net461"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
-          "net20": {
+          "net461": {
             "projectReferences": {}
           }
         }
       },
       "frameworks": {
-        "net20": {
+        "net461": {
           "dependencies": {
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[12.0.3, )"
+              "version": "[13.0.1, )"
             }
           }
         }

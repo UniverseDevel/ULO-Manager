@@ -345,7 +345,7 @@ arraycontains() {
 isrunning() {
   local running_count="0"
 
-  # Check if skript is running using the same user as multiple sessions are possible but only one per user,
+  # Check if script is running using the same user as multiple sessions are possible but only one per user,
   # actions checkulo and isrunning do not login to ULO so they can run as much as they want
   running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning' | wc -l)"
 

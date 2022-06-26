@@ -1,48 +1,58 @@
 {
   "format": 1,
   "restore": {
-    "W:\\Visual Studio\\Projects\\ULO Controller\\ULOController\\ULOController.csproj": {}
+    "W:\\Projects\\.NET\\ULO Controller\\ULOController\\ULOController.csproj": {}
   },
   "projects": {
-    "W:\\Visual Studio\\Projects\\ULO Controller\\ULOController\\ULOController.csproj": {
+    "W:\\Projects\\.NET\\ULO Controller\\ULOController\\ULOController.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "W:\\Visual Studio\\Projects\\ULO Controller\\ULOController\\ULOController.csproj",
+        "projectUniqueName": "W:\\Projects\\.NET\\ULO Controller\\ULOController\\ULOController.csproj",
         "projectName": "ULOController",
-        "projectPath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULOController\\ULOController.csproj",
+        "projectPath": "W:\\Projects\\.NET\\ULO Controller\\ULOController\\ULOController.csproj",
         "packagesPath": "C:\\Users\\Martin Suchy\\.nuget\\packages\\",
-        "outputPath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULOController\\obj\\",
+        "outputPath": "W:\\Projects\\.NET\\ULO Controller\\ULOController\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback"
         ],
         "configFilePaths": [
           "C:\\Users\\Martin Suchy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
         ],
         "originalTargetFrameworks": [
-          "net45"
+          "net461"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
-          "net45": {
+          "net461": {
             "projectReferences": {}
           }
         }
       },
       "frameworks": {
-        "net45": {
+        "net461": {
           "dependencies": {
+            "LibVLCSharp": {
+              "target": "Package",
+              "version": "[3.6.5, )"
+            },
+            "LibVLCSharp.WinForms": {
+              "target": "Package",
+              "version": "[3.6.5, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[12.0.3, )"
+              "version": "[13.0.1, )"
+            },
+            "VideoLAN.LibVLC.Windows": {
+              "target": "Package",
+              "version": "[3.0.16, )"
             },
             "WebSocketSharp": {
               "target": "Package",

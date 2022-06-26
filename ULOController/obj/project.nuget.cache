@@ -1,10 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "5asaj3JJagSYkHPWDrh7M3ht4ZX8WuM9HoWHZoeQFHFkXexg+6M1tVXpYhmHGkRjA5PVdiK/KA3AYScBLlmrPg==",
+  "dgSpecHash": "4jLO+ztQokT8N0RvsGTxB5+HQI1nlT/v/6/CIm9oOwhzncjMP2CzWKKECxd1rPxTAz/FDLVoo/oB43mOYrQBfw==",
   "success": true,
-  "projectFilePath": "W:\\Visual Studio\\Projects\\ULO Controller\\ULOController\\ULOController.csproj",
+  "projectFilePath": "W:\\Projects\\.NET\\ULO Controller\\ULOController\\ULOController.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Martin Suchy\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\libvlcsharp\\3.6.5\\libvlcsharp.3.6.5.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\libvlcsharp.winforms\\3.6.5\\libvlcsharp.winforms.3.6.5.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\microsoft.bcl\\1.1.8\\microsoft.bcl.1.1.8.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\microsoft.bcl.async\\1.0.168\\microsoft.bcl.async.1.0.168.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\microsoft.bcl.build\\1.0.14\\microsoft.bcl.build.1.0.14.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
+    "C:\\Users\\Martin Suchy\\.nuget\\packages\\videolan.libvlc.windows\\3.0.16\\videolan.libvlc.windows.3.0.16.nupkg.sha512",
     "C:\\Users\\Martin Suchy\\.nuget\\packages\\websocketsharp\\1.0.3-rc11\\websocketsharp.1.0.3-rc11.nupkg.sha512"
   ],
   "logs": []
