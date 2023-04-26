@@ -1,6 +1,6 @@
 ﻿namespace ULOController
 {
-    partial class ControllerGUI
+    partial class ControllerGui
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControllerGUI));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControllerGui));
             this.label1 = new System.Windows.Forms.Label();
             this.cbAction = new System.Windows.Forms.ComboBox();
             this.tbHost = new System.Windows.Forms.TextBox();
@@ -522,7 +522,7 @@
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(700, 600);
-            this.Name = "ControllerGUI";
+            this.Name = "ControllerGui";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ULO Controller";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ControllerGUI_FormClosed);

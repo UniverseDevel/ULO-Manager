@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -14,7 +15,7 @@ using System.Text.RegularExpressions;
 
 namespace ULOControls
 {
-    public class ULO
+    public class Ulo
     {
         /*
         If you want to enjoy a little fun by ULOs India developement 
@@ -27,44 +28,44 @@ namespace ULOControls
         */
 
         // List of supported version that this script was tested on, not all versions were catched
-        private static string[] supportedVersions = new string[] { "01.0101", "08.0803", "08.0804", "08.0904", "10.1308" };
+        private static readonly string[] SupportedVersions = new string[] { "01.0101", "08.0803", "08.0804", "08.0904", "10.1308" };
 
         // Private
-        private static readonly string product_location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        private string host = String.Empty;
-        private string token = String.Empty;
+        private static readonly string ProductLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
+        private string _host = String.Empty;
+        private string _token = String.Empty;
 
         // Public
         public static readonly int processId = Process.GetCurrentProcess().Id;
         public static readonly string filesName = "ULOControls";
         public static readonly string timeFormat = "yyyyMMdd_HHmmss";
         public static readonly string filesTimestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        public static readonly string tempOutFile = product_location + "\\" + filesName + "_" + filesTimestamp + "_" + processId.ToString() + ".out.tmp";
-        public static readonly string tempErrFile = product_location + "\\" + filesName + "_" + filesTimestamp + "_" + processId.ToString() + ".err.tmp";
-        public static readonly string outFile = product_location + "\\" + filesName + ".out";
-        public static readonly string errFile = product_location + "\\" + filesName + ".err";
-        public static readonly string confFile = product_location + "\\" + filesName + ".conf";
-        public static readonly string archivePath = product_location + "\\archive";
-        public static readonly string logHandlerFlag = product_location + "\\LOG_HANDLING";
-        public DateTime session_start = DateTime.Now;
-        public DateTime session_end = DateTime.Now;
-        public bool is_supported = false;
+        public static readonly string tempOutFile = ProductLocation + @"\" + filesName + "_" + filesTimestamp + "_" + processId + ".out.tmp";
+        public static readonly string tempErrFile = ProductLocation + @"\" + filesName + "_" + filesTimestamp + "_" + processId + ".err.tmp";
+        public static readonly string outFile = ProductLocation + @"\" + filesName + ".out";
+        public static readonly string errFile = ProductLocation + @"\" + filesName + ".err";
+        public static readonly string confFile = ProductLocation + @"\" + filesName + ".conf";
+        public static readonly string archivePath = ProductLocation + @"\archive";
+        public static readonly string logHandlerFlag = ProductLocation + @"\LOG_HANDLING";
+        public DateTime sessionStart = DateTime.Now;
+        public DateTime sessionEnd = DateTime.Now;
+        public bool isSupported = false;
         public string currentVersion = String.Empty;
-        public int ping_timeout = 5000;
+        public int pingTimeout = 5000;
 
         public Uri uri = null;
 
         public Configuration configuration = new Configuration();
 
-        private void clear()
+        private void Clear()
         {
             //response = String.Empty;
             uri = null;
-            host = String.Empty;
-            token = String.Empty;
-            session_start = DateTime.Now;
-            session_end = DateTime.Now;
-            is_supported = false;
+            _host = String.Empty;
+            _token = String.Empty;
+            sessionStart = DateTime.Now;
+            sessionEnd = DateTime.Now;
+            isSupported = false;
             currentVersion = String.Empty;
         }
 
@@ -80,12 +81,12 @@ namespace ULOControls
 
         public class Configuration
         {
-            public bool writeLog = readConfigBool(ConfigParams.WriteLog, false);
-            public bool showArguments = readConfigBool(ConfigParams.ShowArguments, false);
-            public bool showTrace = readConfigBool(ConfigParams.ShowTrace, false);
-            public bool showSkipped = readConfigBool(ConfigParams.ShowSkipped, false);
-            public bool showPingResults = readConfigBool(ConfigParams.ShowPingResults, false);
-            public bool suppressLogHandling = readConfigBool(ConfigParams.SuppressLogHandling, false);
+            public bool writeLog = ReadConfigBool(ConfigParams.WriteLog, false);
+            public bool showArguments = ReadConfigBool(ConfigParams.ShowArguments, false);
+            public bool showTrace = ReadConfigBool(ConfigParams.ShowTrace, false);
+            public bool showSkipped = ReadConfigBool(ConfigParams.ShowSkipped, false);
+            public bool showPingResults = ReadConfigBool(ConfigParams.ShowPingResults, false);
+            public bool suppressLogHandling = ReadConfigBool(ConfigParams.SuppressLogHandling, false);
         }
 
         public class CameraMode
@@ -109,8 +110,8 @@ namespace ULOControls
         public class DestinationType
         {
             public const string Local = "local";
-            public const string NFS = "nfs";
-            public const string FTP = "ftp";
+            public const string Nfs = "nfs";
+            public const string Ftp = "ftp";
         }
 
         public class Operation
@@ -150,17 +151,12 @@ namespace ULOControls
             public int removed = 0;
         }
 
-        public ULO()
-        {
-            // Init
-        }
-
-        public void reloadConfiguration()
+        public void ReloadConfiguration()
         {
             configuration = new Configuration();
         }
 
-        public bool ping(string host, bool output)
+        public bool Ping(string host, bool output)
         {
             if (!host.Contains("://"))
             {
@@ -171,23 +167,23 @@ namespace ULOControls
             Ping ping = new Ping();
 
             string data = new String('.', 32);
-            int packet_size = Encoding.UTF8.GetByteCount(data);
+            int packetSize = Encoding.UTF8.GetByteCount(data);
             byte[] buffer = Encoding.UTF8.GetBytes(data);
 
             PingOptions options = new PingOptions(64, true);
-            PingReply reply = ping.Send(host, ping_timeout, buffer, options);
+            PingReply reply = ping.Send(host, pingTimeout, buffer, options);
 
             bool state = false;
 
-            if (reply.Status == IPStatus.Success)
+            if (reply != null && reply.Status == IPStatus.Success)
             {
                 if (output)
                 {
-                    writeLog(tempOutFile, "Address:             " + reply.Address.ToString(), true);
-                    writeLog(tempOutFile, "RoundTrip time [ms]: " + reply.RoundtripTime, true);
-                    writeLog(tempOutFile, "Time to live [hops]: " + reply.Options.Ttl, true);
-                    writeLog(tempOutFile, "Don't fragment:      " + reply.Options.DontFragment, true);
-                    writeLog(tempOutFile, "Buffer size [bytes]: " + reply.Buffer.Length, true);
+                    WriteLog(tempOutFile, "Address:             " + reply.Address, true);
+                    WriteLog(tempOutFile, "RoundTrip time [ms]: " + reply.RoundtripTime, true);
+                    WriteLog(tempOutFile, "Time to live [hops]: " + reply.Options.Ttl, true);
+                    WriteLog(tempOutFile, "Don't fragment:      " + reply.Options.DontFragment, true);
+                    WriteLog(tempOutFile, "Buffer size [bytes]: " + reply.Buffer.Length, true);
                 }
 
                 state = true;
@@ -196,7 +192,7 @@ namespace ULOControls
             {
                 if (output)
                 {
-                    writeLog(tempOutFile, "Ping failed with status: " + reply.Status, true);
+                    if (reply != null) WriteLog(tempOutFile, "Ping failed with status: " + reply.Status, true);
                 }
 
                 state = false;
@@ -205,40 +201,40 @@ namespace ULOControls
             return state;
         }
 
-        public void testAvailability(string host)
+        public void TestAvailability(string host)
         {
             // Test for device availability
-            if (ping(host, true))
+            if (Ping(host, true))
             {
-                writeLog(tempOutFile, "", true);
-                writeLog(tempOutFile, "Device is available.", true);
+                WriteLog(tempOutFile, "", true);
+                WriteLog(tempOutFile, "Device is available.", true);
             }
             else
             {
-                writeLog(tempOutFile, "", true);
-                writeLog(tempOutFile, "Device is NOT available.", true);
+                WriteLog(tempOutFile, "", true);
+                WriteLog(tempOutFile, "Device is NOT available.", true);
             }
         }
 
-        public void checkAvailability(string if_true, string if_false, string operation, string host1, string host2, string host3, string host4, string host5)
+        public void CheckAvailability(string ifTrue, string ifFalse, string operation, string host1, string host2, string host3, string host4, string host5)
         {
             try
             {
                 // Check for device availability and set proper mode
-                writeLog(tempOutFile, "", true);
-                writeLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
+                WriteLog(tempOutFile, "", true);
+                WriteLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
 
                 string[] hosts = new string[] { };
                 bool result = false;
-                bool result_step = false;
+                bool resultStep = false;
 
                 switch (operation)
                 {
                     case Operation.And:
-                        result_step = true;
+                        resultStep = true;
                         break;
                     case Operation.Or:
-                        result_step = false;
+                        resultStep = false;
                         break;
                     default:
                         throw new Exception("Operation '" + operation + "' is not supported.");
@@ -272,23 +268,23 @@ namespace ULOControls
 
                 foreach (string host in hosts)
                 {
-                    result = ping(host, false);
+                    result = Ping(host, false);
 
                     if (configuration.showPingResults)
                     {
-                        writeLog(tempOutFile, "Host:                    " + host, true);
-                        writeLog(tempOutFile, "Operation:               " + operation, true);
-                        writeLog(tempOutFile, "Result:                  " + result, true);
-                        writeLog(tempOutFile, "Result step before eval: " + result_step, true);
+                        WriteLog(tempOutFile, "Host:                    " + host, true);
+                        WriteLog(tempOutFile, "Operation:               " + operation, true);
+                        WriteLog(tempOutFile, "Result:                  " + result, true);
+                        WriteLog(tempOutFile, "Result step before eval: " + resultStep, true);
                     }
 
                     switch (operation)
                     {
                         case Operation.And:
-                            if (result && result_step) { result_step = true; } else { result_step = false; }
+                            if (result && resultStep) { resultStep = true; } else { resultStep = false; }
                             break;
                         case Operation.Or:
-                            if (result || result_step) { result_step = true; } else { result_step = false; }
+                            if (result || resultStep) { resultStep = true; } else { resultStep = false; }
                             break;
                         default:
                             throw new Exception("Operation '" + operation + "' is not supported.");
@@ -296,111 +292,114 @@ namespace ULOControls
 
                     if (configuration.showPingResults)
                     {
-                        writeLog(tempOutFile, "Result step after eval:  " + result_step, true);
-                        writeLog(tempOutFile, "===============================================", true);
+                        WriteLog(tempOutFile, "Result step after eval:  " + resultStep, true);
+                        WriteLog(tempOutFile, "===============================================", true);
                     }
                 }
 
-                if (result_step)
+                if (resultStep)
                 {
                     switch (operation)
                     {
                         case Operation.And:
-                            writeLog(tempOutFile, "All devices are available.", true);
+                            WriteLog(tempOutFile, "All devices are available.", true);
                             break;
                         case Operation.Or:
-                            writeLog(tempOutFile, "At least one device is available.", true);
+                            WriteLog(tempOutFile, "At least one device is available.", true);
                             break;
                         default:
                             throw new Exception("Operation '" + operation + "' is not supported.");
                     }
 
                     // Set mode based on provided value
-                    writeLog(tempOutFile, "Setting camera to '" + if_true + "' mode.", true);
-                    setMode(if_true);
+                    WriteLog(tempOutFile, "Setting camera to '" + ifTrue + "' mode.", true);
+                    SetMode(ifTrue);
                 }
                 else
                 {
                     switch (operation)
                     {
                         case Operation.And:
-                            writeLog(tempOutFile, "At least one device is not available.", true);
+                            WriteLog(tempOutFile, "At least one device is not available.", true);
                             break;
                         case Operation.Or:
-                            writeLog(tempOutFile, "All devices are not available.", true);
+                            WriteLog(tempOutFile, "All devices are not available.", true);
                             break;
                         default:
                             throw new Exception("Operation '" + operation + "' is not supported.");
                     }
 
                     // Set mode based on provided value
-                    writeLog(tempOutFile, "Setting camera to '" + if_false + "' mode.", true);
-                    setMode(if_false);
+                    WriteLog(tempOutFile, "Setting camera to '" + ifFalse + "' mode.", true);
+                    SetMode(ifFalse);
                 }
             }
             catch (Exception ex) {
                 try
                 {
-                    setMode(if_false);
+                    SetMode(ifFalse);
                 }
-                catch (Exception exi) { }
+                catch (Exception exi)
+                {
+                    // ignored
+                }
 
                 throw;
             }
         }
 
-        public string login(string ulo_host, string username, string password)
+        public string Login(string uloHost, string username, string password)
         {
             // Workaround for invalid certificate
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
             // Login
-            if (!ulo_host.Contains("://"))
+            if (!uloHost.Contains("://"))
             {
-                ulo_host = "https://" + ulo_host;
+                uloHost = "https://" + uloHost;
             }
-            uri = new Uri(ulo_host);
-            host = "https://" + uri.Host;
-            string response = httpCall(host + "/api/v1/login", "POST", "{ \"iOSAgent\": false }", BasicAuth(username, password));
-            session_start = DateTime.Now;
-            token = getJsonString(response, "token");
-            session_end = session_start.AddSeconds(getJsonInt(response, "expiresIn"));
+            uri = new Uri(uloHost);
+            _host = "https://" + uri.Host;
+            string response = HttpCall(_host + "/api/v1/login", "POST", "{ \"iOSAgent\": false }", BasicAuth(username, password));
+            sessionStart = DateTime.Now;
+            _token = GetJsonString(response, "token");
+            sessionEnd = sessionStart.AddSeconds(GetJsonInt(response, "expiresIn"));
 
             // Check version support
-            is_supported = checkVersion();
+            isSupported = CheckVersion();
 
-            return token;
+            return _token;
         }
 
-        public void logout()
+        public void Logout()
         {
             // Logout
-            if (token != String.Empty)
+            if (_token != String.Empty)
             {
-                callAPI("/api/v1/logout", "POST", "{}", String.Empty);
+                CallApi("/api/v1/logout", "POST", "{}", String.Empty);
             }
 
-            clear();
+            Clear();
         }
 
-        public DateTime getULOTime()
+        public DateTime GetUloTime()
         {
             // Get time
-            DateTime ulo_time = Convert.ToDateTime(callAPI("/api/v1/time", "GET", String.Empty, "time"));
-            if (ulo_time == new DateTime(1970, 1, 1, 0, 0, 0))
+            DateTime uloTime = Convert.ToDateTime(CallApi("/api/v1/time", "GET", String.Empty, "time"));
+            if (uloTime == new DateTime(1970, 1, 1, 0, 0, 0))
             {
-                ulo_time = DateTime.Now;
+                uloTime = DateTime.Now;
             }
 
-            return ulo_time;
+            return uloTime;
         }
 
-        public bool checkVersion()
+        public bool CheckVersion()
         {
             // Check version
             bool supported = false;
-            currentVersion = callAPI("/api/v1/config", "GET", String.Empty, "firmware.currentversion");
-            foreach (string supportedVersion in supportedVersions)
+            currentVersion = CallApi("/api/v1/config", "GET", String.Empty, "firmware.currentversion");
+            foreach (string supportedVersion in SupportedVersions)
             {
                 if (supportedVersion == currentVersion)
                 {
@@ -409,145 +408,145 @@ namespace ULOControls
             }
             if (!supported)
             {
-                writeLog(tempOutFile, "WARNING: Your current ULO version (" + currentVersion + ") is not tested, yet. Results may vary.", true);
+                WriteLog(tempOutFile, "WARNING: Your current ULO version (" + currentVersion + ") is not tested, yet. Results may vary.", true);
             }
 
             return supported;
         }
 
-        public string getMode()
+        public string GetMode()
         {
             // Get mode
-            return callAPI("/api/v1/mode", "GET", String.Empty, "mode");
+            return CallApi("/api/v1/mode", "GET", String.Empty, "mode");
         }
 
-        public void setMode(string mode)
+        public void SetMode(string mode)
         {
             // Set mode
-            if (callAPI("/api/v1/mode", "PUT", "{ \"mode\": \"" + mode + "\" }", "mode").ToLower() != mode)
+            if (CallApi("/api/v1/mode", "PUT", "{ \"mode\": \"" + mode + "\" }", "mode").ToLower() != mode)
             {
                 throw new Exception("Mode change failed.");
             }
             else
             {
-                writeLog(tempOutFile, "Success.", true);
+                WriteLog(tempOutFile, "Success.", true);
             }
         }
 
-        public bool isPowered()
+        public bool IsPowered()
         {
             // Get info if ULO is powered by electricity from plug
-            return Convert.ToBoolean(callAPI("/api/v1/state", "GET", String.Empty, "plugged"));
+            return Convert.ToBoolean(CallApi("/api/v1/state", "GET", String.Empty, "plugged"));
         }
 
-        public int getBattery()
+        public int GetBattery()
         {
             // Get battery capacity
-            return Convert.ToInt32(callAPI("/api/v1/state", "GET", String.Empty, "batteryLevel"));
+            return Convert.ToInt32(CallApi("/api/v1/state", "GET", String.Empty, "batteryLevel"));
         }
 
-        public bool isCard()
+        public bool IsCard()
         {
             // Get info if SD card is inserted into ULO
-            return Convert.ToBoolean(callAPI("/api/v1/files/stats", "GET", String.Empty, "sdcard.inserted"));
+            return Convert.ToBoolean(CallApi("/api/v1/files/stats", "GET", String.Empty, "sdcard.inserted"));
         }
 
-        public int getCardSpace()
+        public int GetCardSpace()
         {
             // Get SD card free capacity
-            return Convert.ToInt32(callAPI("/api/v1/files/stats", "GET", String.Empty, "sdcard.freeMB"));
+            return Convert.ToInt32(CallApi("/api/v1/files/stats", "GET", String.Empty, "sdcard.freeMB"));
         }
 
-        public int getDiskSpace()
+        public int GetDiskSpace()
         {
             // Get internal memory free capacity
-            return Convert.ToInt32(callAPI("/api/v1/files/stats", "GET", String.Empty, "internal.freeMB"));
+            return Convert.ToInt32(CallApi("/api/v1/files/stats", "GET", String.Empty, "internal.freeMB"));
         }
 
-        public void moveToCard()
+        public void MoveToCard()
         {
             // Move files from internal memory to SD card
-            string mode_backup = getMode();
-            setMode(CameraMode.Standard);
-            string response = callAPI("/api/v1/files/backup?filename=all", "PUT", "{\"running\": true}", "$");
-            setMode(mode_backup);
+            string modeBackup = GetMode();
+            SetMode(CameraMode.Standard);
+            string response = CallApi("/api/v1/files/backup?filename=all", "PUT", "{\"running\": true}", "$");
+            SetMode(modeBackup);
             
-            string error = getJsonString(response, "error");
+            string error = GetJsonString(response, "error");
             if (!String.IsNullOrEmpty(error))
             {
                 throw new Exception(error);
             }
             else
             {
-                string status = getJsonString(response, "status");
-                writeLog(tempOutFile, status, true);
+                string status = GetJsonString(response, "status");
+                WriteLog(tempOutFile, status, true);
             }
         }
 
-        public void cleanDiskSpace(string period)
+        public void CleanDiskSpace(string period)
         {
             // Clean files on internal memory
-            string mode_backup = getMode();
-            setMode(CameraMode.Standard);
-            string response = callAPI("/api/v1/files/delete?removeType=" + period, "DELETE", String.Empty, "$");
-            setMode(mode_backup);
+            string modeBackup = GetMode();
+            SetMode(CameraMode.Standard);
+            string response = CallApi("/api/v1/files/delete?removeType=" + period, "DELETE", String.Empty, "$");
+            SetMode(modeBackup);
 
-            string error = getJsonString(response, "error");
+            string error = GetJsonString(response, "error");
             if (error != String.Empty)
             {
                 throw new Exception(error);
             }
             else
             {
-                string status = getJsonString(response, "status");
-                writeLog(tempOutFile, status, true);
+                string status = GetJsonString(response, "status");
+                WriteLog(tempOutFile, status, true);
             }
         }
 
-        public void downloadLog(string type, string destination, int retention, string username, string password)
+        public void DownloadLog(string type, string destination, int retention, string username, string password)
         {
             // Download ULO log into specified location
-            string log_location = callAPI("/api/v1/system/log", "POST", "/system/log", "fileName").Replace("\n", Environment.NewLine);
+            string logLocation = CallApi("/api/v1/system/log", "POST", "/system/log", "fileName").Replace("\n", Environment.NewLine);
             UploadStatistics logStats = new UploadStatistics();
-            logStats = uploadHandler(type, "/logs/" + log_location, destination, false, username, password);
-            logStats = retentionHandler(type, destination, retention, MediaTypeExt.Log, username, password);
+            logStats = UploadHandler(type, "/logs/" + logLocation, destination, false, username, password);
+            logStats = RetentionHandler(type, destination, retention, MediaTypeExt.Log, username, password);
         }
 
-        public void downloadCurrent(string type, string destination, string username, string password)
+        public void DownloadCurrent(string type, string destination, string username, string password)
         {
             // Download current snapshot
-            UploadStatistics fileStats = uploadHandler(type, "/" + callAPI("/api/v1/backgroundImage", "POST", "{}", "filename"), destination, true, username, password);
+            UploadStatistics fileStats = UploadHandler(type, "/" + CallApi("/api/v1/backgroundImage", "POST", "{}", "filename"), destination, true, username, password);
         }
 
-        public void downloadMedia(string mediatype, string type, string destination, int age, int retention, string username, string password)
+        public void DownloadMedia(string mediatype, string type, string destination, int age, int retention, string username, string password)
         {
             // Download all media requested and maintain them
-            writeLog(tempOutFile, "", true);
-            writeLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
+            WriteLog(tempOutFile, "", true);
+            WriteLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
 
             Regex regex = null;
             Match match = null;
             string[] index = new string[] { };
             string[] mediafiles = new string[] { };
-            string mediatype_extension = null;
+            string mediatypeExtension = null;
             string response = String.Empty;
 
             // Set values based on mediatype
             switch (mediatype)
             {
                 case MediaType.Video:
-                    mediatype_extension = MediaTypeExt.Video;
+                    mediatypeExtension = MediaTypeExt.Video;
                     break;
                 case MediaType.Snapshot:
-                    mediatype_extension = MediaTypeExt.Snapshot;
+                    mediatypeExtension = MediaTypeExt.Snapshot;
                     break;
                 default:
                     throw new Exception("Media type '" + mediatype + "' is not supported.");
             }
 
             // Get list of folders
-            index = getJsonStringArray(callAPI("/api/v1/files/media", "GET", "", "$"), "$.files[*].files[*]");
-            regex = new Regex(@"(media\/\d+/video_\d+_\d+." + mediatype_extension + ")");
+            index = GetJsonStringArray(CallApi("/api/v1/files/media", "GET", "", "$"), "$.files[*].files[*]");
+            regex = new Regex(@"(media\/\d+/video_\d+_\d+." + mediatypeExtension + ")");
             foreach (string part in index)
             {
                 match = regex.Match(part);
@@ -560,11 +559,11 @@ namespace ULOControls
 
             // Download media files
             regex = new Regex(@"(\d+_\d+)");
-            DateTime ulo_time = getULOTime();
-            DateTime age_time = ulo_time.AddHours(age * -1);
-            DateTime fresh_file_time = ulo_time.AddMinutes(-1);
+            DateTime uloTime = GetUloTime();
+            DateTime ageTime = uloTime.AddHours(age * -1);
+            DateTime freshFileTime = uloTime.AddMinutes(-1);
             UploadStatistics totalStats = new UploadStatistics();
-            bool stop_processing = false;
+            bool stopProcessing = false;
             foreach (string mediafile in mediafiles)
             {
                 UploadStatistics fileStats = new UploadStatistics();
@@ -573,35 +572,35 @@ namespace ULOControls
                 {
                     // Check age
                     string mediafilename = Path.GetFileName(mediafile.Replace("/", "\\"));
-                    DateTime mediafile_time = DateTime.ParseExact(regex.Match(mediafilename).Value, timeFormat, null);
+                    DateTime mediafileTime = DateTime.ParseExact(regex.Match(mediafilename).Value, timeFormat, null);
 
-                    if (age != 0 && mediafile_time < age_time)
+                    if (age != 0 && mediafileTime < ageTime)
                     {
                         fileStats.skipped = 1;
                         if (configuration.showSkipped)
                         {
-                            writeLog(tempOutFile, "Media file '" + mediafile + "' is too old based on age settings...", true);
-                            writeLog(tempOutFile, "Skipped.", true);
+                            WriteLog(tempOutFile, "Media file '" + mediafile + "' is too old based on age settings...", true);
+                            WriteLog(tempOutFile, "Skipped.", true);
                         }
                     }
                     else
                     {
                         // Check if last media file is old enough to be downloaded
-                        if (mediafiles[mediafiles.Length - 1] == mediafile && mediafile_time > fresh_file_time)
+                        if (mediafiles[mediafiles.Length - 1] == mediafile && mediafileTime > freshFileTime)
                         {
                             fileStats.skipped = 1;
-                            writeLog(tempOutFile, "Media file '" + mediafile + "' might be still used by ULO, it will be downloaded later...", true);
-                            writeLog(tempOutFile, "Skipped.", true);
+                            WriteLog(tempOutFile, "Media file '" + mediafile + "' might be still used by ULO, it will be downloaded later...", true);
+                            WriteLog(tempOutFile, "Skipped.", true);
                         }
                         else
                         {
                             try
                             {
-                                fileStats = uploadHandler(type, mediafile, destination, false, username, password);
+                                fileStats = UploadHandler(type, mediafile, destination, false, username, password);
                             }
                             catch (Exception ex)
                             {
-                                stop_processing = false;
+                                stopProcessing = false;
                                 throw;
                             }
                         }
@@ -610,9 +609,9 @@ namespace ULOControls
                 catch (Exception ex)
                 {
                     fileStats.failed = 1;
-                    writeLog(tempOutFile, "Failed. (Error: " + ex.Message.Trim() + ")", true);
+                    WriteLog(tempOutFile, "Failed. (Error: " + ex.Message.Trim() + ")", true);
 
-                    if (stop_processing)
+                    if (stopProcessing)
                     {
                         throw;
                     }
@@ -632,7 +631,7 @@ namespace ULOControls
                             Console.WriteLine(errorOutput);
                         }
 
-                        writeLog(tempErrFile, errorOutput, false, true);
+                        WriteLog(tempErrFile, errorOutput, false, true);
                     }
                 }
 
@@ -649,18 +648,18 @@ namespace ULOControls
             // Perform clean-up based on retention
             if (retention != 0)
             {
-                writeLog(tempOutFile, "Retention clean-up...", true);
+                WriteLog(tempOutFile, "Retention clean-up...", true);
 
                 // Perform clean-up based on retention
                 UploadStatistics retentionStats = new UploadStatistics();
 
                 try
                 {
-                    retentionStats = retentionHandler(type, destination, retention, mediatype_extension, username, password);
+                    retentionStats = RetentionHandler(type, destination, retention, mediatypeExtension, username, password);
                 }
                 catch (Exception ex)
                 {
-                    stop_processing = false;
+                    stopProcessing = false;
                     throw;
                 }
 
@@ -668,69 +667,69 @@ namespace ULOControls
             }
 
             // Output summary
-            writeLog(tempOutFile, "=====================================", true);
-            writeLog(tempOutFile, "                DONE                 ", true);
-            writeLog(tempOutFile, "=====================================", true);
-            writeLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
-            writeLog(tempOutFile, "Stats:", true);
-            writeLog(tempOutFile, "     Media type:        " + mediatype, true);
-            writeLog(tempOutFile, "     Files uploaded:    " + totalStats.succeeded, true);
-            writeLog(tempOutFile, "     Files failed:      " + totalStats.failed, true);
-            writeLog(tempOutFile, "     Files skipped:     " + totalStats.skipped, true);
-            writeLog(tempOutFile, "     Files overwritten: " + totalStats.overwritten, true);
-            writeLog(tempOutFile, "     Files removed:     " + totalStats.removed, true);
-            writeLog(tempOutFile, "     Files size:        " + bytesToString(totalStats.fileSize), true);
-            writeLog(tempOutFile, "     Download time:     " + Math.Round(totalStats.downloadTime, 2) + " sec", true);
-            writeLog(tempOutFile, "     Upload time:       " + Math.Round(totalStats.uploadTime, 2) + " sec", true);
-            writeLog(tempOutFile, "     Down&Up time:      " + Math.Round(totalStats.downloadTime + totalStats.uploadTime, 2) + " sec", true);
-            writeLog(tempOutFile, "     Avg. down. speed:  " + bytesToString((long)Math.Round(totalStats.fileSize / (totalStats.downloadTime + 1), 2)) + "/s", true);
-            writeLog(tempOutFile, "     Avg. up. speed:    " + bytesToString((long)Math.Round(totalStats.fileSize / (totalStats.uploadTime + 1), 2)) + "/s", true);
+            WriteLog(tempOutFile, "=====================================", true);
+            WriteLog(tempOutFile, "                DONE                 ", true);
+            WriteLog(tempOutFile, "=====================================", true);
+            WriteLog(tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
+            WriteLog(tempOutFile, "Stats:", true);
+            WriteLog(tempOutFile, "     Media type:        " + mediatype, true);
+            WriteLog(tempOutFile, "     Files uploaded:    " + totalStats.succeeded, true);
+            WriteLog(tempOutFile, "     Files failed:      " + totalStats.failed, true);
+            WriteLog(tempOutFile, "     Files skipped:     " + totalStats.skipped, true);
+            WriteLog(tempOutFile, "     Files overwritten: " + totalStats.overwritten, true);
+            WriteLog(tempOutFile, "     Files removed:     " + totalStats.removed, true);
+            WriteLog(tempOutFile, "     Files size:        " + BytesToString(totalStats.fileSize), true);
+            WriteLog(tempOutFile, "     Download time:     " + Math.Round(totalStats.downloadTime, 2) + " sec", true);
+            WriteLog(tempOutFile, "     Upload time:       " + Math.Round(totalStats.uploadTime, 2) + " sec", true);
+            WriteLog(tempOutFile, "     Down&Up time:      " + Math.Round(totalStats.downloadTime + totalStats.uploadTime, 2) + " sec", true);
+            WriteLog(tempOutFile, "     Avg. down. speed:  " + BytesToString((long)Math.Round(totalStats.fileSize / (totalStats.downloadTime + 1), 2)) + "/s", true);
+            WriteLog(tempOutFile, "     Avg. up. speed:    " + BytesToString((long)Math.Round(totalStats.fileSize / (totalStats.uploadTime + 1), 2)) + "/s", true);
         }
 
         /*----------------------------------------------------------------------------*/
 
-        private UploadStatistics fsHandler(string type, string fs_action, string source, string destination, int retention, bool overwrite, string mediatype_extension, string username, string password)
+        private UploadStatistics FsHandler(string type, string fsAction, string source, string destination, int retention, bool overwrite, string mediatypeExtension, string username, string password)
         {
             UploadStatistics handlingStats = new UploadStatistics();
 
             switch (type)
             {
                 case DestinationType.Local:
-                    switch (fs_action)
+                    switch (fsAction)
                     {
                         case FsAction.Upload:
-                            handlingStats = uploadLocal(source, destination, overwrite);
+                            handlingStats = UploadLocal(source, destination, overwrite);
                             break;
                         case FsAction.Retention:
-                            handlingStats = retentionLocal(destination, retention, mediatype_extension);
+                            handlingStats = RetentionLocal(destination, retention, mediatypeExtension);
                             break;
                     }
                     break;
-                case DestinationType.NFS:
+                case DestinationType.Nfs:
                     // Open connection to NFS
                     NetworkCredential credentials = new NetworkCredential(username, password);
                     using (ConnectToSharedFolder nfsConnection = new ConnectToSharedFolder(destination, credentials))
                     {
                         // NFS is used like Local, just needs connection to NFS upfront
-                        switch (fs_action)
+                        switch (fsAction)
                         {
                             case FsAction.Upload:
-                                handlingStats = uploadLocal(source, destination, overwrite);
+                                handlingStats = UploadLocal(source, destination, overwrite);
                                 break;
                             case FsAction.Retention:
-                                handlingStats = retentionLocal(destination, retention, mediatype_extension);
+                                handlingStats = RetentionLocal(destination, retention, mediatypeExtension);
                                 break;
                         }
                     }
                     break;
-                case DestinationType.FTP:
-                    switch (fs_action)
+                case DestinationType.Ftp:
+                    switch (fsAction)
                     {
                         case FsAction.Upload:
-                            handlingStats = uploadFTP(source, destination, overwrite, username, password);
+                            handlingStats = UploadFtp(source, destination, overwrite, username, password);
                             break;
                         case FsAction.Retention:
-                            handlingStats = retentionFTP(destination, retention, mediatype_extension, username, password);
+                            handlingStats = RetentionFtp(destination, retention, mediatypeExtension, username, password);
                             break;
                     }
                     break;
@@ -741,78 +740,78 @@ namespace ULOControls
             return handlingStats;
         }
 
-        private UploadStatistics uploadHandler(string type, string source, string destination, bool overwrite, string username, string password)
+        private UploadStatistics UploadHandler(string type, string source, string destination, bool overwrite, string username, string password)
         {
-            return fsHandler(type, FsAction.Upload, source, destination, 0, overwrite, String.Empty, username, password);
+            return FsHandler(type, FsAction.Upload, source, destination, 0, overwrite, String.Empty, username, password);
         }
 
-        private UploadStatistics retentionHandler(string type, string destination, int retention, string mediatype_extension, string username, string password)
+        private UploadStatistics RetentionHandler(string type, string destination, int retention, string mediatypeExtension, string username, string password)
         {
-            return fsHandler(type, FsAction.Retention, String.Empty, destination, retention, false, mediatype_extension, username, password);
+            return FsHandler(type, FsAction.Retention, String.Empty, destination, retention, false, mediatypeExtension, username, password);
         }
 
-        private string mediaNameAdjust(string mediafilename)
+        private string MediaNameAdjust(string mediafilename)
         {
             // Name conversion is needed so FTP retention has same file format with date and time available
-            string mediafilename_adjusted = mediafilename;
+            string mediafilenameAdjusted = mediafilename;
 
-            Regex regexSortableISO = new Regex(@"(\d+-\d+-\d+T\d+-\d+-\d+)"); // 2019-09-07T12-20-33
+            Regex regexSortableIso = new Regex(@"(\d+-\d+-\d+T\d+-\d+-\d+)"); // 2019-09-07T12-20-33
             Regex regexSortable = new Regex(@"(\d+_\d+)"); // 20190907_122033
             Regex regexLogin = new Regex(@"(loginPicture\.jpg)"); // loginPicture.jpg
 
-            if (regexSortableISO.Match(mediafilename).Success)
+            if (regexSortableIso.Match(mediafilename).Success)
             {
-                DateTime mediafile_time = DateTime.ParseExact(regexSortableISO.Match(mediafilename).Value, "yyyy-MM-ddTHH-mm-ss", null);
-                mediafilename_adjusted = regexSortableISO.Replace(mediafilename, mediafile_time.ToString(timeFormat));
+                DateTime mediafileTime = DateTime.ParseExact(regexSortableIso.Match(mediafilename).Value, "yyyy-MM-ddTHH-mm-ss", null);
+                mediafilenameAdjusted = regexSortableIso.Replace(mediafilename, mediafileTime.ToString(timeFormat));
             }
             else if (regexSortable.Match(mediafilename).Success)
             {
-                DateTime mediafile_time = DateTime.ParseExact(regexSortable.Match(mediafilename).Value, "yyyyMMdd_HHmmss", null);
-                mediafilename_adjusted = regexSortable.Replace(mediafilename, mediafile_time.ToString(timeFormat));
+                DateTime mediafileTime = DateTime.ParseExact(regexSortable.Match(mediafilename).Value, "yyyyMMdd_HHmmss", null);
+                mediafilenameAdjusted = regexSortable.Replace(mediafilename, mediafileTime.ToString(timeFormat));
             }
             else if (regexLogin.Match(mediafilename).Success)
             {
-                mediafilename_adjusted = regexLogin.Replace(mediafilename, "snapshot.jpg");
+                mediafilenameAdjusted = regexLogin.Replace(mediafilename, "snapshot.jpg");
             }
             
-            return mediafilename_adjusted;
+            return mediafilenameAdjusted;
         }
 
         /*----------------------------------------------------------------------------*/
 
-        private UploadStatistics uploadLocal(string mediafile, string destination, bool overwrite)
+        private UploadStatistics UploadLocal(string mediafile, string destination, bool overwrite)
         {
             UploadStatistics uploadStats = new UploadStatistics();
 
             // Create names and paths
-            bool is_local = File.Exists(mediafile);
-            string mediafilename = mediaNameAdjust(Path.GetFileName(mediafile.Replace("/", "\\")));
-            string mediafile_to_path = mediaNameAdjust(mediafile.Replace("/", "\\"));
-            string pathto = mediafile_to_path.Replace(mediafilename, "").Replace("\\media", "").Replace("\\logs", "");
-            string full_path = destination.TrimEnd('\\') + pathto + mediafilename;
+            bool isLocal = File.Exists(mediafile);
+            string mediafilename = MediaNameAdjust(Path.GetFileName(mediafile.Replace("/", "\\")));
+            string mediafileToPath = MediaNameAdjust(mediafile.Replace("/", "\\"));
+            string pathto = mediafileToPath.Replace(mediafilename, "").Replace("\\media", "").Replace("\\logs", "");
+            string fullPath = destination.TrimEnd('\\') + pathto + mediafilename;
             string source = String.Empty;
 
-            if (is_local)
+            if (isLocal)
             {
-                mediafilename = mediaNameAdjust(Path.GetFileName(mediafile.Replace("/", "\\")));
-                mediafile_to_path = String.Empty;
+                mediafilename = MediaNameAdjust(Path.GetFileName(mediafile.Replace("/", "\\")));
+                mediafileToPath = String.Empty;
                 pathto = "\\";
-                full_path = destination.TrimEnd('\\') + pathto + mediafilename;
+                fullPath = destination.TrimEnd('\\') + pathto + mediafilename;
                 source = mediafile.Replace("/", "\\");
             }
 
             try
             {
                 // Check if media file already exists at destination
-                if (File.Exists(full_path))
+                if (File.Exists(fullPath))
                 {
                     if (!overwrite)
                     {
                         uploadStats.skipped = 1;
                         if (configuration.showSkipped)
                         {
-                            writeLog(tempOutFile, "Media file '" + mediafile + "' already downloaded...", true);
-                            writeLog(tempOutFile, "Skipped.", true);
+                            WriteLog(tempOutFile, "Media file '" + mediafile + "' already downloaded...", true);
+                            WriteLog(tempOutFile, "Skipped.", true);
                         }
                         return uploadStats;
                     }
@@ -822,20 +821,20 @@ namespace ULOControls
                     }
                 }
 
-                writeLog(tempOutFile, "Media file '" + mediafile + "' downloading...", true);
+                WriteLog(tempOutFile, "Media file '" + mediafile + "' downloading...", true);
 
                 // Create destination folder
                 Directory.CreateDirectory(destination.TrimEnd('\\') + pathto);
-                if (File.Exists(full_path))
+                if (File.Exists(fullPath))
                 {
-                    File.Delete(full_path);
+                    File.Delete(fullPath);
                 }
                 
                 // Download media file
                 DateTime downloadstart = DateTime.Now;
-                if (!is_local)
+                if (!isLocal)
                 {
-                    source = downloadFile(mediafile, BearerAuth(token));
+                    source = DownloadFile(mediafile, BearerAuth(_token));
                 }
                 DateTime downloadend = DateTime.Now;
                 double downloadtime = (downloadend - downloadstart).TotalSeconds;
@@ -843,7 +842,7 @@ namespace ULOControls
                 
                 // Upload mediafile
                 DateTime uploadstart = DateTime.Now;
-                File.Move(source, full_path);
+                File.Move(source, fullPath);
                 DateTime uploadend = DateTime.Now;
                 double uploadtime = (uploadend - uploadstart).TotalSeconds;
 
@@ -853,13 +852,13 @@ namespace ULOControls
                     File.Delete(source);
                 }
 
-                // Colllect stats
+                // Collect stats
                 uploadStats.fileSize = filesize;
                 uploadStats.downloadTime = downloadtime;
                 uploadStats.uploadTime = uploadtime;
                 uploadStats.succeeded = 1;
 
-                writeLog(tempOutFile, "Succeeded. (Size: " + bytesToString(filesize) + " | Time: " + Math.Round(downloadtime + uploadtime, 2) + " sec | Download speed: " + bytesToString((long)Math.Round(filesize / (downloadtime + 1), 2)) + "/s | Upload speed: " + bytesToString((long)Math.Round(filesize / (uploadtime + 1), 2)) + "/s)", true);
+                WriteLog(tempOutFile, "Succeeded. (Size: " + BytesToString(filesize) + " | Time: " + Math.Round(downloadtime + uploadtime, 2) + " sec | Download speed: " + BytesToString((long)Math.Round(filesize / (downloadtime + 1), 2)) + "/s | Upload speed: " + BytesToString((long)Math.Round(filesize / (uploadtime + 1), 2)) + "/s)", true);
             }
             catch (Exception ex)
             {
@@ -876,7 +875,7 @@ namespace ULOControls
             return uploadStats;
         }
 
-        private UploadStatistics retentionLocal(string destination, int retention, string mediatype_extension)
+        private UploadStatistics RetentionLocal(string destination, int retention, string mediatypeExtension)
         {
             UploadStatistics uploadStats = new UploadStatistics();
 
@@ -884,13 +883,13 @@ namespace ULOControls
             Array.Sort(directories);
             foreach (string directory in directories)
             {
-                writeLog(tempOutFile, "Retention clean-up of files in directory '" + directory + "' started...", true);
+                WriteLog(tempOutFile, "Retention clean-up of files in directory '" + directory + "' started...", true);
 
                 string[] files = Directory.GetFiles(directory);
                 Array.Sort(files);
                 foreach (string file in files)
                 {
-                    if (Path.GetExtension(file).ToLower() != "." + mediatype_extension)
+                    if (Path.GetExtension(file).ToLower() != "." + mediatypeExtension)
                     {
                         continue;
                     }
@@ -900,13 +899,13 @@ namespace ULOControls
                     {
                         try
                         {
-                            writeLog(tempOutFile, "Retention clean-up of file '" + directory.Replace(destination, "") + "\\" + fi.Name + "' started...", true);
+                            WriteLog(tempOutFile, "Retention clean-up of file '" + directory.Replace(destination, "") + "\\" + fi.Name + "' started...", true);
                             fi.Delete();
                             uploadStats.removed++;
                         }
                         catch (Exception ex)
                         {
-                            writeLog(tempOutFile, "Retention clean-up of file '" + directory.Replace(destination, "") + "\\" + fi.Name + "' failed due to: " + ex.Message + ".", true);
+                            WriteLog(tempOutFile, "Retention clean-up of file '" + directory.Replace(destination, "") + "\\" + fi.Name + "' failed due to: " + ex.Message + ".", true);
                         }
                     }
                 }
@@ -916,12 +915,12 @@ namespace ULOControls
                 {
                     try
                     {
-                        writeLog(tempOutFile, "Retention clean-up of direcotry '" + directory + "' started...", true);
+                        WriteLog(tempOutFile, "Retention clean-up of directory '" + directory + "' started...", true);
                         Directory.Delete(directory, false);
                     }
                     catch (Exception ex)
                     {
-                        writeLog(tempOutFile, "Retention clean-up of direcotry '" + directory + "' failed due to: " + ex.Message + ".", true);
+                        WriteLog(tempOutFile, "Retention clean-up of directory '" + directory + "' failed due to: " + ex.Message + ".", true);
                     }
                 }
             }
@@ -932,42 +931,42 @@ namespace ULOControls
 
         /*----------------------------------------------------------------------------*/
 
-        private UploadStatistics uploadFTP(string mediafile, string destination, bool overwrite, string username, string password)
+        private UploadStatistics UploadFtp(string mediafile, string destination, bool overwrite, string username, string password)
         {
             UploadStatistics uploadStats = new UploadStatistics();
 
             // Create names and paths
-            bool is_local = File.Exists(mediafile);
-            string mediafilename = mediaNameAdjust(Path.GetFileName(mediafile.Replace("/", "\\")));
-            string mediafile_to_path = mediaNameAdjust(mediafile);
-            string pathto = mediafile_to_path.Replace(mediafilename, "").Replace("/media", "").Replace("/logs", "");
-            string full_path = destination.TrimEnd('/') + pathto + mediafilename;
+            bool isLocal = File.Exists(mediafile);
+            string mediafilename = MediaNameAdjust(Path.GetFileName(mediafile.Replace("/", "\\")));
+            string mediafileToPath = MediaNameAdjust(mediafile);
+            string pathto = mediafileToPath.Replace(mediafilename, "").Replace("/media", "").Replace("/logs", "");
+            string fullPath = destination.TrimEnd('/') + pathto + mediafilename;
             string source = String.Empty;
             FtpWebRequest request = null;
             FtpWebResponse response = null;
             NetworkCredential cred = new NetworkCredential(username, password);
 
-            if (is_local)
+            if (isLocal)
             {
-                mediafilename = mediaNameAdjust(Path.GetFileName(mediafile.Replace("/", "\\")));
-                mediafile_to_path = String.Empty;
+                mediafilename = MediaNameAdjust(Path.GetFileName(mediafile.Replace("/", "\\")));
+                mediafileToPath = String.Empty;
                 pathto = "\\";
-                full_path = destination.TrimEnd('\\') + pathto + mediafilename;
+                fullPath = destination.TrimEnd('\\') + pathto + mediafilename;
                 source = mediafile.Replace("/", "\\");
             }
 
             // Check if media file already exists at destination
             try
             {
-                if (existsFTP(full_path, cred))
+                if (ExistsFtp(fullPath, cred))
                 {
                     if (!overwrite)
                     {
                         uploadStats.skipped = 1;
                         if (configuration.showSkipped)
                         {
-                            writeLog(tempOutFile, "Media file '" + mediafile + "' already downloaded...", true);
-                            writeLog(tempOutFile, "Skipped.", true);
+                            WriteLog(tempOutFile, "Media file '" + mediafile + "' already downloaded...", true);
+                            WriteLog(tempOutFile, "Skipped.", true);
                         }
                         return uploadStats;
                     }
@@ -977,7 +976,7 @@ namespace ULOControls
                     }
                 }
 
-                writeLog(tempOutFile, "Media file '" + mediafile + "' downloading...", true);
+                WriteLog(tempOutFile, "Media file '" + mediafile + "' downloading...", true);
 
                 // Create destination folder
                 // Root
@@ -1023,9 +1022,9 @@ namespace ULOControls
 
                 // Download media file
                 DateTime downloadstart = DateTime.Now;
-                if (!is_local)
+                if (!isLocal)
                 {
-                    source = downloadFile(mediafile, BearerAuth(token));
+                    source = DownloadFile(mediafile, BearerAuth(_token));
                 }
                 DateTime downloadend = DateTime.Now;
                 double downloadtime = (downloadend - downloadstart).TotalSeconds;
@@ -1036,7 +1035,7 @@ namespace ULOControls
                 client.Credentials = cred;
 
                 DateTime uploadstart = DateTime.Now;
-                client.UploadFile(full_path, WebRequestMethods.Ftp.UploadFile, source);
+                client.UploadFile(fullPath, WebRequestMethods.Ftp.UploadFile, source);
                 DateTime uploadend = DateTime.Now;
                 double uploadtime = (uploadend - uploadstart).TotalSeconds;
 
@@ -1048,13 +1047,13 @@ namespace ULOControls
                     File.Delete(source);
                 }
 
-                // Colllect stats
+                // Collect stats
                 uploadStats.fileSize = filesize;
                 uploadStats.downloadTime = downloadtime;
                 uploadStats.uploadTime = uploadtime;
                 uploadStats.succeeded = 1;
 
-                writeLog(tempOutFile, "Succeeded. (Size: " + bytesToString(filesize) + " | Time: " + Math.Round(downloadtime + uploadtime, 2) + " sec | Download speed: " + bytesToString((long)Math.Round(filesize / (downloadtime + 1), 2)) + "/s | Upload speed: " + bytesToString((long)Math.Round(filesize / (uploadtime + 1), 2)) + "/s)", true);
+                WriteLog(tempOutFile, "Succeeded. (Size: " + BytesToString(filesize) + " | Time: " + Math.Round(downloadtime + uploadtime, 2) + " sec | Download speed: " + BytesToString((long)Math.Round(filesize / (downloadtime + 1), 2)) + "/s | Upload speed: " + BytesToString((long)Math.Round(filesize / (uploadtime + 1), 2)) + "/s)", true);
             }
             catch (Exception ex)
             {
@@ -1071,7 +1070,7 @@ namespace ULOControls
             return uploadStats;
         }
 
-        private UploadStatistics retentionFTP(string destination, int retention, string mediatype_extension, string username, string password)
+        private UploadStatistics RetentionFtp(string destination, int retention, string mediatypeExtension, string username, string password)
         {
             UploadStatistics uploadStats = new UploadStatistics();
 
@@ -1088,7 +1087,7 @@ namespace ULOControls
                 string[] directories = new string[] { };
                 using (response = (FtpWebResponse)request.GetResponse())
                 {
-                    using (streamReader = new StreamReader(response.GetResponseStream()))
+                    using (streamReader = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException()))
                     {
                         string line = streamReader.ReadLine();
                         while (!string.IsNullOrEmpty(line))
@@ -1107,7 +1106,7 @@ namespace ULOControls
                     request.Credentials = cred;
                     request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
                     string[] files = new string[] { };
-                    int file_count = 0;
+                    int fileCount = 0;
                     using (response = (FtpWebResponse)request.GetResponse())
                     {
                         using (streamReader = new StreamReader(response.GetResponseStream()))
@@ -1115,31 +1114,31 @@ namespace ULOControls
                             string line = streamReader.ReadLine();
                             while (!string.IsNullOrEmpty(line))
                             {
-                                string file_name = line.Split(new[] { ' ', '\t' })[line.Split(new[] { ' ', '\t' }).Length - 1];
+                                string fileName = line.Split(new[] { ' ', '\t' })[line.Split(new[] { ' ', '\t' }).Length - 1];
 
-                                if (file_name == "." || file_name == "..")
+                                if (fileName == "." || fileName == "..")
                                 {
                                     line = streamReader.ReadLine();
                                     continue;
                                 }
 
-                                file_count++;
+                                fileCount++;
 
-                                if (Path.GetExtension(file_name).ToLower() != "." + mediatype_extension)
+                                if (Path.GetExtension(fileName).ToLower() != "." + mediatypeExtension)
                                 {
                                     line = streamReader.ReadLine();
                                     continue;
                                 }
 
                                 Array.Resize(ref files, files.Length + 1);
-                                files[files.Length - 1] = directory.TrimEnd('/') + "/" + file_name;
+                                files[files.Length - 1] = directory.TrimEnd('/') + "/" + fileName;
                                 line = streamReader.ReadLine();
                             }
                         }
                     }
 
                     // Remove files if too old
-                    int removed_count = 0;
+                    int removedCount = 0;
                     if (files.Length != 0)
                     {
                         Array.Sort(files);
@@ -1148,23 +1147,23 @@ namespace ULOControls
                             Regex regex = new Regex(@"(\d+_\d+)");
                             if (regex.Match(file).Success)
                             {
-                                DateTime mediafile_time = DateTime.ParseExact(regex.Match(file).Value, timeFormat, null);
-                                if (mediafile_time < DateTime.Now.AddHours(retention * -1))
+                                DateTime mediafileTime = DateTime.ParseExact(regex.Match(file).Value, timeFormat, null);
+                                if (mediafileTime < DateTime.Now.AddHours(retention * -1))
                                 {
                                     try
                                     {
-                                        writeLog(tempOutFile, "Retention clean-up of file '" + file.Replace(destination, "") + "' started...", true);
+                                        WriteLog(tempOutFile, "Retention clean-up of file '" + file.Replace(destination, "") + "' started...", true);
                                         request = (FtpWebRequest)WebRequest.Create(file);
                                         request.Method = WebRequestMethods.Ftp.DeleteFile;
                                         request.Credentials = cred;
                                         response = (FtpWebResponse)request.GetResponse();
                                         response.Close();
-                                        removed_count++;
+                                        removedCount++;
                                         uploadStats.removed++;
                                     }
                                     catch (Exception ex)
                                     {
-                                        writeLog(tempOutFile, "Retention clean-up of file '" + file.Replace(destination, "") + "' failed due to: " + ex.Message + ".", true);
+                                        WriteLog(tempOutFile, "Retention clean-up of file '" + file.Replace(destination, "") + "' failed due to: " + ex.Message + ".", true);
                                     }
                                 }
                             }
@@ -1172,12 +1171,12 @@ namespace ULOControls
                     }
 
                     // Remove directory if empty
-                    file_count = file_count - removed_count;
-                    if (file_count == 0)
+                    fileCount = fileCount - removedCount;
+                    if (fileCount == 0)
                     {
                         try
                         {
-                            writeLog(tempOutFile, "Retention clean-up of direcotry '" + directory + "' started...", true);
+                            WriteLog(tempOutFile, "Retention clean-up of directory '" + directory + "' started...", true);
                             request = (FtpWebRequest)WebRequest.Create(directory);
                             request.Method = WebRequestMethods.Ftp.RemoveDirectory;
                             request.Credentials = cred;
@@ -1186,7 +1185,7 @@ namespace ULOControls
                         }
                         catch (Exception ex)
                         {
-                            writeLog(tempOutFile, "Retention clean-up of direcotry '" + directory + "' failed due to: " + ex.Message + ".", true);
+                            WriteLog(tempOutFile, "Retention clean-up of directory '" + directory + "' failed due to: " + ex.Message + ".", true);
                         }
                     }
                 }
@@ -1203,9 +1202,9 @@ namespace ULOControls
             return uploadStats;
         }
 
-        private bool existsFTP(string uri, NetworkCredential cred)
+        private bool ExistsFtp(string ftpUri, NetworkCredential cred)
         {
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(uri.TrimEnd('/'));
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUri.TrimEnd('/'));
             request.Credentials = cred;
             request.Method = WebRequestMethods.Ftp.GetDateTimestamp;
 
@@ -1235,7 +1234,7 @@ namespace ULOControls
 
         /*----------------------------------------------------------------------------*/
 
-        private string bytesToString(long byteCount)
+        private string BytesToString(long byteCount)
         {
             string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
             if (byteCount == 0)
@@ -1243,34 +1242,36 @@ namespace ULOControls
             long bytes = Math.Abs(byteCount);
             int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
             double num = Math.Round(bytes / Math.Pow(1024, place), 1);
-            return (Math.Sign(byteCount) * num).ToString() + " " + suf[place];
+            return (Math.Sign(byteCount) * num).ToString(CultureInfo.InvariantCulture) + " " + suf[place];
         }
 
-        private IEnumerable<JToken> getJson(string json, string path)
+        private IEnumerable<JToken> GetJson(string json, string path)
         {
             return JObject.Parse(json).SelectTokens(path, false);
         }
 
-        private string getJsonObject(string json, string path)
+        private string GetJsonObject(string json, string path)
         {
-            IEnumerable<JToken> _tokens = getJson(json, path);
+            IEnumerable<JToken> tokens = GetJson(json, path);
 
-            if (_tokens == null)
+            if (tokens == null)
             {
                 return String.Empty;
             }
             else
             {
-                IEnumerator<JToken> iter = _tokens.GetEnumerator();
-                iter.MoveNext();
-                return iter.Current.ToString();
+                using (IEnumerator<JToken> iter = tokens.GetEnumerator())
+                {
+                    iter.MoveNext();
+                    return iter.Current?.ToString();
+                }
             }
         }
 
-        private string[] getJsonStringArray(string json, string path)
+        private string[] GetJsonStringArray(string json, string path)
         {
             string[] cobject = new string[] { };
-            foreach (JToken jobject in getJson(json, path))
+            foreach (JToken jobject in GetJson(json, path))
             {
                 Array.Resize(ref cobject, cobject.Length + 1);
                 cobject[cobject.Length - 1] = Convert.ToString(jobject);
@@ -1278,10 +1279,10 @@ namespace ULOControls
             return cobject;
         }
 
-        private int[] getJsonIntArray(string json, string path)
+        private int[] GetJsonIntArray(string json, string path)
         {
             int[] cobject = new int[] { };
-            foreach (JToken jobject in getJson(json, path))
+            foreach (JToken jobject in GetJson(json, path))
             {
                 Array.Resize(ref cobject, cobject.Length + 1);
                 cobject[cobject.Length - 1] = Convert.ToInt32(jobject);
@@ -1289,35 +1290,43 @@ namespace ULOControls
             return cobject;
         }
 
-        private string getJsonString(string json, string path)
+        private string GetJsonString(string json, string path)
         {
-            IEnumerator<JToken> iter = getJson(json, path).GetEnumerator();
-            iter.MoveNext();
-            return Convert.ToString(iter.Current);
+            using (IEnumerator<JToken> iter = GetJson(json, path).GetEnumerator())
+            {
+                iter.MoveNext();
+                return Convert.ToString(iter.Current);
+            }
         }
 
-        private DateTime getJsonDateTime(string json, string path)
+        private DateTime GetJsonDateTime(string json, string path)
         {
-            IEnumerator<JToken> iter = getJson(json, path).GetEnumerator();
-            iter.MoveNext();
-            return Convert.ToDateTime(iter.Current);
+            using (IEnumerator<JToken> iter = GetJson(json, path).GetEnumerator())
+            {
+                iter.MoveNext();
+                return Convert.ToDateTime(iter.Current);
+            }
         }
 
-        private int getJsonInt(string json, string path)
+        private int GetJsonInt(string json, string path)
         {
-            IEnumerator<JToken> iter = getJson(json, path).GetEnumerator();
-            iter.MoveNext();
-            return Convert.ToInt32(iter.Current);
+            using (IEnumerator<JToken> iter = GetJson(json, path).GetEnumerator())
+            {
+                iter.MoveNext();
+                return Convert.ToInt32(iter.Current);
+            }
         }
 
-        private bool getJsonBool(string json, string path)
+        private bool GetJsonBool(string json, string path)
         {
-            IEnumerator<JToken> iter = getJson(json, path).GetEnumerator();
-            iter.MoveNext();
-            return Convert.ToBoolean(iter.Current);
+            using (IEnumerator<JToken> iter = GetJson(json, path).GetEnumerator())
+            {
+                iter.MoveNext();
+                return Convert.ToBoolean(iter.Current);
+            }
         }
 
-        private bool isJson(string text)
+        private bool IsJson(string text)
         {
             text = text.Trim();
             if ((text.StartsWith("{") && text.EndsWith("}")) || //For object
@@ -1364,7 +1373,7 @@ namespace ULOControls
             return ipAddress;
         }
 
-        private string httpCall(string url, string method, string body, string authorization)
+        private string HttpCall(string url, string method, string body, string authorization)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = method;
@@ -1392,10 +1401,10 @@ namespace ULOControls
                 // Handle response
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                    using (StreamReader sr = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException()))
                     {
-                        string response_text = sr.ReadToEnd();
-                        return response_text;
+                        string responseText = sr.ReadToEnd();
+                        return responseText;
                     }
                 }
             }
@@ -1404,17 +1413,17 @@ namespace ULOControls
                 // Handle response even if it throws an exception
                 using (HttpWebResponse response = (HttpWebResponse)ex.Response)
                 {
-                    using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                    using (StreamReader sr = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException()))
                     {
-                        string response_text = sr.ReadToEnd();
+                        string responseText = sr.ReadToEnd();
                         // Check if response is JSON, if yes return it else throw original exception
-                        if (!isJson(response_text))
+                        if (!IsJson(responseText))
                         {
                             throw;
                         }
                         else
                         {
-                            return response_text;
+                            return responseText;
                         }
                     }
                 }
@@ -1431,7 +1440,7 @@ namespace ULOControls
             }
         }
 
-        private string downloadFile(string url, string authorization)
+        private string DownloadFile(string url, string authorization)
         {
             string destination = Path.GetTempFileName();
 
@@ -1441,22 +1450,25 @@ namespace ULOControls
                 {
                     client.Headers.Add("Authorization", authorization);
                 }
-                Stream stream = client.OpenRead(host + url);
-                Int64 web_file_size = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
-                client.DownloadFile(host + url, destination);
-                Int64 local_file_size = new FileInfo(destination).Length;
-                stream.Close();
+                Stream stream = client.OpenRead(_host + url);
+                Int64 webFileSize = Convert.ToInt64(client.ResponseHeaders["Content-Length"]);
+                client.DownloadFile(_host + url, destination);
+                Int64 localFileSize = new FileInfo(destination).Length;
+                if (stream != null) stream.Close();
 
                 // Check if file was downloaded correctly
-                if (web_file_size != local_file_size)
+                if (webFileSize != localFileSize)
                 {
                     try
                     {
                         File.Delete(destination);
                     }
-                    catch (Exception ex) { }
+                    catch (Exception ex)
+                    {
+                        // ignored
+                    }
 
-                    throw new Exception("Downloaded file size does not match original file size. (Original: " + web_file_size + "; Downloaded: " + local_file_size + ")");
+                    throw new Exception("Downloaded file size does not match original file size. (Original: " + webFileSize + "; Downloaded: " + localFileSize + ")");
                 }
             }
 
@@ -1465,10 +1477,10 @@ namespace ULOControls
 
         /*----------------------------------------------------------------------------*/
 
-        public string callAPI(string api_path, string method, string body, string json_path)
+        public string CallApi(string apiPath, string method, string body, string jsonPath)
         {
             // Call API
-            string response = httpCall(host + api_path, method, body, BearerAuth(token));
+            string response = HttpCall(_host + apiPath, method, body, BearerAuth(_token));
 
             string output = String.Empty;
 
@@ -1479,9 +1491,9 @@ namespace ULOControls
              *             https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
              *             and online evaluator is here: https://jsonpath.com/
              */
-            if (json_path != String.Empty)
+            if (jsonPath != String.Empty)
             {
-                output = getJsonObject(response, json_path);
+                output = GetJsonObject(response, jsonPath);
             }
 
             return output;
@@ -1489,12 +1501,12 @@ namespace ULOControls
 
         /*----------------------------------------------------------------------------*/
 
-        public void writeLog(string filename, string new_text, bool write_to_eof)
+        public void WriteLog(string filename, string newText, bool writeToEof)
         {
-            writeLog(filename, new_text, write_to_eof, false);
+            WriteLog(filename, newText, writeToEof, false);
         }
 
-        public void writeLog(string filename, string new_text, bool write_to_eof, bool suppress_output)
+        public void WriteLog(string filename, string newText, bool writeToEof, bool suppressOutput)
         {
             if (configuration.writeLog)
             {
@@ -1511,11 +1523,11 @@ namespace ULOControls
                         }
                     }
 
-                    bool write_success = false;
-                    TimeSpan attempt_time = new TimeSpan(0, 0, 0, 0, 0);
-                    TimeSpan attempt_limit = new TimeSpan(0, 0, 0, 0, 100); // days, hours, minutes, seconds, milliseconds
-                    DateTime attempt_start = DateTime.Now;
-                    while (!write_success)
+                    bool writeSuccess = false;
+                    TimeSpan attemptTime = new TimeSpan(0, 0, 0, 0, 0);
+                    TimeSpan attemptLimit = new TimeSpan(0, 0, 0, 0, 100); // days, hours, minutes, seconds, milliseconds
+                    DateTime attemptStart = DateTime.Now;
+                    while (!writeSuccess)
                     {
                         try
                         {
@@ -1523,17 +1535,17 @@ namespace ULOControls
                             {
                                 using (StreamReader reader = new StreamReader(filename))
                                 {
-                                    if (write_to_eof)
+                                    if (writeToEof)
                                     {
                                         while (!reader.EndOfStream)
                                         {
                                             writer.WriteLine(reader.ReadLine());
                                         }
-                                        writer.WriteLine(new_text);
+                                        writer.WriteLine(newText);
                                     }
                                     else
                                     {
-                                        writer.WriteLine(new_text);
+                                        writer.WriteLine(newText);
                                         while (!reader.EndOfStream)
                                         {
                                             writer.WriteLine(reader.ReadLine());
@@ -1542,14 +1554,14 @@ namespace ULOControls
                                 }
                             }
 
-                            write_success = true;
+                            writeSuccess = true;
                         }
                         catch (Exception ex)
                         {
-                            write_success = false;
-                            attempt_time = DateTime.Now - attempt_start;
+                            writeSuccess = false;
+                            attemptTime = DateTime.Now - attemptStart;
 
-                            if (attempt_time > attempt_limit)
+                            if (attemptTime > attemptLimit)
                             {
                                 throw;
                             }
@@ -1563,9 +1575,9 @@ namespace ULOControls
                         File.Delete(tempfile);
                     }
 
-                    if (!suppress_output)
+                    if (!suppressOutput)
                     {
-                        Console.WriteLine(new_text);
+                        Console.WriteLine(newText);
                     }
                 }
                 catch (Exception ex)
@@ -1580,21 +1592,21 @@ namespace ULOControls
             }
             else
             {
-                if (!suppress_output)
+                if (!suppressOutput)
                 {
-                    Console.WriteLine(new_text);
+                    Console.WriteLine(newText);
                 }
             }
         }
 
-        public void markLogs()
+        public void MarkLogs()
         {
             // Mark temp files with <EOF>
             if (File.Exists(tempOutFile))
             {
                 if (!File.ReadAllText(tempOutFile).Trim().EndsWith("<EOF>"))
                 {
-                    writeLog(tempOutFile, Environment.NewLine + "<EOF>", true, true);
+                    WriteLog(tempOutFile, Environment.NewLine + "<EOF>", true, true);
                 }
             }
 
@@ -1602,17 +1614,17 @@ namespace ULOControls
             {
                 if (!File.ReadAllText(tempErrFile).Trim().EndsWith("<EOF>"))
                 {
-                    writeLog(tempErrFile, Environment.NewLine + "<EOF>", true, true);
+                    WriteLog(tempErrFile, Environment.NewLine + "<EOF>", true, true);
                 }
             }
         }
 
-        public void handleTempLogs()
+        public void HandleTempLogs()
         {
             try
             {
                 // Mark temp files with <EOF>
-                markLogs();
+                MarkLogs();
 
                 // Stop log handling if that is configured
                 if (configuration.suppressLogHandling)
@@ -1626,7 +1638,8 @@ namespace ULOControls
                 {
                     if (process.Id != processId)
                     {
-                        if (process.MainModule.FileName == Process.GetCurrentProcess().MainModule.FileName)
+                        var processModule = Process.GetCurrentProcess().MainModule;
+                        if (processModule != null && process.MainModule != null && process.MainModule.FileName == processModule.FileName)
                         {
                             // Other process of the same path is running, it will handle logs
                             return;
@@ -1681,49 +1694,49 @@ namespace ULOControls
                 }
 
                 // Handle logs
-                DirectoryInfo dir = new DirectoryInfo(product_location);
+                DirectoryInfo dir = new DirectoryInfo(ProductLocation);
                 FileInfo[] files = dir.GetFiles(filesName + "*.tmp", SearchOption.TopDirectoryOnly);
                 Array.Sort(files, delegate (FileInfo f1, FileInfo f2) { return f1.CreationTime.CompareTo(f2.CreationTime); });
-                bool output_stopped = false;
-                bool error_stopped = false;
+                bool outputStopped = false;
+                bool errorStopped = false;
                 foreach (FileInfo file in files)
                 {
-                    bool is_output = false;
-                    bool is_error = false;
+                    bool isOutput = false;
+                    bool isError = false;
                     
-                    string log_file = String.Empty;
+                    string logFile = String.Empty;
 
                     if (file.Name.EndsWith(".out.tmp"))
                     {
-                        log_file = outFile;
-                        is_output = true;
+                        logFile = outFile;
+                        isOutput = true;
                     }
 
                     if (file.Name.EndsWith(".err.tmp"))
                     {
-                        log_file = errFile;
-                        is_error = true;
+                        logFile = errFile;
+                        isError = true;
                     }
 
-                    if (!is_output && !is_error)
+                    if (!isOutput && !isError)
                     {
                         continue;
                     }
 
-                    if (output_stopped && error_stopped)
+                    if (outputStopped && errorStopped)
                     {
                         break;
                     }
 
-                    if ((output_stopped && is_output) || (error_stopped && is_error))
+                    if ((outputStopped && isOutput) || (errorStopped && isError))
                     {
                         continue;
                     }
 
                     // Create log file if does not exist
-                    if (!File.Exists(log_file))
+                    if (!File.Exists(logFile))
                     {
-                        using (FileStream fs = File.Create(log_file))
+                        using (FileStream fs = File.Create(logFile))
                         {
                             Byte[] info = new UTF8Encoding(true).GetBytes(String.Empty);
                             fs.Write(info, 0, info.Length);
@@ -1731,13 +1744,13 @@ namespace ULOControls
                     }
 
                     // Check if file is fit for processing
-                    string file_content = File.ReadAllText(file.FullName);
-                    bool file_is_finished = file_content.Trim().EndsWith("<EOF>");
-                    bool file_too_old = (file.LastWriteTime.AddMinutes(10) < DateTime.Now);
-                    if (file_is_finished || file_too_old)
+                    string fileContent = File.ReadAllText(file.FullName);
+                    bool fileIsFinished = fileContent.Trim().EndsWith("<EOF>");
+                    bool fileTooOld = (file.LastWriteTime.AddMinutes(10) < DateTime.Now);
+                    if (fileIsFinished || fileTooOld)
                     {
                         // Process file
-                        File.AppendAllText(log_file, file_content.TrimEnd().Replace("<EOF>", String.Empty));
+                        File.AppendAllText(logFile, fileContent.TrimEnd().Replace("<EOF>", String.Empty));
 
                         // Remove processed file
                         File.Delete(file.FullName);
@@ -1745,14 +1758,14 @@ namespace ULOControls
                     else
                     {
                         // Stop further processing of files of same type
-                        if (is_output)
+                        if (isOutput)
                         {
-                            output_stopped = true;
+                            outputStopped = true;
                         }
 
-                        if (is_error)
+                        if (isError)
                         {
-                            error_stopped = true;
+                            errorStopped = true;
                         }
                     }
                 }
@@ -1769,35 +1782,35 @@ namespace ULOControls
             }
         }
 
-        public static bool readConfigBool(string argName, bool if_not_set)
+        public static bool ReadConfigBool(string argName, bool ifNotSet)
         {
-            string value = readConfig(argName);
-            bool is_set = (value == String.Empty ? false : true);
-            return (is_set ? Convert.ToBoolean(value) : if_not_set);
+            string value = ReadConfig(argName);
+            bool isSet = (value == String.Empty ? false : true);
+            return (isSet ? Convert.ToBoolean(value) : ifNotSet);
         }
 
-        public static DateTime readConfigTime(string argName, DateTime if_not_set)
+        public static DateTime ReadConfigTime(string argName, DateTime ifNotSet)
         {
-            string value = readConfig(argName);
-            bool is_set = (value == String.Empty ? false : true);
-            return (is_set ? DateTime.ParseExact(readConfig(argName), "yyyy.MM.dd HH:mm:ss", null) : if_not_set);
+            string value = ReadConfig(argName);
+            bool isSet = (value == String.Empty ? false : true);
+            return (isSet ? DateTime.ParseExact(ReadConfig(argName), "yyyy.MM.dd HH:mm:ss", null) : ifNotSet);
         }
 
-        public static string readConfigString(string argName, string if_not_set)
+        public static string ReadConfigString(string argName, string ifNotSet)
         {
-            string value = readConfig(argName);
-            bool is_set = (value == String.Empty ? false : true);
-            return (is_set ? value : if_not_set);
+            string value = ReadConfig(argName);
+            bool isSet = (value == String.Empty ? false : true);
+            return (isSet ? value : ifNotSet);
         }
 
-        public static int readConfigInt(string argName, int if_not_set)
+        public static int ReadConfigInt(string argName, int ifNotSet)
         {
-            string value = readConfig(argName);
-            bool is_set = (value == String.Empty ? false : true);
-            return (is_set ? Convert.ToInt32(value) : if_not_set);
+            string value = ReadConfig(argName);
+            bool isSet = (value == String.Empty ? false : true);
+            return (isSet ? Convert.ToInt32(value) : ifNotSet);
         }
 
-        public static string readConfig(string argName)
+        public static string ReadConfig(string argName)
         {
             if (File.Exists(confFile))
             {
@@ -1826,7 +1839,7 @@ namespace ULOControls
             }
         }
 
-        public void writeConfig()
+        public void WriteConfig()
         {
             // Generate configuration file contents
             string cfgText = String.Empty;
@@ -1837,7 +1850,7 @@ namespace ULOControls
             File.WriteAllText(confFile, cfgText);
         }
 
-        private static void getStackCallers()
+        private static void GetStackCallers()
         {
             StackTrace stackTrace = new StackTrace();
             string[] callers = new string[] { };
@@ -1848,15 +1861,19 @@ namespace ULOControls
                     break;
                 }
 
-                string class_name = stackTrace.GetFrame(i).GetMethod().ReflectedType.Name;
-                string method_name = stackTrace.GetFrame(i).GetMethod().Name;
-                if (method_name.StartsWith(".") || method_name == stackTrace.GetFrame(0).GetMethod().Name)
+                var reflectedType = stackTrace.GetFrame(i).GetMethod().ReflectedType;
+                if (reflectedType != null)
                 {
-                    continue;
-                }
+                    string className = reflectedType.Name;
+                    string methodName = stackTrace.GetFrame(i).GetMethod().Name;
+                    if (methodName.StartsWith(".") || methodName == stackTrace.GetFrame(0).GetMethod().Name)
+                    {
+                        continue;
+                    }
 
-                Array.Resize(ref callers, callers.Length + 1);
-                callers[callers.Length - 1] = class_name + "." + method_name;
+                    Array.Resize(ref callers, callers.Length + 1);
+                    callers[callers.Length - 1] = className + "." + methodName;
+                }
             }
 
             Array.Reverse(callers);
@@ -1900,7 +1917,7 @@ namespace ULOControls
 
             if (result != 0)
             {
-                string error_msg = String.Empty;
+                string errorMsg = String.Empty;
 
                 try
                 {
@@ -1916,14 +1933,14 @@ namespace ULOControls
                             break;
                     }
 
-                    error_msg = new Win32Exception(result).Message + ". (Code: " + result + ")" + hint;
+                    errorMsg = new Win32Exception(result).Message + ". (Code: " + result + ")" + hint;
                 }
                 catch (Exception ex)
                 {
-                    error_msg = "Error connecting to remote share with unknown code " + result + ".";
+                    errorMsg = "Error connecting to remote share with unknown code " + result + ".";
                 }
 
-                throw new Win32Exception(result, error_msg);
+                throw new Win32Exception(result, errorMsg);
             }
         }
 
@@ -1964,7 +1981,7 @@ namespace ULOControls
             public string Provider;
         }
 
-        public enum ResourceScope : int
+        public enum ResourceScope
         {
             Connected = 1,
             GlobalNetwork,
@@ -1973,7 +1990,7 @@ namespace ULOControls
             Context
         };
 
-        public enum ResourceType : int
+        public enum ResourceType
         {
             Any = 0,
             Disk = 1,
@@ -1981,7 +1998,7 @@ namespace ULOControls
             Reserved = 8,
         }
 
-        public enum ResourceDisplaytype : int
+        public enum ResourceDisplaytype
         {
             Generic = 0x0,
             Domain = 0x01,

@@ -11,23 +11,23 @@ namespace ULOController
 {
     static class Controller
     {
-        public static readonly string product_root = Path.GetPathRoot(Assembly.GetEntryAssembly().Location);
-        public static readonly string product_location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        public static readonly string product_title = ((AssemblyTitleAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
-        public static readonly string product_version = Assembly.GetEntryAssembly().GetName().Version.ToString();
-        public static readonly string product_filename = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
-        public static readonly string product_config_filename = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) + ".exe.config";
+        public static readonly string productRoot = Path.GetPathRoot(Assembly.GetEntryAssembly()?.Location);
+        public static readonly string productLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
+        public static readonly string productTitle = ((AssemblyTitleAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
+        public static readonly string productVersion = Assembly.GetEntryAssembly()?.GetName().Version.ToString();
+        public static readonly string productFilename = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule?.FileName);
+        public static readonly string productConfigFilename = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule?.FileName) + ".exe.config";
 
         private static string _action = String.Empty;
 
-        private static ULO ulo = new ULO();
+        private static readonly Ulo Ulo = new Ulo();
 
-        private static bool gui_shown = false;
+        private static bool _guiShown = false;
         
         public class Actions
         {
             // Developement actions
-            public const string CallAPI = "callapi";
+            public const string CallApi = "callapi";
             // User actions
             public const string GetMode = "getmode";
             public const string SetMode = "setmode";
@@ -59,14 +59,14 @@ namespace ULOController
             public const string All = "all";
         }
 
-        public static string usage()
+        public static string Usage()
         {
             string usage = String.Empty;
             /* Length limit - mind the variables, their values and escape symbols */
-            usage += product_title + @" v" + product_version + Environment.NewLine;
+            usage += productTitle + @" v" + productVersion + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"Usage:" + Environment.NewLine;
-            usage += @"   ./" + product_filename + @" <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>" + Environment.NewLine;
+            usage += @"   ./" + productFilename + @" <ulo_host> <ulo_user> <ulo_pass> <action> <arg1> <argN>" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"Actions:" + Environment.NewLine;
             usage += @"   " + Actions.LiveFeed + @" - Show current live feed from camera (GUI only)" + Environment.NewLine;
@@ -86,9 +86,9 @@ namespace ULOController
             usage += @"   " + Actions.SetMode + @" - Set ULO camera mode" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           1. mode - camera recording mode" + Environment.NewLine;
-            usage += @"               a) " + ULO.CameraMode.Standard + @" - ULO awake and not recording" + Environment.NewLine;
-            usage += @"               b) " + ULO.CameraMode.Spy + @" - ULO awake and recording" + Environment.NewLine;
-            usage += @"               c) " + ULO.CameraMode.Alert + @" - ULO asleep and recording" + Environment.NewLine;
+            usage += @"               a) " + Ulo.CameraMode.Standard + @" - ULO awake and not recording" + Environment.NewLine;
+            usage += @"               b) " + Ulo.CameraMode.Spy + @" - ULO awake and recording" + Environment.NewLine;
+            usage += @"               c) " + Ulo.CameraMode.Alert + @" - ULO asleep and recording" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"   " + Actions.IsPowered + @" - Get info if ULO is powered by electricity from plug" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
@@ -130,13 +130,13 @@ namespace ULOController
             usage += @"" + Environment.NewLine;
             usage += @"   " + Actions.DownloadLog + @" - Download ULO log into specified location" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
-            usage += @"           1. destination type - " + ULO.DestinationType.Local + @", " + ULO.DestinationType.NFS + @", " + ULO.DestinationType.FTP + Environment.NewLine;
+            usage += @"           1. destination type - " + Ulo.DestinationType.Local + @", " + Ulo.DestinationType.Nfs + @", " + Ulo.DestinationType.Ftp + Environment.NewLine;
             usage += @"           2. destination path - location where snapshot files should be moved" + Environment.NewLine;
             usage += @"                                 NOTE: Always use absolute paths! Destination" + Environment.NewLine;
             usage += @"                                       folder must already exist!" + Environment.NewLine;
-            usage += @"               a) " + ULO.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
-            usage += @"               b) " + ULO.DestinationType.NFS + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
-            usage += @"               c) " + ULO.DestinationType.FTP + @" - ""ftp://<host>:<port>/<path>"" (Required: username," + Environment.NewLine;
+            usage += @"               a) " + Ulo.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
+            usage += @"               b) " + Ulo.DestinationType.Nfs + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
+            usage += @"               c) " + Ulo.DestinationType.Ftp + @" - ""ftp://<host>:<port>/<path>"" (Required: username," + Environment.NewLine;
             usage += @"                        password)" + Environment.NewLine;
             usage += @"           3. retention - how old uploaded files should be removed in hours;" + Environment.NewLine;
             usage += @"                          if set to 0, no age limit will be used and all" + Environment.NewLine;
@@ -148,13 +148,13 @@ namespace ULOController
             usage += @"                     location, if snapshot with same name exists it" + Environment.NewLine;
             usage += @"                     is overwritten" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
-            usage += @"           1. destination type - " + ULO.DestinationType.Local + @", " + ULO.DestinationType.NFS + @", " + ULO.DestinationType.FTP + Environment.NewLine;
+            usage += @"           1. destination type - " + Ulo.DestinationType.Local + @", " + Ulo.DestinationType.Nfs + @", " + Ulo.DestinationType.Ftp + Environment.NewLine;
             usage += @"           2. destination path - location where snapshot files should be moved" + Environment.NewLine;
             usage += @"                                 NOTE: Always use absolute paths! Destination" + Environment.NewLine;
             usage += @"                                       folder must already exist!" + Environment.NewLine;
-            usage += @"               a) " + ULO.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
-            usage += @"               b) " + ULO.DestinationType.NFS + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
-            usage += @"               c) " + ULO.DestinationType.FTP + @" - ""ftp://<host>:<port>/<path>"" (Required: username," + Environment.NewLine;
+            usage += @"               a) " + Ulo.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
+            usage += @"               b) " + Ulo.DestinationType.Nfs + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
+            usage += @"               c) " + Ulo.DestinationType.Ftp + @" - ""ftp://<host>:<port>/<path>"" (Required: username," + Environment.NewLine;
             usage += @"                        password)" + Environment.NewLine;
             usage += @"           3. username" + Environment.NewLine;
             usage += @"           4. password" + Environment.NewLine;
@@ -162,13 +162,13 @@ namespace ULOController
             usage += @"   " + Actions.DownloadVideos + @" - Download all available videos stored in ULO into specified" + Environment.NewLine;
             usage += @"                    location, if video with same name exists it is skipped" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
-            usage += @"           1. destination type - " + ULO.DestinationType.Local + @", " + ULO.DestinationType.NFS + @", " + ULO.DestinationType.FTP + Environment.NewLine;
+            usage += @"           1. destination type - " + Ulo.DestinationType.Local + @", " + Ulo.DestinationType.Nfs + @", " + Ulo.DestinationType.Ftp + Environment.NewLine;
             usage += @"           2. destination path - location where video files should be moved" + Environment.NewLine;
             usage += @"                                 NOTE: Always use absolute paths! Destination" + Environment.NewLine;
             usage += @"                                       folder must already exist!" + Environment.NewLine;
-            usage += @"               a) " + ULO.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
-            usage += @"               b) " + ULO.DestinationType.NFS + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
-            usage += @"               c) " + ULO.DestinationType.FTP + @" - ""ftp://<host>:<port>/<path>"" (Required: username," + Environment.NewLine;
+            usage += @"               a) " + Ulo.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
+            usage += @"               b) " + Ulo.DestinationType.Nfs + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
+            usage += @"               c) " + Ulo.DestinationType.Ftp + @" - ""ftp://<host>:<port>/<path>"" (Required: username," + Environment.NewLine;
             usage += @"                        password)" + Environment.NewLine;
             usage += @"           3. age - how old files should be downloaded in hours; if set" + Environment.NewLine;
             usage += @"                    to 0, no age limit will be used and all files will" + Environment.NewLine;
@@ -183,13 +183,13 @@ namespace ULOController
             usage += @"                       specified location, if snapshot with same name exists it" + Environment.NewLine;
             usage += @"                       is skipped" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
-            usage += @"           1. destination type - " + ULO.DestinationType.Local + @", " + ULO.DestinationType.NFS + @", " + ULO.DestinationType.FTP + Environment.NewLine;
+            usage += @"           1. destination type - " + Ulo.DestinationType.Local + @", " + Ulo.DestinationType.Nfs + @", " + Ulo.DestinationType.Ftp + Environment.NewLine;
             usage += @"           2. destination path - location where snapshot files should be moved" + Environment.NewLine;
             usage += @"                                 NOTE: Always use absolute paths! Destination" + Environment.NewLine;
             usage += @"                                       folder must already exist!" + Environment.NewLine;
-            usage += @"               a) " + ULO.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
-            usage += @"               b) " + ULO.DestinationType.NFS + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
-            usage += @"               c) " + ULO.DestinationType.FTP + @" - ""ftp://<host>:<port>/<path>"" (Required: username," + Environment.NewLine;
+            usage += @"               a) " + Ulo.DestinationType.Local + @" - ""<drive>:\<path>\""" + Environment.NewLine;
+            usage += @"               b) " + Ulo.DestinationType.Nfs + @" - ""\\<host>\<path>"" (Required: username, password)" + Environment.NewLine;
+            usage += @"               c) " + Ulo.DestinationType.Ftp + @" - ""ftp://<host>:<port>/<path>"" (Required: username," + Environment.NewLine;
             usage += @"                        password)" + Environment.NewLine;
             usage += @"           3. age - how old files should be downloaded in hours; if set" + Environment.NewLine;
             usage += @"                    to 0, no age limit will be used and all files will" + Environment.NewLine;
@@ -207,16 +207,16 @@ namespace ULOController
             usage += @"   " + Actions.CheckAvailability + @" - Check for device availability and set proper mode" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           1. mode if true - camera recording mode if conditions are met" + Environment.NewLine;
-            usage += @"               a) " + ULO.CameraMode.Standard + @" - ULO awake and not recording" + Environment.NewLine;
-            usage += @"               b) " + ULO.CameraMode.Spy + @" - ULO awake and recording" + Environment.NewLine;
-            usage += @"               c) " + ULO.CameraMode.Alert + @" - ULO asleep and recording" + Environment.NewLine;
+            usage += @"               a) " + Ulo.CameraMode.Standard + @" - ULO awake and not recording" + Environment.NewLine;
+            usage += @"               b) " + Ulo.CameraMode.Spy + @" - ULO awake and recording" + Environment.NewLine;
+            usage += @"               c) " + Ulo.CameraMode.Alert + @" - ULO asleep and recording" + Environment.NewLine;
             usage += @"           2. mode if false - camera recording mode if conditions are not met" + Environment.NewLine;
-            usage += @"               a) " + ULO.CameraMode.Standard + @" - ULO awake and not recording" + Environment.NewLine;
-            usage += @"               b) " + ULO.CameraMode.Spy + @" - ULO awake and recording" + Environment.NewLine;
-            usage += @"               c) " + ULO.CameraMode.Alert + @" - ULO asleep and recording" + Environment.NewLine;
+            usage += @"               a) " + Ulo.CameraMode.Standard + @" - ULO awake and not recording" + Environment.NewLine;
+            usage += @"               b) " + Ulo.CameraMode.Spy + @" - ULO awake and recording" + Environment.NewLine;
+            usage += @"               c) " + Ulo.CameraMode.Alert + @" - ULO asleep and recording" + Environment.NewLine;
             usage += @"           3. operation - operation to determine how to check devices" + Environment.NewLine;
-            usage += @"               a) " + ULO.Operation.And + @" - All devices available to be true" + Environment.NewLine;
-            usage += @"               b) " + ULO.Operation.Or + @" - Any device available to be true" + Environment.NewLine;
+            usage += @"               a) " + Ulo.Operation.And + @" - All devices available to be true" + Environment.NewLine;
+            usage += @"               b) " + Ulo.Operation.Or + @" - Any device available to be true" + Environment.NewLine;
             usage += @"           4. host1 - hostname of device you want to check if available" + Environment.NewLine;
             usage += @"           5. host2 - hostname of device you want to check if available" + Environment.NewLine;
             usage += @"                      (optional)" + Environment.NewLine;
@@ -227,7 +227,7 @@ namespace ULOController
             usage += @"           8. host5 - hostname of device you want to check if available" + Environment.NewLine;
             usage += @"                      (optional)" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
-            usage += @"   " + Actions.CallAPI + @" - Call API with custom parameters" + Environment.NewLine;
+            usage += @"   " + Actions.CallApi + @" - Call API with custom parameters" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           1. api path - path to API module" + Environment.NewLine;
             usage += @"           2. method - call method [GET|PUT|POST|DELETE|...]" + Environment.NewLine;
@@ -236,26 +236,26 @@ namespace ULOController
             usage += @"" + Environment.NewLine;
             usage += @"Examples:" + Environment.NewLine;
             usage += @"    - Download video files" + Environment.NewLine;
-            usage += @"        ./" + product_filename + @" ""192.168.0.10"" ""test"" ""123!Abc"" ""downloadvideos""" + Environment.NewLine;
+            usage += @"        ./" + productFilename + @" ""192.168.0.10"" ""test"" ""123!Abc"" ""downloadvideos""" + Environment.NewLine;
             usage += @"         ""local"" ""C:\ulo\"" ""24"" ""48""" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"Library configuration (optional):" + Environment.NewLine;
-            usage += @"   By creating a text file with name """ + Path.GetFileName(ULO.confFile) + @""" in same directory as ULO" + Environment.NewLine;
+            usage += @"   By creating a text file with name """ + Path.GetFileName(Ulo.confFile) + @""" in same directory as ULO" + Environment.NewLine;
             usage += @"   library, you can change some library behavior or enable debug options. Each" + Environment.NewLine;
             usage += @"   parameter can be set to either true or false, there can be only one parameter" + Environment.NewLine;
             usage += @"   per line and there should be equal sign (=) between parameter name and value." + Environment.NewLine;
             usage += @"   Default values are false." + Environment.NewLine;
-            usage += @"       1. " + ULO.ConfigParams.WriteLog + @" - write output into log file" + Environment.NewLine;
-            usage += @"       2. " + ULO.ConfigParams.ShowArguments + @" - incoming arguments will be written to console" + Environment.NewLine;
-            usage += @"       3. " + ULO.ConfigParams.ShowTrace + @" - error trace will be written to console" + Environment.NewLine;
-            usage += @"       4. " + ULO.ConfigParams.ShowSkipped + @" - skipped files will be written to log and console" + Environment.NewLine;
-            usage += @"       5. " + ULO.ConfigParams.ShowPingResults + @" - availability check will show more information" + Environment.NewLine;
-            usage += @"       6. " + ULO.ConfigParams.SuppressLogHandling + @" - log handler will stop chronologically push logs" + Environment.NewLine;
+            usage += @"       1. " + Ulo.ConfigParams.WriteLog + @" - write output into log file" + Environment.NewLine;
+            usage += @"       2. " + Ulo.ConfigParams.ShowArguments + @" - incoming arguments will be written to console" + Environment.NewLine;
+            usage += @"       3. " + Ulo.ConfigParams.ShowTrace + @" - error trace will be written to console" + Environment.NewLine;
+            usage += @"       4. " + Ulo.ConfigParams.ShowSkipped + @" - skipped files will be written to log and console" + Environment.NewLine;
+            usage += @"       5. " + Ulo.ConfigParams.ShowPingResults + @" - availability check will show more information" + Environment.NewLine;
+            usage += @"       6. " + Ulo.ConfigParams.SuppressLogHandling + @" - log handler will stop chronologically push logs" + Environment.NewLine;
             usage += @"                                into single log file" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"Examples:" + Environment.NewLine;
-            usage += @"    " + ULO.ConfigParams.WriteLog + @"=true" + Environment.NewLine;
-            usage += @"    " + ULO.ConfigParams.ShowArguments + @"=false" + Environment.NewLine;
+            usage += @"    " + Ulo.ConfigParams.WriteLog + @"=true" + Environment.NewLine;
+            usage += @"    " + Ulo.ConfigParams.ShowArguments + @"=false" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
             usage += @"Notes from working with ULO:" + Environment.NewLine;
             usage += @"    - When using this tool, ULO usually wakes up unless it is in Alert mode." + Environment.NewLine;
@@ -292,10 +292,10 @@ namespace ULOController
         /// <summary>
         /// Process input arguments into variables and log/output info about it if configured so
         /// </summary>
-        private static string handleArg(string[] args, int index, string if_not_set)
+        private static string HandleArg(string[] args, int index, string ifNotSet)
         {
             string output = String.Empty;
-            bool used_default = false;
+            bool usedDefault = false;
 
             try
             {
@@ -303,8 +303,8 @@ namespace ULOController
             }
             catch (Exception ex)
             {
-                output = if_not_set;
-                used_default = true;
+                output = ifNotSet;
+                usedDefault = true;
             }
 
             // Action should be stored as global variable
@@ -313,17 +313,17 @@ namespace ULOController
                 _action = output.ToLower();
             }
 
-            if (ulo.configuration.showArguments)
+            if (Ulo.configuration.showArguments)
             {
                 if (index == 0)
                 {
-                    ulo.writeLog(ULO.tempOutFile, String.Empty, true);
-                    ulo.writeLog(ULO.tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
+                    Ulo.WriteLog(Ulo.tempOutFile, String.Empty, true);
+                    Ulo.WriteLog(Ulo.tempOutFile, DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]"), true);
                 }
 
                 // Check if passwords are not processed and remove them
-                string revised_output = output;
-                string password_stars = "****";
+                string revisedOutput = output;
+                string passwordStars = "****";
 
                 if (output != String.Empty)
                 {
@@ -331,33 +331,33 @@ namespace ULOController
                     {
                         case 2:
                             // ULO password
-                            revised_output = password_stars;
+                            revisedOutput = passwordStars;
                             break;
                         default:
                             switch (_action)
                             {
                                 case Actions.DownloadLog:
                                     // Destination password
-                                    if (index == 9) { revised_output = password_stars; }
+                                    if (index == 9) { revisedOutput = passwordStars; }
                                     break;
                                 case Actions.CurrentSnapshot:
                                     // Destination password
-                                    if (index == 7) { revised_output = password_stars; }
+                                    if (index == 7) { revisedOutput = passwordStars; }
                                     break;
                                 case Actions.DownloadVideos:
                                     // Destination password
-                                    if (index == 9) { revised_output = password_stars; }
+                                    if (index == 9) { revisedOutput = passwordStars; }
                                     break;
                                 case Actions.DownloadSnapshots:
                                     // Destination password
-                                    if (index == 9) { revised_output = password_stars; }
+                                    if (index == 9) { revisedOutput = passwordStars; }
                                     break;
                             }
                             break;
                     }
                 }
 
-                ulo.writeLog(ULO.tempOutFile, "Argument " + ((index < 10) ? "0" + index : index.ToString()) + " = '" + revised_output + "' (used_default: " + used_default + ")", true);
+                Ulo.WriteLog(Ulo.tempOutFile, "Argument " + ((index < 10) ? "0" + index : index.ToString()) + " = '" + revisedOutput + "' (used_default: " + usedDefault + ")", true);
             }
 
             return output;
@@ -372,22 +372,22 @@ namespace ULOController
             try
             {
                 // Define arguments
-                string host = handleArg(args, 0, String.Empty);
-                string username = handleArg(args, 1, String.Empty);
-                string password = handleArg(args, 2, String.Empty);
-                string action = handleArg(args, 3, String.Empty);
-                string arg1 = handleArg(args, 4, String.Empty);
-                string arg2 = handleArg(args, 5, String.Empty);
-                string arg3 = handleArg(args, 6, String.Empty);
-                string arg4 = handleArg(args, 7, String.Empty);
-                string arg5 = handleArg(args, 8, String.Empty);
-                string arg6 = handleArg(args, 9, String.Empty);
-                string arg7 = handleArg(args, 10, String.Empty);
-                string arg8 = handleArg(args, 11, String.Empty);
+                string host = HandleArg(args, 0, String.Empty);
+                string username = HandleArg(args, 1, String.Empty);
+                string password = HandleArg(args, 2, String.Empty);
+                string action = HandleArg(args, 3, String.Empty);
+                string arg1 = HandleArg(args, 4, String.Empty);
+                string arg2 = HandleArg(args, 5, String.Empty);
+                string arg3 = HandleArg(args, 6, String.Empty);
+                string arg4 = HandleArg(args, 7, String.Empty);
+                string arg5 = HandleArg(args, 8, String.Empty);
+                string arg6 = HandleArg(args, 9, String.Empty);
+                string arg7 = HandleArg(args, 10, String.Empty);
+                string arg8 = HandleArg(args, 11, String.Empty);
 
-                if (ulo.configuration.showArguments)
+                if (Ulo.configuration.showArguments)
                 {
-                    ulo.writeLog(ULO.tempOutFile, String.Empty, true);
+                    Ulo.WriteLog(Ulo.tempOutFile, String.Empty, true);
                 }
                 
                 // Main execution
@@ -395,11 +395,11 @@ namespace ULOController
                 {
                     if (Environment.UserInteractive)
                     {
-                        gui_shown = true;
+                        _guiShown = true;
                         // Show GUI
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
-                        Application.Run(new ControllerGUI());
+                        Application.Run(new ControllerGui());
                     }
                     else
                     {
@@ -418,40 +418,40 @@ namespace ULOController
                         else
                         {
                             // If applicaation is not started by explorer show help
-                            Console.WriteLine(usage());
+                            Console.WriteLine(Usage());
                         }
                     }
                 }
                 else if(host == "/?" || host == "?" || host == "-h" || host == "-help" || host == "--help")
                 {
-                    Console.WriteLine(usage());
+                    Console.WriteLine(Usage());
                 }
                 else
                 {
                     try
                     {
                         // Login
-                        ulo.login(host, username, password);
+                        Ulo.Login(host, username, password);
 
                         // Perform action
-                        ulo.writeLog(ULO.tempOutFile, executeAction(action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8), true);
+                        Ulo.WriteLog(Ulo.tempOutFile, ExecuteAction(action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8), true);
 
-                        ulo.logout();
+                        Ulo.Logout();
                     }
                     catch (Exception ex)
                     {
-                        ulo.logout();
+                        Ulo.Logout();
 
                         throw;
                     }
 
                 }
 
-                ulo.handleTempLogs();
+                Ulo.HandleTempLogs();
             }
             catch (Exception ex)
             {
-                if (gui_shown)
+                if (_guiShown)
                 {
                     throw;
                 }
@@ -461,48 +461,48 @@ namespace ULOController
                 {
                     dot = ".";
                 }
-                Console.WriteLine("ERROR: " + ex.Message + dot);
-                exceptionHandler(ex);
+                Console.WriteLine(@"ERROR: " + ex.Message + dot);
+                ExceptionHandler(ex);
 
                 try
                 {
-                    ulo.handleTempLogs();
+                    Ulo.HandleTempLogs();
                 }
-                catch (Exception ex_in)
+                catch (Exception exIn)
                 {
-                    ulo.markLogs();
+                    Ulo.MarkLogs();
                 }
             }
         }
 
-        public static string executeAction(string action, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
+        public static string ExecuteAction(string action, string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8)
         {
             string output = String.Empty;
 
             switch (action.ToLower())
             {
                 // Developement actions
-                case Actions.CallAPI:
+                case Actions.CallApi:
                     // Get API output
-                    output = ulo.callAPI(arg1, arg2, arg3, arg4);
+                    output = Ulo.CallApi(arg1, arg2, arg3, arg4);
                     break;
                 // User actions
                 case Actions.GetMode:
                     // Get mode
-                    output = ulo.getMode();
+                    output = Ulo.GetMode();
                     break;
                 case Actions.SetMode:
                     // Set mode
                     switch (arg1.ToLower())
                     {
-                        case ULO.CameraMode.Standard:
-                            ulo.setMode(ULO.CameraMode.Standard);
+                        case Ulo.CameraMode.Standard:
+                            Ulo.SetMode(Ulo.CameraMode.Standard);
                             break;
-                        case ULO.CameraMode.Spy:
-                            ulo.setMode(ULO.CameraMode.Spy);
+                        case Ulo.CameraMode.Spy:
+                            Ulo.SetMode(Ulo.CameraMode.Spy);
                             break;
-                        case ULO.CameraMode.Alert:
-                            ulo.setMode(ULO.CameraMode.Alert);
+                        case Ulo.CameraMode.Alert:
+                            Ulo.SetMode(Ulo.CameraMode.Alert);
                             break;
                         default:
                             throw new Exception("Mode '" + arg1 + "' is not supported.");
@@ -510,27 +510,27 @@ namespace ULOController
                     break;
                 case Actions.IsPowered:
                     // Get info if ULO is powered by electricity from plug
-                    output = Convert.ToString(ulo.isPowered());
+                    output = Convert.ToString(Ulo.IsPowered());
                     break;
                 case Actions.GetBattery:
                     // Get battery capacity
-                    output = Convert.ToString(ulo.getBattery());
+                    output = Convert.ToString(Ulo.GetBattery());
                     break;
                 case Actions.IsCard:
                     // Get info if SD card is inserted into ULO
-                    output = Convert.ToString(ulo.isCard());
+                    output = Convert.ToString(Ulo.IsCard());
                     break;
                 case Actions.GetCardSpace:
                     // Get SD card free capacity
-                    output = Convert.ToString(ulo.getCardSpace());
+                    output = Convert.ToString(Ulo.GetCardSpace());
                     break;
                 case Actions.GetDiskSpace:
                     // Get internal memory free capacity
-                    output = Convert.ToString(ulo.getDiskSpace());
+                    output = Convert.ToString(Ulo.GetDiskSpace());
                     break;
                 case Actions.MoveToCard:
                     // Move files from internal memory to SD card
-                    ulo.moveToCard();
+                    Ulo.MoveToCard();
                     break;
                 case Actions.CleanDiskSpace:
                     // Clean files on internal memory
@@ -538,80 +538,80 @@ namespace ULOController
                     switch (arg1.ToLower())
                     {
                         case DeletePeriodMap.OldestDay:
-                            period = ULO.DeletePeriod.OldestDay;
+                            period = Ulo.DeletePeriod.OldestDay;
                             break;
                         case DeletePeriodMap.OldestWeek:
-                            period = ULO.DeletePeriod.OldestWeek;
+                            period = Ulo.DeletePeriod.OldestWeek;
                             break;
                         case DeletePeriodMap.OldestYear:
-                            period = ULO.DeletePeriod.OldestYear;
+                            period = Ulo.DeletePeriod.OldestYear;
                             break;
                         case DeletePeriodMap.LatestDay:
-                            period = ULO.DeletePeriod.LatestDay;
+                            period = Ulo.DeletePeriod.LatestDay;
                             break;
                         case DeletePeriodMap.LatestWeek:
-                            period = ULO.DeletePeriod.LatestWeek;
+                            period = Ulo.DeletePeriod.LatestWeek;
                             break;
                         case DeletePeriodMap.LatestYear:
-                            period = ULO.DeletePeriod.LatestYear;
+                            period = Ulo.DeletePeriod.LatestYear;
                             break;
                         case DeletePeriodMap.All:
-                            period = ULO.DeletePeriod.All;
+                            period = Ulo.DeletePeriod.All;
                             break;
                         default:
                             throw new Exception("Delete period '" + arg1 + "' is not supported.");
                     }
-                    ulo.cleanDiskSpace(period);
+                    Ulo.CleanDiskSpace(period);
                     break;
                 case Actions.DownloadLog:
                     // Download ULO log into specified location
-                    ulo.downloadLog(arg1, arg2, ((arg3 != String.Empty) ? Int32.Parse(arg3) : 0), arg4, arg5);
+                    Ulo.DownloadLog(arg1, arg2, ((arg3 != String.Empty) ? Int32.Parse(arg3) : 0), arg4, arg5);
                     break;
                 case Actions.CurrentSnapshot:
                     // Download current snapshot
-                    ulo.downloadCurrent(arg1, arg2, arg3, arg4);
+                    Ulo.DownloadCurrent(arg1, arg2, arg3, arg4);
                     break;
                 case Actions.DownloadVideos:
                     // Download videos
-                    ulo.downloadMedia(ULO.MediaType.Video, arg1, arg2, ((arg3 != String.Empty) ? Int32.Parse(arg3) : 0), ((arg4 != String.Empty) ? Int32.Parse(arg4) : 0), arg5, arg6);
+                    Ulo.DownloadMedia(Ulo.MediaType.Video, arg1, arg2, ((arg3 != String.Empty) ? Int32.Parse(arg3) : 0), ((arg4 != String.Empty) ? Int32.Parse(arg4) : 0), arg5, arg6);
                     break;
                 case Actions.DownloadSnapshots:
                     // Download snapshots
-                    ulo.downloadMedia(ULO.MediaType.Snapshot, arg1, arg2, ((arg3 != String.Empty) ? Int32.Parse(arg3) : 0), ((arg4 != String.Empty) ? Int32.Parse(arg4) : 0), arg5, arg6);
+                    Ulo.DownloadMedia(Ulo.MediaType.Snapshot, arg1, arg2, ((arg3 != String.Empty) ? Int32.Parse(arg3) : 0), ((arg4 != String.Empty) ? Int32.Parse(arg4) : 0), arg5, arg6);
                     break;
                 case Actions.TestAvailability:
                     // Test for device availability
-                    ulo.testAvailability(arg1);
+                    Ulo.TestAvailability(arg1);
                     break;
                 case Actions.CheckAvailability:
                     // Check for device availability and set proper mode
-                    string mode_if_true = "";
+                    string modeIfTrue = "";
                     switch (arg1.ToLower())
                     {
-                        case ULO.CameraMode.Standard:
-                            mode_if_true = ULO.CameraMode.Standard;
+                        case Ulo.CameraMode.Standard:
+                            modeIfTrue = Ulo.CameraMode.Standard;
                             break;
-                        case ULO.CameraMode.Spy:
-                            mode_if_true = ULO.CameraMode.Spy;
+                        case Ulo.CameraMode.Spy:
+                            modeIfTrue = Ulo.CameraMode.Spy;
                             break;
-                        case ULO.CameraMode.Alert:
-                            mode_if_true = ULO.CameraMode.Alert;
+                        case Ulo.CameraMode.Alert:
+                            modeIfTrue = Ulo.CameraMode.Alert;
                             break;
                         default:
                             throw new Exception("Mode '" + arg1 + "' is not supported.");
                     }
 
-                    string mode_if_false = "";
+                    string modeIfFalse = "";
                     switch (arg2.ToLower())
                     {
-                        case ULO.CameraMode.Standard:
-                            mode_if_false = ULO.CameraMode.Standard;
+                        case Ulo.CameraMode.Standard:
+                            modeIfFalse = Ulo.CameraMode.Standard;
                             break;
-                        case ULO.CameraMode.Spy:
-                            mode_if_false = ULO.CameraMode.Spy;
+                        case Ulo.CameraMode.Spy:
+                            modeIfFalse = Ulo.CameraMode.Spy;
                             break;
-                        case ULO.CameraMode.Alert:
-                            mode_if_false = ULO.CameraMode.Alert;
+                        case Ulo.CameraMode.Alert:
+                            modeIfFalse = Ulo.CameraMode.Alert;
                             break;
                         default:
                             throw new Exception("Mode '" + arg2 + "' is not supported.");
@@ -620,17 +620,17 @@ namespace ULOController
                     string operation = "";
                     switch (arg3.ToLower())
                     {
-                        case ULO.Operation.And:
-                            operation = ULO.Operation.And;
+                        case Ulo.Operation.And:
+                            operation = Ulo.Operation.And;
                             break;
-                        case ULO.Operation.Or:
-                            operation = ULO.Operation.Or;
+                        case Ulo.Operation.Or:
+                            operation = Ulo.Operation.Or;
                             break;
                         default:
                             throw new Exception("Operation '" + arg3 + "' is not supported.");
                     }
 
-                    ulo.checkAvailability(mode_if_true, mode_if_false, operation, arg4, arg5, arg6, arg7, arg8);
+                    Ulo.CheckAvailability(modeIfTrue, modeIfFalse, operation, arg4, arg5, arg6, arg7, arg8);
                     break;
                 case Actions.LiveFeed:
                     throw new Exception("Live feed is GUI only feature.");
@@ -641,7 +641,7 @@ namespace ULOController
             return output;
         }
 
-        private static void exceptionHandler(Exception ex)
+        private static void ExceptionHandler(Exception ex)
         {
             string timestamp = DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]");
             string errorOutput = String.Empty;
@@ -652,14 +652,14 @@ namespace ULOController
             errorOutput += "StackTrace = " + ex.StackTrace + Environment.NewLine;
             errorOutput += "TargetSite = " + ex.TargetSite + Environment.NewLine;
 
-            if (ulo.configuration.showTrace)
+            if (Ulo.configuration.showTrace)
             {
                 Console.WriteLine(String.Empty);
                 Console.WriteLine(errorOutput);
             }
 
-            ulo.writeLog(ULO.tempErrFile, errorOutput, true, true);
-            ulo.writeLog(ULO.tempOutFile, timestamp + " ERROR: " + ex.Message, true, true);
+            Ulo.WriteLog(Ulo.tempErrFile, errorOutput, true, true);
+            Ulo.WriteLog(Ulo.tempOutFile, timestamp + " ERROR: " + ex.Message, true, true);
 
             //throw ex;
         }

@@ -11,14 +11,14 @@ using static ULOController.Controller;
 
 namespace ULOController
 {
-    public partial class ControllerGUI : Form
+    public partial class ControllerGui : Form
     {
-        private long maxFileSize = 100 * (long)Math.Pow(1024, 2); // bytes
-        private string storagePath = product_location + "\\media";
-        private string videoFile = String.Empty;
-        private int fileRetention = 5;
-        private WebSocket ws;
-        private bool fileReset = false;
+        private long _maxFileSize = 100 * (long)Math.Pow(1024, 2); // bytes
+        private string _storagePath = productLocation + "\\media";
+        private string _videoFile = String.Empty;
+        private int _fileRetention = 5;
+        private WebSocket _ws;
+        private bool _fileReset = false;
         
         private readonly LibVLC _libVlc; // https://code.videolan.org/mfkl/libvlcsharp-samples
         private MemoryStream _memoryStreamVlc;
@@ -27,18 +27,18 @@ namespace ULOController
 
         private string generate_video_filename()
         {
-            return storagePath + "\\video-" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".mp4";
+            return _storagePath + "\\video-" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".mp4";
         }
 
-        ULO ulo = new ULO();
-        bool init = false;
-        bool stream_running = false;
+        Ulo _ulo = new Ulo();
+        bool _init = false;
+        bool _streamRunning = false;
 
         private delegate void SafeCallDelegate(string text);
 
-        public ControllerGUI()
+        public ControllerGui()
         {
-            init = true;
+            _init = true;
             InitializeComponent();
 
             // LibVLC initiation
@@ -48,9 +48,9 @@ namespace ULOController
             videoView1.MediaPlayer.Volume = 50;
             videoView1.BackgroundImage = null;
 
-            tbUsage.Text = usage();
+            tbUsage.Text = Usage();
             
-            cbAction.Items.Add(Actions.CallAPI);
+            cbAction.Items.Add(Actions.CallApi);
             cbAction.Items.Add(Actions.LiveFeed);
             cbAction.Items.Add(Actions.CheckAvailability);
             cbAction.Items.Add(Actions.CleanDiskSpace);
@@ -73,22 +73,22 @@ namespace ULOController
             tbUsername.Text = Properties.Settings.Default.username;
             tbPassword.Text = Properties.Settings.Default.password;
 
-            setCfgValues();
+            SetCfgValues();
 
-            init = false;
+            _init = false;
         }
 
-        private void setCfgValues()
+        private void SetCfgValues()
         {
-            cfg_writeLog.Checked = ulo.configuration.writeLog;
-            cfg_showArguments.Checked = ulo.configuration.showArguments;
-            cfg_showTrace.Checked = ulo.configuration.showTrace;
-            cfg_showSkipped.Checked = ulo.configuration.showSkipped;
-            cfg_showPingResults.Checked = ulo.configuration.showPingResults;
-            cfg_suppressLogHandling.Checked = ulo.configuration.suppressLogHandling;
+            cfg_writeLog.Checked = _ulo.configuration.writeLog;
+            cfg_showArguments.Checked = _ulo.configuration.showArguments;
+            cfg_showTrace.Checked = _ulo.configuration.showTrace;
+            cfg_showSkipped.Checked = _ulo.configuration.showSkipped;
+            cfg_showPingResults.Checked = _ulo.configuration.showPingResults;
+            cfg_suppressLogHandling.Checked = _ulo.configuration.suppressLogHandling;
         }
 
-        private void addLine(string text)
+        private void AddLine(string text)
         {
             this.Invoke((MethodInvoker)(() => tbOutput.Select(tbOutput.TextLength + 1, 0)));
             this.Invoke((MethodInvoker)(() => tbOutput.SelectedText = Environment.NewLine + text));
@@ -107,16 +107,16 @@ namespace ULOController
                 stream.Write(bytes, 0, bytes.Length);
             }
 
-            if (fi.Length > maxFileSize)
+            if (fi.Length > _maxFileSize)
             {
-                videoFile = generate_video_filename();
-                addLine("Maximum file size reached, starting new video file.");
-                addLine("Video location: " + videoFile);
+                _videoFile = generate_video_filename();
+                AddLine("Maximum file size reached, starting new video file.");
+                AddLine("Video location: " + _videoFile);
 
-                fileReset = true;
-                ws.Close();
-                ws.Connect();
-                fileReset = false;
+                _fileReset = true;
+                _ws.Close();
+                _ws.Connect();
+                _fileReset = false;
 
                 DirectoryInfo info = new DirectoryInfo(fi.DirectoryName);
                 FileInfo[] files = info.GetFiles("video-*.mp4");
@@ -128,7 +128,7 @@ namespace ULOController
                 foreach (FileInfo file in files)
                 {
                     counter++;
-                    if (counter > fileRetention)
+                    if (counter > _fileRetention)
                     {
                         try
                         {
@@ -142,20 +142,20 @@ namespace ULOController
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            cancelStream();
+            CancelStream();
         }
 
-        private void cancelStream()
+        private void CancelStream()
         {
             try
             {
                 // TODO
             }
             catch (Exception ex) { }
-            ws.Close(CloseStatusCode.Normal);
+            _ws.Close(CloseStatusCode.Normal);
         }
 
-        private void btnExecute_Click(object sender_main, EventArgs e_main)
+        private void btnExecute_Click(object senderMain, EventArgs eMain)
         {
 
             if (tbHost.Text != String.Empty && tbUsername.Text != String.Empty && tbPassword.Text != String.Empty && cbAction.Items[cbAction.SelectedIndex].ToString() != String.Empty)
@@ -169,7 +169,7 @@ namespace ULOController
 
                 if (cbAction.Items[cbAction.SelectedIndex].ToString() == Actions.LiveFeed)
                 {
-                    if (!stream_running)
+                    if (!_streamRunning)
                     {
                         bool record = false;
                         if (tbArg1.Text != String.Empty)
@@ -178,38 +178,38 @@ namespace ULOController
                         }
                         if (tbArg2.Text != String.Empty)
                         {
-                            storagePath = tbArg2.Text;
+                            _storagePath = tbArg2.Text;
                         }
                         if (tbArg3.Text != String.Empty)
                         {
-                            maxFileSize = Convert.ToInt32(tbArg3.Text) * (long)Math.Pow(1024, 2);
+                            _maxFileSize = Convert.ToInt32(tbArg3.Text) * (long)Math.Pow(1024, 2);
                         }
                         if (tbArg4.Text != String.Empty)
                         {
-                            fileRetention = Convert.ToInt32(tbArg4.Text);
+                            _fileRetention = Convert.ToInt32(tbArg4.Text);
                         }
-                        videoFile = generate_video_filename();
+                        _videoFile = generate_video_filename();
 
                         try
                         {
                             string[] protocols = new string[] { "mudesign.ulo.mp4" };
-                            ws = new WebSocket(new Uri("ws://" + tbHost.Text + "/api/v1/live").AbsoluteUri, protocols);
+                            _ws = new WebSocket(new Uri("ws://" + tbHost.Text + "/api/v1/live").AbsoluteUri, protocols);
                             //ws.Log.Level = WebSocketSharp.LogLevel.Trace;
                             //ws.Log.File = ULO.errFile;
                             //ws.SetProxy("http://" + tbHost.Text, tbUsername.Text, tbPassword.Text);
                             //ws.SetCredentials(tbUsername.Text, tbPassword.Text, true);
-                            ws.Origin = "http://" + tbHost.Text;
-                            ws.EnableRedirection = true;
-                            ws.EmitOnPing = true;
-                            ws.OnOpen += (sender, e) =>
+                            _ws.Origin = "http://" + tbHost.Text;
+                            _ws.EnableRedirection = true;
+                            _ws.EmitOnPing = true;
+                            _ws.OnOpen += (sender, e) =>
                             {
-                                addLine("Connection opened.");
+                                AddLine("Connection opened.");
                                 if (record)
                                 {
-                                    addLine("Video location: " + videoFile);
+                                    AddLine("Video location: " + _videoFile);
                                 }
-                                stream_running = true;
-                                if (!fileReset)
+                                _streamRunning = true;
+                                if (!_fileReset)
                                 {
                                     this.Invoke((MethodInvoker)(() =>
                                     {
@@ -218,19 +218,19 @@ namespace ULOController
                                     }));
                                 }
                             };
-                            ws.OnMessage += (sender, e) =>
+                            _ws.OnMessage += (sender, e) =>
                             {
                                 if (e.IsText)
                                 {
-                                    addLine("Text message received: " + e.Data + ".");
+                                    AddLine("Text message received: " + e.Data + ".");
                                     return;
                                 }
                                 if (e.IsBinary)
                                 {
-                                    addLine("Binary message received of size: " + e.RawData.Length + ".");
+                                    AddLine("Binary message received of size: " + e.RawData.Length + ".");
                                     if (record)
                                     {
-                                        AppendAllBytes(videoFile, e.RawData);
+                                        AppendAllBytes(_videoFile, e.RawData);
                                     }
                                     /*
                                     https://github.com/jeremyVignelles/libvlcsharp-nonfree-samples/blob/main/
@@ -247,18 +247,18 @@ namespace ULOController
                                     return;
                                 }
                             };
-                            ws.OnError += (sender, e) =>
+                            _ws.OnError += (sender, e) =>
                             {
-                                addLine("ERROR: " + e.Message + ".");
+                                AddLine("ERROR: " + e.Message + ".");
                                 throw e.Exception;
                             };
-                            ws.OnClose += (sender, e) =>
+                            _ws.OnClose += (sender, e) =>
                             {
-                                addLine("Connection closed.");
-                                addLine("Reason: " + e.Reason);
-                                addLine("WasClean: " + e.WasClean);
-                                stream_running = false;
-                                if (!fileReset)
+                                AddLine("Connection closed.");
+                                AddLine("Reason: " + e.Reason);
+                                AddLine("WasClean: " + e.WasClean);
+                                _streamRunning = false;
+                                if (!_fileReset)
                                 {
                                     this.Invoke((MethodInvoker)(() =>
                                     {
@@ -268,11 +268,11 @@ namespace ULOController
                                 }
                             };
 
-                            ws.Connect();
+                            _ws.Connect();
                         }
                         catch (Exception ex)
                         {
-                            writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: " + ex);
+                            WriteOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: " + ex);
                         }
                     }
                 }
@@ -284,7 +284,7 @@ namespace ULOController
                     {
                         string execCmd = "\"" + tbHost.Text + "\" \"" + tbUsername.Text + "\" \"" + tbPassword.Text + "\" \"" + cbAction.Items[cbAction.SelectedIndex].ToString() + "\" \"" + tbArg1.Text + "\" \"" + tbArg2.Text + "\" \"" + tbArg3.Text + "\" \"" + tbArg4.Text + "\" \"" + tbArg5.Text + "\" \"" + tbArg6.Text + "\" \"" + tbArg7.Text + "\" \"" + tbArg8.Text + "\"";
                         Process process = new Process();
-                        process.StartInfo.FileName = product_location + @"\" + product_filename + ".exe";
+                        process.StartInfo.FileName = productLocation + @"\" + productFilename + ".exe";
                         process.StartInfo.Arguments = execCmd;
                         process.StartInfo.CreateNoWindow = true;
                         process.StartInfo.UseShellExecute = false;
@@ -296,14 +296,14 @@ namespace ULOController
                         process.BeginOutputReadLine();
                         process.BeginErrorReadLine();
 
-                        while (processExists(process.Id))
+                        while (ProcessExists(process.Id))
                         {
                             Thread.Sleep(100);
                         }
                     }
                     catch (Exception ex)
                     {
-                        writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: " + ex);
+                        WriteOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: " + ex);
                     }
 
                     btnExecute.Enabled = true;
@@ -313,33 +313,33 @@ namespace ULOController
             {
                 if (tbHost.Text == String.Empty)
                 {
-                    writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: ULO Hostname not provided.");
+                    WriteOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: ULO Hostname not provided.");
                 }
                 if (tbUsername.Text == String.Empty)
                 {
-                    writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: ULO Username not provided.");
+                    WriteOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: ULO Username not provided.");
                 }
                 if (tbPassword.Text == String.Empty)
                 {
-                    writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: ULO Password not provided.");
+                    WriteOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: ULO Password not provided.");
                 }
                 if (cbAction.Items[cbAction.SelectedIndex].ToString() == String.Empty)
                 {
-                    writeOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: Action not provided.");
+                    WriteOutput(DateTime.Now.ToString("[yyyy.MM.dd - HH:mm:ss]") + Environment.NewLine + "ERROR: Action not provided.");
                 }
             }
         }
 
         private void text_Received(object sender, DataReceivedEventArgs e)
         {
-            writeOutput(e.Data);
+            WriteOutput(e.Data);
         }
 
-        private void writeOutput(string text)
+        private void WriteOutput(string text)
         {
             if (tbOutput.InvokeRequired)
             {
-                var call = new SafeCallDelegate(writeOutput);
+                var call = new SafeCallDelegate(WriteOutput);
                 tbOutput.Invoke(call, new object[] { text });
             }
             else
@@ -350,7 +350,7 @@ namespace ULOController
             }
         }
 
-        private bool processExists(int pid)
+        private bool ProcessExists(int pid)
         {
             foreach (Process p in Process.GetProcesses())
             {
@@ -364,33 +364,33 @@ namespace ULOController
 
         private void cfgValue_CheckedChanged(object sender, EventArgs e)
         {
-            if (!init)
+            if (!_init)
             {
                 CheckBox checkbox = (CheckBox)sender;
                 string cfgName = checkbox.Name.Replace("cfg_", String.Empty);
                 bool cfgValue = checkbox.Checked;
                 
-                foreach (FieldInfo fieldInfo in ulo.configuration.GetType().GetFields())
+                foreach (FieldInfo fieldInfo in _ulo.configuration.GetType().GetFields())
                 {
                     if (fieldInfo.Name == cfgName)
                     {
-                        fieldInfo.SetValue(ulo.configuration, cfgValue);
+                        fieldInfo.SetValue(_ulo.configuration, cfgValue);
                     }
                 }
 
-                ulo.writeConfig();
-                ulo.reloadConfiguration();
-                setCfgValues();
+                _ulo.WriteConfig();
+                _ulo.ReloadConfiguration();
+                SetCfgValues();
             }
         }
 
         private void ControllerGUI_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (stream_running)
+            if (_streamRunning)
             {
-                cancelStream();
+                CancelStream();
             }
-            ulo.handleTempLogs();
+            _ulo.HandleTempLogs();
             Application.Exit();
         }
     }

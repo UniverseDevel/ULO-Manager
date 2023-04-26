@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    ".NETFramework,Version=v4.6.1": {
+    ".NETFramework,Version=v4.6.2": {
       "LibVLCSharp/3.6.5": {
         "type": "package",
         "dependencies": {
@@ -9,10 +9,14 @@
           "System.ValueTuple": "4.5.0"
         },
         "compile": {
-          "lib/net40/LibVLCSharp.dll": {}
+          "lib/net40/LibVLCSharp.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/LibVLCSharp.dll": {}
+          "lib/net40/LibVLCSharp.dll": {
+            "related": ".xml"
+          }
         }
       },
       "LibVLCSharp.WinForms/3.6.5": {
@@ -21,10 +25,14 @@
           "LibVLCSharp": "3.6.5"
         },
         "compile": {
-          "lib/net40/LibVLCSharp.WinForms.dll": {}
+          "lib/net40/LibVLCSharp.WinForms.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/LibVLCSharp.WinForms.dll": {}
+          "lib/net40/LibVLCSharp.WinForms.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Bcl/1.1.8": {
@@ -48,14 +56,26 @@
           "System.Net"
         ],
         "compile": {
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.dll": {}
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {
+            "related": ".xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {
+            "related": ".Desktop.xml;.xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.dll": {
+            "related": ".Extensions.Desktop.xml;.Extensions.xml;.xml"
+          }
         },
         "runtime": {
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.dll": {}
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {
+            "related": ".xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {
+            "related": ".Desktop.xml;.xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.dll": {
+            "related": ".Extensions.Desktop.xml;.Extensions.xml;.xml"
+          }
         }
       },
       "Microsoft.Bcl.Build/1.0.14": {
@@ -64,10 +84,14 @@
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.ValueTuple/4.5.0": {
@@ -80,7 +104,9 @@
           "ref/net461/System.ValueTuple.dll": {}
         },
         "runtime": {
-          "lib/net461/System.ValueTuple.dll": {}
+          "lib/net461/System.ValueTuple.dll": {
+            "related": ".xml"
+          }
         }
       },
       "VideoLAN.LibVLC.Windows/3.0.16": {
@@ -99,7 +125,7 @@
         }
       }
     },
-    ".NETFramework,Version=v4.6.1/win": {
+    ".NETFramework,Version=v4.6.2/win": {
       "LibVLCSharp/3.6.5": {
         "type": "package",
         "dependencies": {
@@ -107,10 +133,14 @@
           "System.ValueTuple": "4.5.0"
         },
         "compile": {
-          "lib/net40/LibVLCSharp.dll": {}
+          "lib/net40/LibVLCSharp.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/LibVLCSharp.dll": {}
+          "lib/net40/LibVLCSharp.dll": {
+            "related": ".xml"
+          }
         }
       },
       "LibVLCSharp.WinForms/3.6.5": {
@@ -119,10 +149,14 @@
           "LibVLCSharp": "3.6.5"
         },
         "compile": {
-          "lib/net40/LibVLCSharp.WinForms.dll": {}
+          "lib/net40/LibVLCSharp.WinForms.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/LibVLCSharp.WinForms.dll": {}
+          "lib/net40/LibVLCSharp.WinForms.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Bcl/1.1.8": {
@@ -146,14 +180,26 @@
           "System.Net"
         ],
         "compile": {
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.dll": {}
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {
+            "related": ".xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {
+            "related": ".Desktop.xml;.xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.dll": {
+            "related": ".Extensions.Desktop.xml;.Extensions.xml;.xml"
+          }
         },
         "runtime": {
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.dll": {}
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {
+            "related": ".xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {
+            "related": ".Desktop.xml;.xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.dll": {
+            "related": ".Extensions.Desktop.xml;.Extensions.xml;.xml"
+          }
         }
       },
       "Microsoft.Bcl.Build/1.0.14": {
@@ -162,10 +208,14 @@
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.ValueTuple/4.5.0": {
@@ -178,7 +228,9 @@
           "ref/net461/System.ValueTuple.dll": {}
         },
         "runtime": {
-          "lib/net461/System.ValueTuple.dll": {}
+          "lib/net461/System.ValueTuple.dll": {
+            "related": ".xml"
+          }
         }
       },
       "VideoLAN.LibVLC.Windows/3.0.16": {
@@ -197,7 +249,7 @@
         }
       }
     },
-    ".NETFramework,Version=v4.6.1/win-x64": {
+    ".NETFramework,Version=v4.6.2/win-x64": {
       "LibVLCSharp/3.6.5": {
         "type": "package",
         "dependencies": {
@@ -205,10 +257,14 @@
           "System.ValueTuple": "4.5.0"
         },
         "compile": {
-          "lib/net40/LibVLCSharp.dll": {}
+          "lib/net40/LibVLCSharp.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/LibVLCSharp.dll": {}
+          "lib/net40/LibVLCSharp.dll": {
+            "related": ".xml"
+          }
         }
       },
       "LibVLCSharp.WinForms/3.6.5": {
@@ -217,10 +273,14 @@
           "LibVLCSharp": "3.6.5"
         },
         "compile": {
-          "lib/net40/LibVLCSharp.WinForms.dll": {}
+          "lib/net40/LibVLCSharp.WinForms.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/LibVLCSharp.WinForms.dll": {}
+          "lib/net40/LibVLCSharp.WinForms.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Bcl/1.1.8": {
@@ -244,14 +304,26 @@
           "System.Net"
         ],
         "compile": {
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.dll": {}
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {
+            "related": ".xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {
+            "related": ".Desktop.xml;.xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.dll": {
+            "related": ".Extensions.Desktop.xml;.Extensions.xml;.xml"
+          }
         },
         "runtime": {
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.dll": {}
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {
+            "related": ".xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {
+            "related": ".Desktop.xml;.xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.dll": {
+            "related": ".Extensions.Desktop.xml;.Extensions.xml;.xml"
+          }
         }
       },
       "Microsoft.Bcl.Build/1.0.14": {
@@ -260,10 +332,14 @@
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.ValueTuple/4.5.0": {
@@ -276,7 +352,9 @@
           "ref/net461/System.ValueTuple.dll": {}
         },
         "runtime": {
-          "lib/net461/System.ValueTuple.dll": {}
+          "lib/net461/System.ValueTuple.dll": {
+            "related": ".xml"
+          }
         }
       },
       "VideoLAN.LibVLC.Windows/3.0.16": {
@@ -295,7 +373,7 @@
         }
       }
     },
-    ".NETFramework,Version=v4.6.1/win-x86": {
+    ".NETFramework,Version=v4.6.2/win-x86": {
       "LibVLCSharp/3.6.5": {
         "type": "package",
         "dependencies": {
@@ -303,10 +381,14 @@
           "System.ValueTuple": "4.5.0"
         },
         "compile": {
-          "lib/net40/LibVLCSharp.dll": {}
+          "lib/net40/LibVLCSharp.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/LibVLCSharp.dll": {}
+          "lib/net40/LibVLCSharp.dll": {
+            "related": ".xml"
+          }
         }
       },
       "LibVLCSharp.WinForms/3.6.5": {
@@ -315,10 +397,14 @@
           "LibVLCSharp": "3.6.5"
         },
         "compile": {
-          "lib/net40/LibVLCSharp.WinForms.dll": {}
+          "lib/net40/LibVLCSharp.WinForms.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/LibVLCSharp.WinForms.dll": {}
+          "lib/net40/LibVLCSharp.WinForms.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Bcl/1.1.8": {
@@ -342,14 +428,26 @@
           "System.Net"
         ],
         "compile": {
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.dll": {}
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {
+            "related": ".xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {
+            "related": ".Desktop.xml;.xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.dll": {
+            "related": ".Extensions.Desktop.xml;.Extensions.xml;.xml"
+          }
         },
         "runtime": {
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {},
-          "lib/net40/Microsoft.Threading.Tasks.dll": {}
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.Desktop.dll": {
+            "related": ".xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.Extensions.dll": {
+            "related": ".Desktop.xml;.xml"
+          },
+          "lib/net40/Microsoft.Threading.Tasks.dll": {
+            "related": ".Extensions.Desktop.xml;.Extensions.xml;.xml"
+          }
         }
       },
       "Microsoft.Bcl.Build/1.0.14": {
@@ -358,10 +456,14 @@
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.ValueTuple/4.5.0": {
@@ -374,7 +476,9 @@
           "ref/net461/System.ValueTuple.dll": {}
         },
         "runtime": {
-          "lib/net461/System.ValueTuple.dll": {}
+          "lib/net461/System.ValueTuple.dll": {
+            "related": ".xml"
+          }
         }
       },
       "VideoLAN.LibVLC.Windows/3.0.16": {
@@ -2062,7 +2166,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    ".NETFramework,Version=v4.6.1": [
+    ".NETFramework,Version=v4.6.2": [
       "LibVLCSharp >= 3.6.5",
       "LibVLCSharp.WinForms >= 3.6.5",
       "Newtonsoft.Json >= 13.0.1",
@@ -2071,42 +2175,35 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Martin Suchy\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback": {}
+    "C:\\Users\\KayaNatsumi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "W:\\Projects\\.NET\\ULO Controller\\ULOController\\ULOController.csproj",
-      "projectName": "ULOController",
+      "projectName": "ULOController.csproj",
       "projectPath": "W:\\Projects\\.NET\\ULO Controller\\ULOController\\ULOController.csproj",
-      "packagesPath": "C:\\Users\\Martin Suchy\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\KayaNatsumi\\.nuget\\packages\\",
       "outputPath": "W:\\Projects\\.NET\\ULO Controller\\ULOController\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Martin Suchy\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
+        "C:\\Users\\KayaNatsumi\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net461"
+        "net462"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://www.nuget.org/api/v2/": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net461": {
+        "net462": {
           "projectReferences": {}
         }
       }
     },
     "frameworks": {
-      "net461": {
+      "net462": {
         "dependencies": {
           "LibVLCSharp": {
             "target": "Package",
