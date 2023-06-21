@@ -25,7 +25,11 @@
         },
         "frameworks": {
           "net462": {
-            "projectReferences": {}
+            "projectReferences": {
+              "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj": {
+                "projectPath": "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj"
+              }
+            }
           }
         }
       },
@@ -51,6 +55,53 @@
             "WebSocketSharp": {
               "target": "Package",
               "version": "[1.0.3-rc11, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj",
+        "projectName": "ULO.csproj",
+        "projectPath": "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj",
+        "packagesPath": "C:\\Users\\KayaNatsumi\\.nuget\\packages\\",
+        "outputPath": "W:\\Projects\\.NET\\ULO Controller\\ULO\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\KayaNatsumi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net462"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net462": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net462": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
             }
           }
         }

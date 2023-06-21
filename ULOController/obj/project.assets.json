@@ -123,6 +123,19 @@
         "runtime": {
           "lib/websocket-sharp.dll": {}
         }
+      },
+      "ULO.csproj/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6.2",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "bin/placeholder/ULO.csproj.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ULO.csproj.dll": {}
+        }
       }
     },
     ".NETFramework,Version=v4.6.2/win": {
@@ -246,6 +259,19 @@
         },
         "runtime": {
           "lib/websocket-sharp.dll": {}
+        }
+      },
+      "ULO.csproj/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6.2",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "bin/placeholder/ULO.csproj.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ULO.csproj.dll": {}
         }
       }
     },
@@ -371,6 +397,19 @@
         "runtime": {
           "lib/websocket-sharp.dll": {}
         }
+      },
+      "ULO.csproj/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6.2",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "bin/placeholder/ULO.csproj.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ULO.csproj.dll": {}
+        }
       }
     },
     ".NETFramework,Version=v4.6.2/win-x86": {
@@ -494,6 +533,19 @@
         },
         "runtime": {
           "lib/websocket-sharp.dll": {}
+        }
+      },
+      "ULO.csproj/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6.2",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "bin/placeholder/ULO.csproj.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ULO.csproj.dll": {}
         }
       }
     }
@@ -2163,6 +2215,11 @@
         "websocketsharp.1.0.3-rc11.nupkg.sha512",
         "websocketsharp.nuspec"
       ]
+    },
+    "ULO.csproj/1.0.0": {
+      "type": "project",
+      "path": "../ULO/ULO.csproj",
+      "msbuildProject": "../ULO/ULO.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -2170,6 +2227,7 @@
       "LibVLCSharp >= 3.6.5",
       "LibVLCSharp.WinForms >= 3.6.5",
       "Newtonsoft.Json >= 13.0.1",
+      "ULO.csproj >= 1.0.0",
       "VideoLAN.LibVLC.Windows >= 3.0.16",
       "WebSocketSharp >= 1.0.3-rc11"
     ]
@@ -2198,7 +2256,11 @@
       },
       "frameworks": {
         "net462": {
-          "projectReferences": {}
+          "projectReferences": {
+            "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj": {
+              "projectPath": "W:\\Projects\\.NET\\ULO Controller\\ULO\\ULO.csproj"
+            }
+          }
         }
       }
     },

@@ -105,7 +105,7 @@ http://192.168.0.10/api/v1/config/wifi/networks - GET - Available WiFi networks
 http://192.168.0.10/api/v1/system/log - GET - System log  
 http://192.168.0.10/api/v1/users/1 - GET - Information about user with ID 1 (usually Admin)  
 http://192.168.0.10/api/v1/files/stats - GET - Statistic about stoarge  
-http://192.168.0.10/api/v1/interface/CheckVersionOnCloud - POST - Initiate check for update  
+http://192.168.0.10/api/v1/interface/CheckVersionOnCloud - POST - Initiate check for update (Used to contact 34.232.121.46 that traces to ec2-34-232-121-46.compute-1.amazonaws.com, but is no longer active)
 http://192.168.0.10/api/v1/files/media - GET - Get list of all media files in all dierctories  
 http://192.168.0.10/api/v1/files/media?type=snapshot - GET - Get list of media files in all dierctories filtered to snapshots  
 http://192.168.0.10/api/v1/files/media?type=video - GET - Get list of media files in all dierctories filtered to video  

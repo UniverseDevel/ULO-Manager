@@ -18,7 +18,7 @@ namespace ULOControls
     public class Ulo
     {
         /*
-        If you want to enjoy a little fun by ULOs India developement 
+        If you want to enjoy a little fun by ULOs India development 
         team, log in to your ULO and then insert following URL 
         into your browser: http://<ULO_IP>/assets/sounds/snapshot_20170829_092122.mp4
         it's either test file or they were not so hard at work.
