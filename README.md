@@ -114,6 +114,7 @@ http://192.168.0.10/api/v1/files/media/20190623 - GET - Get list of all media fi
 http://192.168.0.10/api/v1/files/media/20190623/snapshotCount - GET - Number of snapshots in this path  
 http://192.168.0.10/api/v1/files/delete?removeType=6 - DELETE - Delete files on local storage - 0: Oldest day; 1: Oldest week; 2: Oldest year; 3: Last day; 4: Last week; 5: Last year; 6: All time  
 ws://192.168.0.10/api/v1/live - Binary stream - Live feed, currently unsupported by Controller  
+rtsp://192.168.0.10:8901/live - RTSP live stream (unsecured)  
 http://192.168.0.10/api/v1/logout - POST - Logout (invalidate Bearer token used)  
 
 Hope this stuff helps at least someone.
