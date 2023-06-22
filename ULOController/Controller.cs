@@ -29,6 +29,7 @@ namespace ULOController
             // Developement actions
             public const string CallApi = "callapi";
             // User actions
+            public const string GetName = "getname";
             public const string GetMode = "getmode";
             public const string SetMode = "setmode";
             public const string IsPowered = "ispowered";
@@ -79,6 +80,9 @@ namespace ULOController
             usage += @"           4. retention - number of split files that wont be automatically" + Environment.NewLine;
             usage += @"                          deleted [Default: 5]" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
+            usage += @"   " + Actions.GetName + @" - Get ULO name" + Environment.NewLine;
+            usage += @"       Arguments:" + Environment.NewLine;
+            usage += @"           None" + Environment.NewLine;
             usage += @"   " + Actions.GetMode + @" - Get current ULO camera mode" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           None" + Environment.NewLine;
@@ -487,6 +491,10 @@ namespace ULOController
                     output = Ulo.CallApi(arg1, arg2, arg3, arg4);
                     break;
                 // User actions
+                case Actions.GetName:
+                    // Get name
+                    output = Ulo.GetName();
+                    break;
                 case Actions.GetMode:
                     // Get mode
                     output = Ulo.GetMode();

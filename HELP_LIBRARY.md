@@ -15,6 +15,10 @@ Actions:
            4. retention - number of split files that wont be automatically
                           deleted [Default: 5]
 
+   getmode - Get ULO name
+       Arguments:
+           None
+
    getmode - Get current ULO camera mode
        Arguments:
            None

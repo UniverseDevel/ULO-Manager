@@ -62,6 +62,7 @@ namespace ULOController
             cbAction.Items.Add(Actions.GetCardSpace);
             cbAction.Items.Add(Actions.GetDiskSpace);
             cbAction.Items.Add(Actions.GetMode);
+            cbAction.Items.Add(Actions.GetName);
             cbAction.Items.Add(Actions.IsCard);
             cbAction.Items.Add(Actions.IsPowered);
             cbAction.Items.Add(Actions.MoveToCard);

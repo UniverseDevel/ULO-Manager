@@ -18,6 +18,15 @@ namespace ULOControls
     public class Ulo
     {
         /*
+         * TODO:
+         *
+         * - add support for multiple ULOs
+         * - validate which versions are actually supported if possible
+         * - create repository of image versions
+         * 
+         */
+        
+        /*
         If you want to enjoy a little fun by ULOs India development 
         team, log in to your ULO and then insert following URL 
         into your browser: http://<ULO_IP>/assets/sounds/snapshot_20170829_092122.mp4
@@ -27,8 +36,25 @@ namespace ULOControls
         Be careful when using ULO: https://support.ulo.camera/hc/en-us/community/posts/360005096479-ULO-security-risk-for-your-network-and-worse
         */
 
-        // List of supported version that this script was tested on, not all versions were catched
-        private static readonly string[] SupportedVersions = new string[] { "01.0101", "08.0803", "08.0804", "08.0904", "10.1308" };
+        // List of known versions, not all versions were caught
+        private static readonly string[] KnownVersions = new string[]
+        {
+            "01.0101",
+            "06.0601",
+            "08.0803",
+            "08.0804",
+            "08.0904",
+            "10.1308"
+        };
+        // List of supported versions that this script was tested on
+        private static readonly string[] SupportedVersions = new string[]
+        {
+            "06.0601",
+            "08.0803",
+            "08.0804",
+            "08.0904",
+            "10.1308"
+        };
 
         // Private
         private static readonly string ProductLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
@@ -50,6 +76,7 @@ namespace ULOControls
         public DateTime sessionStart = DateTime.Now;
         public DateTime sessionEnd = DateTime.Now;
         public bool isSupported = false;
+        public string deviceName = String.Empty;
         public string currentVersion = String.Empty;
         public int pingTimeout = 5000;
 
@@ -66,6 +93,7 @@ namespace ULOControls
             sessionStart = DateTime.Now;
             sessionEnd = DateTime.Now;
             isSupported = false;
+            deviceName = String.Empty;
             currentVersion = String.Empty;
         }
 
@@ -137,6 +165,7 @@ namespace ULOControls
             public const string Video = "mp4";
             public const string Snapshot = "jpg";
             public const string Log = "zip";
+            public const string LogOld = "log";
         }
 
         private class UploadStatistics
@@ -149,6 +178,47 @@ namespace ULOControls
             public int succeeded = 0;
             public int failed = 0;
             public int removed = 0;
+        }
+
+        public bool IsSupportedVersion(string version, string min_version = null, string max_version = null)
+        {
+            if (string.IsNullOrEmpty(min_version) && string.IsNullOrEmpty(max_version))
+            {
+                throw new Exception("Internal error: Version check where min and max versions are both empty.");
+            }
+
+            double version_num = Convert.ToDouble(version);
+
+            if (string.IsNullOrEmpty(min_version))
+            {
+                double max_version_num = Convert.ToDouble(max_version);
+                
+                if (version_num <= max_version_num)
+                {
+                    return true;
+                }
+            }
+            else if (string.IsNullOrEmpty(max_version))
+            {
+                double min_version_num = Convert.ToDouble(min_version);
+                
+                if (version_num >= min_version_num)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                double min_version_num = Convert.ToDouble(min_version);
+                double max_version_num = Convert.ToDouble(max_version);
+                
+                if (version_num >= min_version_num && version_num <= max_version_num)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void ReloadConfiguration()
@@ -367,6 +437,7 @@ namespace ULOControls
 
             // Check version support
             isSupported = CheckVersion();
+            deviceName = GetName();
 
             return _token;
         }
@@ -412,6 +483,12 @@ namespace ULOControls
             }
 
             return supported;
+        }
+
+        public string GetName()
+        {
+            // Get name
+            return CallApi("/api/v1/config", "GET", String.Empty, "device.name");
         }
 
         public string GetMode()
@@ -506,10 +583,27 @@ namespace ULOControls
         public void DownloadLog(string type, string destination, int retention, string username, string password)
         {
             // Download ULO log into specified location
-            string logLocation = CallApi("/api/v1/system/log", "POST", "/system/log", "fileName").Replace("\n", Environment.NewLine);
-            UploadStatistics logStats = new UploadStatistics();
-            logStats = UploadHandler(type, "/logs/" + logLocation, destination, false, username, password);
-            logStats = RetentionHandler(type, destination, retention, MediaTypeExt.Log, username, password);
+            if (IsSupportedVersion(currentVersion, "08.0000", String.Empty))
+            {
+                string logLocation = CallApi("/api/v1/system/log", "POST", "/system/log", "fileName").Replace("\n", Environment.NewLine);
+                UploadStatistics logStats = new UploadStatistics();
+                logStats = UploadHandler(type, "/logs/" + logLocation, destination, false, username, password);
+                logStats = RetentionHandler(type, destination, retention, MediaTypeExt.Log, username, password);
+            }
+            else
+            {
+                string logContent = CallApi("/api/v1/system/log", "GET", String.Empty, "%");
+                
+                string temp_src = Path.GetTempFileName();
+                string timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss", CultureInfo.InvariantCulture);
+                string new_src = temp_src.Replace(Path.GetFileName(temp_src), "system_"+timestamp+"."+MediaTypeExt.LogOld);
+                
+                File.Move(temp_src, new_src);
+                File.WriteAllText(new_src, logContent, Encoding.UTF8);
+                UploadStatistics logStats = new UploadStatistics();
+                logStats = UploadHandler(type, new_src, destination, false, username, password);
+                logStats = RetentionHandler(type, destination, retention, MediaTypeExt.LogOld, username, password);
+            }
         }
 
         public void DownloadCurrent(string type, string destination, string username, string password)
@@ -542,6 +636,18 @@ namespace ULOControls
                     break;
                 default:
                     throw new Exception("Media type '" + mediatype + "' is not supported.");
+            }
+            
+            // Check for valid destination type
+            if (type != DestinationType.Ftp && type != DestinationType.Local && type != DestinationType.Nfs)
+            {
+                throw new Exception("Destination type '" + type + "' is not supported.");
+            }
+            
+            // Check for for credentials
+            if ((type == DestinationType.Ftp || type == DestinationType.Nfs) && (username == String.Empty || password == String.Empty))
+            {
+                throw new Exception("Destination type '" + type + "' requires username and password to be provided.");
             }
 
             // Get list of folders
@@ -799,6 +905,10 @@ namespace ULOControls
                 fullPath = destination.TrimEnd('\\') + pathto + mediafilename;
                 source = mediafile.Replace("/", "\\");
             }
+            else
+            {
+                mediafilename = mediafile;
+            }
 
             try
             {
@@ -810,7 +920,7 @@ namespace ULOControls
                         uploadStats.skipped = 1;
                         if (configuration.showSkipped)
                         {
-                            WriteLog(tempOutFile, "Media file '" + mediafile + "' already downloaded...", true);
+                            WriteLog(tempOutFile, "Media file '" + mediafilename + "' already downloaded...", true);
                             WriteLog(tempOutFile, "Skipped.", true);
                         }
                         return uploadStats;
@@ -821,7 +931,7 @@ namespace ULOControls
                     }
                 }
 
-                WriteLog(tempOutFile, "Media file '" + mediafile + "' downloading...", true);
+                WriteLog(tempOutFile, "Media file '" + mediafilename + "' downloading...", true);
 
                 // Create destination folder
                 Directory.CreateDirectory(destination.TrimEnd('\\') + pathto);
@@ -954,6 +1064,10 @@ namespace ULOControls
                 fullPath = destination.TrimEnd('\\') + pathto + mediafilename;
                 source = mediafile.Replace("/", "\\");
             }
+            else
+            {
+                mediafilename = mediafile;
+            }
 
             // Check if media file already exists at destination
             try
@@ -965,7 +1079,7 @@ namespace ULOControls
                         uploadStats.skipped = 1;
                         if (configuration.showSkipped)
                         {
-                            WriteLog(tempOutFile, "Media file '" + mediafile + "' already downloaded...", true);
+                            WriteLog(tempOutFile, "Media file '" + mediafilename + "' already downloaded...", true);
                             WriteLog(tempOutFile, "Skipped.", true);
                         }
                         return uploadStats;
@@ -976,7 +1090,7 @@ namespace ULOControls
                     }
                 }
 
-                WriteLog(tempOutFile, "Media file '" + mediafile + "' downloading...", true);
+                WriteLog(tempOutFile, "Media file '" + mediafilename + "' downloading...", true);
 
                 // Create destination folder
                 // Root
@@ -1490,8 +1604,13 @@ namespace ULOControls
              *             Detailed documentation how to use syntax in json_path is here:
              *             https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
              *             and online evaluator is here: https://jsonpath.com/
+             *             Note: Use % to provide HTML or raw text output
              */
-            if (jsonPath != String.Empty)
+            if (jsonPath == "%")
+            {
+                output = response;
+            }
+            else if (jsonPath != String.Empty)
             {
                 output = GetJsonObject(response, jsonPath);
             }
