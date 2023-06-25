@@ -29,6 +29,7 @@ namespace ULOController
             // Developement actions
             public const string CallApi = "callapi";
             // User actions
+            public const string GetVersion = "getversion";
             public const string GetName = "getname";
             public const string GetMode = "getmode";
             public const string SetMode = "setmode";
@@ -80,6 +81,9 @@ namespace ULOController
             usage += @"           4. retention - number of split files that wont be automatically" + Environment.NewLine;
             usage += @"                          deleted [Default: 5]" + Environment.NewLine;
             usage += @"" + Environment.NewLine;
+            usage += @"   " + Actions.GetVersion + @" - Get ULO version" + Environment.NewLine;
+            usage += @"       Arguments:" + Environment.NewLine;
+            usage += @"           None" + Environment.NewLine;
             usage += @"   " + Actions.GetName + @" - Get ULO name" + Environment.NewLine;
             usage += @"       Arguments:" + Environment.NewLine;
             usage += @"           None" + Environment.NewLine;
@@ -491,6 +495,10 @@ namespace ULOController
                     output = Ulo.CallApi(arg1, arg2, arg3, arg4);
                     break;
                 // User actions
+                case Actions.GetVersion:
+                    // Get version
+                    output = Ulo.GetVersion();
+                    break;
                 case Actions.GetName:
                     // Get name
                     output = Ulo.GetName();
