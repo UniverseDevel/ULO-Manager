@@ -323,8 +323,8 @@ exit_code="0"
 is_logged_in="0"
 
 ulo_tmp_folder="/tmp"
-ulo_consecutive_errors_file="${ulo_tmp_folder}/ulo_cef.*.tmp"
-ulo_state_file="${ulo_tmp_folder}/ulo_state.tmp"
+ulo_consecutive_errors_file="${ulo_tmp_folder}/ulo_cef.${host}.*.tmp"
+ulo_state_file="${ulo_tmp_folder}/ulo_state.${host}.tmp"
 
 # FUNCTIONS --------------------------------------------------------------------------------
 
@@ -345,13 +345,13 @@ arraycontains() {
 isrunning() {
   local running_count="0"
 
-  # Check if script is running using the same user as multiple sessions are possible but only one per user,
+  # Check if skript is running using the same host and user as multiple sessions are possible but only one per host per user,
   # actions checkulo and isrunning do not login to ULO so they can run as much as they want
-  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning' | wc -l)"
+  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${host}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning' | wc -l)"
 
   if [[ "${running_count}" != "0" ]]; then
     if [[ "${quiet}" == "0" ]]; then
-      ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning'
+      ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${host}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning'
     fi
 
     throw "Other process already running (count: ${running_count})."
