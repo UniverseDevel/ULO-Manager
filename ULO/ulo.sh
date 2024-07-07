@@ -77,7 +77,7 @@ usage() {
   echo "  -q - Quiet mode, suppress most of the outputs"
   echo
   echo "Actions:"
-  echo "  isrunning - Check if other instance of skript is running"
+  echo "  isrunning - Check if other instance of script is running"
   echo "      Arguments:"
   echo "          None"
   echo
@@ -323,8 +323,8 @@ exit_code="0"
 is_logged_in="0"
 
 ulo_tmp_folder="/tmp"
-ulo_consecutive_errors_file="${ulo_tmp_folder}/ulo_cef.*.tmp"
-ulo_state_file="${ulo_tmp_folder}/ulo_state.tmp"
+ulo_consecutive_errors_file="${ulo_tmp_folder}/ulo_cef.${host}.*.tmp"
+ulo_state_file="${ulo_tmp_folder}/ulo_state.${host}.tmp"
 
 # FUNCTIONS --------------------------------------------------------------------------------
 
@@ -345,13 +345,13 @@ arraycontains() {
 isrunning() {
   local running_count="0"
 
-  # Check if script is running using the same user as multiple sessions are possible but only one per user,
+  # Check if script is running using the same host and user as multiple sessions are possible but only one per host per user,
   # actions checkulo and isrunning do not login to ULO so they can run as much as they want
-  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning' | wc -l)"
+  running_count="$(ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${host}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning' | wc -l)"
 
   if [[ "${running_count}" != "0" ]]; then
     if [[ "${quiet}" == "0" ]]; then
-      ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning'
+      ps -ef | grep -v "$$" | grep "${SCRIPT_NAME}" | grep "${host}" | grep "${username}" | grep -v 'grep' | grep -v 'checkulo' | grep -v 'isrunning'
     fi
 
     throw "Other process already running (count: ${running_count})."
@@ -663,7 +663,12 @@ downloadmedia() {
   esac
   code_throw "0" "Downloading media failed."
 
+  local error_count=0
   echo "${output}" | grep "${extension}" | while read -r media; do
+    if [[ "${error_count}" -ge "3" ]]; then
+      throw "Unable to get media."
+    fi
+
     media_trim="/${media//media\//}"
     real_path_to="$(realpath "${path_to}")"
     media_path="$(dirname "${real_path_to}${media_trim}")"
@@ -699,9 +704,19 @@ downloadmedia() {
 
     if [[ "${media_path}" != "" ]]; then
       if [[ -t 1 ]]; then
-        { timeout --preserve-status --kill-after=5s 1m wget "${wget_args[@]}" -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate && write "OK"; } || write "FAILED"
+        if timeout --preserve-status --kill-after=5s 1m wget "${wget_args[@]}" -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate; then
+          write "OK"
+        else
+          write "FAILED: ${media_name}"
+          (( error_count++ ))
+        fi
       else
-        { timeout --preserve-status --kill-after=5s 1m wget -q -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate && write "OK: ${media_name}"; } || write "FAILED: ${media_name}"
+        if timeout --preserve-status --kill-after=5s 1m wget -q -T 20 -N -P "${media_path}" "https://${host}/${media_url_path}${media}" --header="Authorization: ${auth}" --no-check-certificate; then
+          write "OK: ${media_name}"
+        else
+          write "FAILED: ${media_name}"
+          (( error_count++ ))
+        fi
       fi
 
       if [[ "$(du -k "${media_path}" | cut -f1)" == "0" ]]; then
