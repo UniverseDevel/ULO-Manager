@@ -36,7 +36,8 @@ that does not require IT expertise.
 **Date:** 2026-08-14
 **Method:** Network-only, read-only — port scan, endpoint enumeration, directory listing, ADB
 check, system log analysis.
-**Script:** [`forensics/ulo_probe.py`](../forensics/ulo_probe.py) - see [`forensics/`](../forensics/README.md) for the rest of the analysis scripts
+**Script:** [`forensics/ulo_probe.py`](../forensics/ulo_probe.py) - see [`forensics/`](../forensics/README.md) for the
+rest of the analysis scripts
 **Risk:** None (all read-only requests).
 **Target users:** Anyone comfortable running a Python script.
 
@@ -294,6 +295,313 @@ console would likely give:
 * USB-to-UART adapter (FTDI, CP2102, CH340 — ~€5)
 * Multimeter to identify GND and TX
 * Terminal software (PuTTY, minicom, screen)
+
+---
+
+## Attempt 2 — CVE analysis and exploitation testing
+
+**Date:** 2026-08-15
+**Method:** Active probing — directory traversal, command injection, file upload, config injection,
+binary protocol analysis, system log deep-dive.
+**Risk:** Low (no persistent changes made to device).
+
+### Port 55555 — internal IPC status socket
+
+Both cameras expose port 55555. Extended protocol analysis:
+
+- Sends exactly **6 bytes** on connect: `00 01 00 00 00 01` — then goes completely silent
+- **Ignores all input** — tested: echo back, structured commands (0x00–0xFF), payloads, JSON
+- **Single-client only** — second simultaneous connection is refused
+- No periodic heartbeat — just the initial 6 bytes, holds connection open indefinitely
+- Behaviour identical in both standard and setup modes
+
+Decoded as big-endian uint16 triplet: `(1, 0, 1)` — likely `(protocol_version=1, reserved=0, state=1)`.
+
+**Conclusion:** This is an internal IPC status socket. The Qt application (`lu.mudesign.ulo`)
+opens this port for a single local process (likely the STM32 communication daemon or a watchdog
+service) to connect and receive state notifications. It was never designed for external
+interaction and cannot be exploited — it accepts no commands whatsoever.
+
+### Directory traversal — blocked
+
+Tested 11 traversal variants including double-encoding, `/media/../../`, and Android-specific
+paths (`/data/user/0/lu.mudesign.ulo/files/`, `/system/build.prop`, `/proc/version`).
+All return 404. The web server canonicalises paths before resolving.
+
+### Command injection via backup name — not possible
+
+Tested 13 payloads on both cameras (with storage freed): `test;id`, `test$(id)`,
+`` test`id` ``, `test|id`, `test&&id`, `../../../tmp/pwned`, `../../sdcard/pwned`,
+`test.sh`, `test.bin`, `a;echo PWNED>/tmp/test`, null bytes, and a normal name.
+
+**Result:** The camera completely ignores the user-supplied `name` field. All attempts produce
+the same auto-generated filename `ulo_YYYYMMDD_HHMMSS.zip`. The parameter is decorative —
+it is never interpolated into a shell command or filesystem path.
+
+- fw 06.0601: returns "cannot create backup file ulo_YYYYMMDD_HHMMSS.zip" (storage issue)
+- fw 10.1308: returns "Backup failed. Please try again..."
+- Neither camera creates any backup — filesystem errors persist regardless of input
+- No evidence the name reaches any shell or path construction
+
+### File upload (CVE-2020-27304 style) — rejected
+
+```
+POST /api/v1/import  Content-Type: multipart/form-data
+→ 415 "unexpected content type, expected application/json"
+```
+
+### Config injection — strict validation
+
+```
+PUT /api/v1/config {"adb": true}     → 422 "unexpected section 'adb'"
+PUT /api/v1/config {"debug": true}   → 422 "unexpected section 'debug'"
+PUT /api/v1/config {"shell": {...}}  → 422 "unexpected section 'shell'"
+```
+
+### WebDAV (PROPFIND/MKCOL) — read-only, web-root-scoped
+
+The HTTP `Allow` header reveals WebDAV methods: `GET, POST, HEAD, CONNECT, PUT, DELETE, OPTIONS, PROPFIND, MKCOL`.
+
+`PROPFIND` with `Depth: 1` returns XML directory listings for web-app directories:
+
+- `/build/` → 8 files (main.js, main.js.map, vendor.js, polyfills.js, css, sw-toolbox, qt_temp files)
+- `/assets/` → 6 subdirs (fonts, i18n, icon, img, js, sounds)
+- `/assets/sounds/` → camera-click.wav + the Bollywood video
+- `/assets/fonts/` → 34 files including Qt temporary lock files
+
+**Write attempts failed:**
+
+- `MKCOL /media/test_dir` → empty response (connection dropped, no directory created)
+- `PUT /media/test.txt` → empty response (file not created, verified by GET → 404)
+- `PUT /tmp/test.txt` → 401 Unauthorized
+- `MKCOL /test_write` → 401 Unauthorized
+
+**Filesystem paths not reachable:** PROPFIND on `/data/`, `/system/`, `/proc/`, `/tmp/`, `/etc/`,
+`/mnt/`, `/sdcard/` all return 404. The WebDAV is scoped to the web server's document root only —
+no filesystem escape.
+
+**Conclusion:** WebDAV gives read-only file listing within the web app tree. No write capability,
+no filesystem traversal beyond what HTTP GET already provided.
+
+### Setup mode testing (device flipped upside-down)
+
+Both cameras tested with `"config": true` (verified via `/api/v1/state`).
+
+**Ports:** Identical to standard mode — 80, 443, 8080, 8443, 55555. No ADB (5555), no SSH (22).
+
+**Setup-specific endpoints that work:**
+
+- `GET /api/v1/config/wifi/networks` → returns visible WiFi SSIDs (blocked in standard mode)
+- `GET /api/v1/neighbors` → discovers other ULO cameras on the LAN
+
+**No change observed:**
+
+- Same API surface, same WebDAV behaviour, same port 55555
+- Backups still blocked ("switch to Standard mode")
+- No debug services enabled
+- FOTA status unchanged
+
+**Conclusion:** Setup mode is purely for WiFi provisioning via the mobile app + BLE. It does not
+enable any developer or debug access.
+
+### SELinux analysis (from system.txt, 22 MB, no auth on 10.1308)
+
+The ULO app runs under SELinux enforcing mode as `untrusted_app`:
+
+```
+scontext=u:r:untrusted_app:s0:c512,c768
+```
+
+Observed denials:
+
+- Write to `/tmp` (labelled `shell_data_file`)
+- Create lock file `LCK..ttyHSL1` (serial port to STM32)
+- Write to dalvik-cache
+- Certain socket ioctls
+
+**Implication:** Even a successful web server RCE lands in a sandboxed SELinux domain.
+Firmware replacement or ADB enablement would require additional privilege escalation.
+
+### UART confirmed — `ttyHSL1`
+
+The system log shows the app attempting to lock `ttyHSL1` — a Qualcomm High Speed UART port.
+This is the serial communication channel between the APQ (Android SoC) and the STM32 head MCU.
+
+On APQ8016-class devices:
+
+- Baud: 115200 8N1
+- Level: 3.3V
+- Typically exposed on a 4-pin header or test pads (TX, RX, GND, VCC)
+
+This is the **most reliable path to a root shell**. It bypasses all software protections.
+
+### FOTA mechanism (from system.txt logs)
+
+```
+VVDN: fota: bsp_version is "8"
+VVDN: fota: stm version file exist
+Fota: APK major=0, minor=9, patch=0
+Fota: cloudSTM checksum and filepath mismatch
+Fota: cloudBSP checksum OR bsp filepath NULL
+Fota: cloudAPK checksum OR apk filepath NULL
+```
+
+The FOTA system checks three components independently (STM, BSP/APQ, APK) against checksums
+from a cloud response. The cloud server (`34.232.121.46`) is dead. A MITM attack serving a
+fake response could trigger firmware download, but:
+
+- **STM32:** Only CRC-32 verification — replacement trivial
+- **APQ/BSP:** Likely Qualcomm secboot — probably signed
+- **APK:** Unknown verification — may or may not be signed
+
+### Bluetooth GATT service
+
+```
+BluetoothGattServer: addService() - service: a3ceb858-9de1-11e7-abc4-cec278b6b50a
+BluetoothGattServer: registerCallback() - UUID=f9aa1392-4af6-4b19-80d1-4920984ddd47
+```
+
+Used for initial WiFi provisioning via the mobile app. Characteristics and write permissions
+are unknown — requires BLE enumeration with nRF Connect or `gatttool`.
+
+### Applicable CVEs
+
+| CVE            | Target                            | Applicable? | Why                                      |
+|----------------|-----------------------------------|-------------|------------------------------------------|
+| CVE-2020-27304 | CivetWeb path traversal in upload | ❌           | Server rejects multipart bodies          |
+| CVE-2025-55763 | CivetWeb buffer overflow in URI   | ⚠️          | Possible but lands in SELinux sandbox    |
+| CVE-2018-20352 | Mongoose use-after-free in CGI    | ❌           | No CGI handlers on device                |
+| CVE-2017-11567 | Mongoose CSRF → config → RCE      | ❌           | No admin UI, direct API access available |
+
+### Conclusion
+
+**No purely network-based path to root was found.** The device is well-protected by:
+
+1. Strict API input validation (rejects unknown sections/types)
+2. Path canonicalisation (no traversal)
+3. SELinux enforcing (web server is sandboxed)
+4. No exposed debug services (ADB, SSH, Telnet all closed)
+
+**Viable paths requiring physical access:**
+
+1. **UART** (`ttyHSL1`) — connect serial adapter, get bootloader/shell
+2. **JTAG/SWD** on the STM32 — direct MCU programming (requires identifying pins)
+
+**Viable paths requiring network interception:**
+
+1. **FOTA MITM** — ARP-spoof + fake update server (STM32 part only confirmed exploitable)
+
+---
+
+## Attempt 3 — Similar hardware research and manufacturer documentation
+
+**Date:** 2026-08-15
+**Method:** Web research — FCC filings, reference hardware documentation, community projects.
+
+### FCC Filing (FCC ID: 2ANJS-ULO1)
+
+The ULO camera has a public FCC filing with:
+
+- **Internal photos** (18 pages) — PCB layout, components, antenna
+- **Schematics** (confidential, metadata only)
+- **Block diagram** (confidential, metadata only)
+- **Operational description** (confidential, metadata only)
+
+URL: https://fccid.io/2ANJS-ULO1/Internal-Photos/Internal-Photos-3564626
+
+The internal photos should reveal UART test pads, boot-select pins, and whether USB data lines
+are routed to the micro-USB connector. The confidential schematics would be the definitive
+reference but are not publicly available.
+
+### Reference hardware: DragonBoard 410c (same APQ8016 SoC)
+
+The ULO's APQ (Qualcomm Applications Processor) is the APQ8016 (Snapdragon 410 family),
+the same chip used in the DragonBoard 410c reference board. Key documented access methods:
+
+#### SD card boot
+
+The APQ8016 supports booting from SD card via hardware strap pins (`MS_BOOT_CONFIG[1:0]`):
+
+- `00` = eMMC (default)
+- `01` = SD card
+
+On the DragonBoard 410c, SD card boot is triggered by **holding the Vol- button at power-on**.
+The ULO may have a similar mechanism if the button signal is routed to the boot-config GPIO.
+
+**What to try:** Insert a bootable SD card (postmarketOS or custom Linux image built for
+APQ8016), power-cycle the ULO while holding the button on its base (if one exists), or while
+the camera is flipped upside down (which triggers "setup mode" — this might relate to boot-
+config pin state).
+
+#### Qualcomm EDL (Emergency Download) mode — USB 9008
+
+APQ8016 devices can enter EDL mode, which allows full partition read/write via the
+`Qualcomm HS-USB QDLoader 9008` USB device. Methods to trigger EDL:
+
+1. **EDL cable** — A modified USB cable with a 910kΩ resistor between D+ and GND. Plug in
+   while device is off → forces EDL mode on many Qualcomm devices.
+2. **Test points** — Shorting specific EDL test pads on the PCB while connecting USB.
+3. **Software** — `adb reboot edl` or `fastboot oem edl` (requires existing ADB/fastboot).
+
+**Prerequisite:** The ULO's micro-USB connector must have data lines connected (not just
+power for charging). The FCC internal photos should reveal this.
+
+**If EDL mode works**, tools like QFIL (Qualcomm Flash Image Loader) or open-source
+`qdl`/`edl` can read/write all flash partitions, including system, boot, and recovery.
+
+#### Fastboot mode
+
+If the bootloader is accessible (via UART interrupt or button combo at boot), `fastboot`
+allows flashing individual partitions. On APQ8016:
+
+- `fastboot flash boot boot.img` — replace kernel/ramdisk
+- `fastboot flash system system.img` — replace Android system
+- `fastboot oem unlock` — unlock bootloader (if supported)
+
+### Community firmware projects for APQ8016/MSM8916
+
+| Project                       | URL                                                                      | Relevance                           |
+|-------------------------------|--------------------------------------------------------------------------|-------------------------------------|
+| postmarketOS DragonBoard 410c | https://wiki.postmarketos.org/wiki/Arrow_DragonBoard_410c_(arrow-db410c) | Full Linux on APQ8016               |
+| MSM8916 mainlining            | https://wiki.postmarketos.org/wiki/MSM8916_Mainlining                    | Upstream kernel for this SoC family |
+| APQ8016E documentation        | https://github.com/pwnall/qualcomm-apq8016e-docs                         | Datasheets, register maps           |
+| Qualcomm camera subsystem     | https://www.kernel.org/doc/html/latest/media/qcom_camss.html             | V4L2 driver for camera hardware     |
+
+### SD card firmware auto-flash pattern
+
+Many IoT cameras (Yi, Wyze, Wuuk, etc.) support automatic firmware flashing from SD card:
+
+1. Place firmware file with specific name at SD card root (e.g., `update.bin`, `demo.bin`)
+2. Power cycle the device
+3. Device detects file, flashes itself automatically
+
+**ULO's SD card is accessible** — we know the camera has an SD slot and the API has
+`POST /api/v1/import` for restoring backups from SD. It's possible that:
+
+- A specially named file on the SD card triggers firmware update on boot
+- The FOTA system checks the SD card as a firmware source
+- The bootloader has an SD card recovery mode
+
+**What to try:** Place files with names like `update.bin`, `ulo_firmware.zip`,
+`autoupdate.bin`, `recovery.zip`, `firmware.bin` on an SD card and insert + power cycle.
+Monitor the camera's eye display for any unusual boot animation.
+
+### VVDN Technologies (ODM)
+
+VVDN built the hardware platform. They provide camera engineering services including BSP
+development. Their SDK/documentation is not public (NDA-protected). However:
+
+- VVDN camera platforms typically use standard Qualcomm BSP (Board Support Package)
+- They follow Qualcomm's reference design closely (DragonBoard 410c pattern)
+- The `VVDN:` prefix in log messages confirms their software layer
+
+### Key experiment to try next
+
+1. **Download FCC internal photos** — identify UART pads, USB data routing, boot switches
+2. **Try EDL cable** (910kΩ D+ to GND) while connecting USB with camera powered off
+3. **Try SD card boot** — prepare postmarketOS APQ8016 image on microSD, insert, power cycle
+4. **Try SD card auto-flash** — place various firmware filenames on SD card, power cycle
+5. **Flip camera upside down during boot** — "setup mode" might change boot-config GPIO state
 
 ---
 

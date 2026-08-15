@@ -42,18 +42,19 @@ A **third** WebSocket endpoint, in addition to the documented `/api/v1` (events,
 sub-protocol is `mudesign.ulo.rtsp` and it carries binary data.
 
 **Confirmed working** on both firmware versions — WebSocket upgrade succeeds on ports 80, 8080, 443
-and 8443. Its purpose in the source is unclear (used alongside the RTSP stream URL `rtsp://<host>:8901/live`)
-and may be a tunnelling mechanism for environments where raw RTSP is blocked.
+and 8443. **Live probing** (see [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) Attempt 2) revealed it is
+a **signalling channel only**: after authentication it sends the text `Started`, then periodic
+WebSocket pings. It does not carry video data and is not an alternative to the fMP4 live stream.
 
-Not yet added to the endpoint registry because its data format is not understood.
+Added to the endpoint registry as `RtspWs`.
 
 ## 3. Three WebSocket sub-protocols
 
-| Endpoint       | Sub-protocol        | Mode          | Purpose                                               |
-|----------------|---------------------|---------------|-------------------------------------------------------|
-| `/api/v1`      | `mudesign.ulo.json` | text (JSON)   | Push events: mode changes, orientation, motion, power |
-| `/api/v1/live` | `mudesign.ulo.mp4`  | binary (fMP4) | Live H.264 video fragments                            |
-| `/api/v1/rtsp` | `mudesign.ulo.rtsp` | binary        | Unknown — possibly RTSP tunnelling                    |
+| Endpoint       | Sub-protocol        | Mode          | Purpose                                                    |
+|----------------|---------------------|---------------|------------------------------------------------------------|
+| `/api/v1`      | `mudesign.ulo.json` | text (JSON)   | Push events: mode changes, orientation, motion, power      |
+| `/api/v1/live` | `mudesign.ulo.mp4`  | binary (fMP4) | Live H.264 video fragments                                 |
+| `/api/v1/rtsp` | `mudesign.ulo.rtsp` | binary        | Signalling channel (sends `Started`, then keepalive pings) |
 
 ## 4. Auth token leakage in URLs
 
@@ -141,6 +142,9 @@ Each can be enabled or disabled per recording mode (standard, spy, alert, batter
 ## 7. What this tells us about gaining deeper access
 
 **Nothing in the web app source reveals a shell, a debug port, or direct system access.**
+This was confirmed by live probing in [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) Attempt 2, which
+tested all speculative paths, setup mode, WebDAV, and command injection without finding any route
+to a shell.
 
 The attack surface exposed by the source is the same as what was already documented:
 
@@ -159,7 +163,7 @@ configuration endpoint, or a way to write to the filesystem beyond the media and
 | Finding                                      | How it helps                                                                                                                                                                                                                    |
 |----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Firmware version = APQ.APKSTM**            | We can show the three components separately in the status display, and the endpoint registry can match on each layer.                                                                                                           |
-| **`/api/v1/rtsp` WebSocket**                 | A potential additional video source if the fMP4 live stream has issues — worth investigating its data format.                                                                                                                   |
+| **`/api/v1/rtsp` WebSocket**                 | Investigated — sends `Started` text then pings only. Not a video source. Likely coordinates RTSP session state for the mobile app.                                                                                              |
 | **Token in URL is how media downloads work** | Confirms that for downloading media files, the camera accepts `?token=` as an alternative to the `Authorization` header. Our app already uses the header, which is safer, but this is a fallback if the header path ever fails. |
 | **Voice command list**                       | Could be exposed in the UI so users know what the camera listens for, and the voice config could be made editable.                                                                                                              |
 | **Import from SD card**                      | The flow (`GET /api/v1/import` → list, `POST /api/v1/import` → restore) could be added to the Setup tab for restoring a backup from a card.                                                                                     |
