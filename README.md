@@ -16,6 +16,7 @@ analysis of the images it ships.
 | [Application guide](docs/APPLICATION.md) | ULO Manager: the command line tool, the Windows application and the library                                                          |
 | [Use cases](docs/USE_CASES.md)           | Scheduled sync to a share or FTP, presence-based mode switching, snapshots, live video, housekeeping                                 |
 | [Build guide](docs/BUILDING.md)          | Building on Windows and Linux, IDE setup, troubleshooting                                                                            |
+| [Easter eggs](docs/EASTER_EGGS.md)       | Oddities found on the device: media left on it before delivery, and the small absurdities in its firmware and certificates           |
 
 ## What is here
 
