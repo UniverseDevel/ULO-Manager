@@ -1,21 +1,38 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+out/
+publish/
+*.user
 
-/.vs/ULO Controller/v15
-/.vs/ULO Controller/v16
-/ULOController/bin/Release/ULOControls.err
-/ULOController/bin/Release/ULOControls.out
-/ULOController/bin/Release/ULOControls.conf
-/ULOController/bin/Release/Newtonsoft.Json.xml
-/ULOController/bin/Release/AForge.xml
-/ULOController/bin/Release/AForge.Video.xml
-/ULOController/bin/Release/AForge.dll
-/.idea
-/ULO/bin/Debug
-/ULO/obj/Debug
-/ULOController/bin/Debug
-/ULOController/obj/Debug
-/ULOController/bin/Release/*.mov
-/ULOController/bin/Release/*.mp4
-/ULOController/bin/Release/media
+# IDE
+.vs/
+.idea/
+*.suo
+*.userprefs
+
+# Tooling
+.dotnet/
+*.log
+
+# Downloaded camera media
+media/
+*.mov
+*.mp4
+
+
+# Build output of the UloManager solution
+bin/
+obj/
+
+# Rider stores the per-solution MSBuild choice here, with machine specific paths
+*.DotSettings.user
+
+# Forensics output - contains device names, SSIDs, accounts and log excerpts
+ulo_probe_results.json
+
+# Python
+__pycache__/
+*.pyc

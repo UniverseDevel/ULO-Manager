@@ -1,0 +1,7 @@
+# Keep certificate and firmware artefacts byte-exact - line-ending translation would
+# change their hashes and break verification against the archived checksums.
+*.pem  -text
+*.der  binary
+*.bin  binary
+*.ico  binary
+*.pdf  binary
