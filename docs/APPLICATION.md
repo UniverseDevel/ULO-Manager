@@ -255,3 +255,5 @@ Main types: `UloClient` (HTTP and session), `UloDevice` (all operations), `UloMe
 * [API reference](API.md) — the endpoints and protocols this implements
 * [Use cases](USE_CASES.md) — scheduled sync, presence switching, housekeeping
 * [Build guide](BUILDING.md) — Windows, Linux and IDE setup
+* [Access research](ACCESS_RESEARCH.md) — device access attempts, hardware analysis, FCC findings
+* [FCC filing](fcc/README.md) — internal photos, hardware docs, reference platform
