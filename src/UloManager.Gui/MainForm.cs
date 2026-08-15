@@ -151,6 +151,7 @@ public sealed partial class MainForm : Form
         _tabs.TabPages.Add(_liveTab = BuildLiveTab());
         _tabs.TabPages.Add(_activityTab = BuildActivityTab());
         _tabs.TabPages.Add(_mediaTab = BuildMediaTab());
+        _tabs.TabPages.Add(_eyesTab = BuildEyesTab());
         _tabs.TabPages.Add(BuildSetupTab());
         _tabs.TabPages.Add(_apiTab = BuildApiTab());
         return _tabs;
@@ -257,6 +258,9 @@ public sealed partial class MainForm : Form
 
         /// <summary>Connected, camera upside down in admin/setup mode - purple.</summary>
         Setup,
+
+        /// <summary>Connected but refresh is failing (camera rebooting, network issue) - orange.</summary>
+        Warning,
     }
 
     /// <summary>Paints the status bar dot and puts the full description on its tooltip.</summary>
@@ -266,6 +270,7 @@ public sealed partial class MainForm : Form
         {
             DeviceIndicator.Usage => Color.SeaGreen,
             DeviceIndicator.Setup => Color.MediumPurple,
+            DeviceIndicator.Warning => Color.Orange,
             _ => Color.Gray,
         };
 

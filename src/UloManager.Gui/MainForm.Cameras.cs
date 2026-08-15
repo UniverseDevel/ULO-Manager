@@ -457,9 +457,11 @@ public sealed partial class MainForm
         // purple when it is upside down in setup mode.
         var indicator = !camera.IsConnected
             ? DeviceIndicator.Offline
-            : camera.DeviceMode == UloDeviceMode.Setup
-                ? DeviceIndicator.Setup
-                : DeviceIndicator.Usage;
+            : !string.IsNullOrWhiteSpace(camera.LastError)
+                ? DeviceIndicator.Warning
+                : camera.DeviceMode == UloDeviceMode.Setup
+                    ? DeviceIndicator.Setup
+                    : DeviceIndicator.Usage;
 
         e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         using (var dot = new SolidBrush(IndicatorColour(indicator)))
@@ -534,6 +536,11 @@ public sealed partial class MainForm
             parts.Add(mode.ToApiValue());
         }
 
+        if (!string.IsNullOrWhiteSpace(camera.LastError))
+        {
+            parts.Add($"⚠ {Shorten(camera.LastError)}");
+        }
+
         return string.Join(" · ", parts);
     }
 
@@ -559,6 +566,7 @@ public sealed partial class MainForm
     {
         DeviceIndicator.Usage => Color.SeaGreen,
         DeviceIndicator.Setup => Color.MediumPurple,
+        DeviceIndicator.Warning => Color.Orange,
         _ => Color.Gray,
     };
 
@@ -728,6 +736,10 @@ public sealed partial class MainForm
 
         await TryRefreshAsync("Recordings", RefreshMediaAsync);
         MarkTabLoaded(_mediaTab);
+        switching.ThrowIfCancellationRequested();
+
+        await TryRefreshAsync("Eyes", () => LoadEyeSettingsAsync(_cts.Token));
+        MarkTabLoaded(_eyesTab);
         switching.ThrowIfCancellationRequested();
 
         await TryRefreshAsync("Setup", LoadSetupAsync);
@@ -907,6 +919,27 @@ public sealed partial class MainForm
         _exclusionReset.Checked = false;
         _backupBox.Items.Clear();
         _firmwareLabel.Text = "";
+
+        // Eyes tab
+        _eyeHueSlider.Value = 0;
+        _eyeHueLabel.Text = "0";
+        _eyeIrisSpin.Value = 0;
+        _eyePupilSpin.Value = 0;
+        _eyeReflectionBox.SelectedIndex = -1;
+        _behaviorsView.Items.Clear();
+
+        // Voice commands
+        _voiceStandard.Checked = false;
+        _voiceAlert.Checked = false;
+        _voiceSpy.Checked = false;
+        _voiceBattery.Checked = false;
+        _cmdGoToSleep.Checked = false;
+        _cmdAlertOn.Checked = false;
+        _cmdAlertOff.Checked = false;
+        _cmdTakePicture.Checked = false;
+        _cmdStartVideo.Checked = false;
+        _cmdStopVideo.Checked = false;
+
         _responseBox.Clear();
     }
 

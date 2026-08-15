@@ -328,7 +328,7 @@ public sealed partial class MainForm
             Add("Recording mode", snapshot.Mode.ToApiValue());
             Add("Battery", $"{snapshot.State.BatteryLevel}% ({(snapshot.State.Plugged ? "plugged in" : "on battery")})");
             Add("Camera clock", snapshot.DeviceTime.ToString("yyyy-MM-dd HH:mm:ss"));
-            Add("Firmware", $"{config.Firmware.CurrentVersion} (cloud {config.Firmware.CloudVersion})");
+            Add("Firmware", FormatFirmwareVersion(config.Firmware.CurrentVersion, config.Firmware.CloudVersion));
             Add("Update available", config.Firmware.UpdateAvailable ? "yes" : "no");
             Add("Wi-Fi", config.Wifi.Ssid);
             Add("Video quality", config.Video.Quality);
@@ -360,4 +360,31 @@ public sealed partial class MainForm
     private GroupBox _snapshotGroup = null!;
     private PictureBox _snapshotBox = null!;
     private CheckBox _autoSnapshotBox = null!;
+
+    /// <summary>
+    /// Decodes the firmware version. The update logic in the vendor's own source reveals that
+    /// <c>10.1308</c> is three layers: APQ <c>10</c> (Android image), APK <c>13</c> (application),
+    /// STM <c>08</c> (head/motor microcontroller).
+    /// </summary>
+    private static string FormatFirmwareVersion(string current, string cloud)
+    {
+        static string Decode(string version)
+        {
+            var parts = version.Split('.');
+            if (parts.Length == 2 && parts[1].Length == 4)
+            {
+                return $"{version} (Android {parts[0]}, app {parts[1][..2]}, head {parts[1][2..]})";
+            }
+
+            return version;
+        }
+
+        var result = Decode(current);
+        if (!string.IsNullOrWhiteSpace(cloud) && cloud != current)
+        {
+            result += $", cloud {Decode(cloud)}";
+        }
+
+        return result;
+    }
 }

@@ -943,3 +943,4 @@ the Android-side CVEs.
 * [Use cases](USE_CASES.md) — the isolated-network deployment recommended in §7.1
 * [Company and manufacturer](COMPANY.md) — Mu Design Sàrl, Kickstarter campaign, legal status
 * [Access research](ACCESS_RESEARCH.md) — ongoing attempts to gain deeper access for community firmware
+* [Source analysis](SOURCE_ANALYSIS.md) — findings from the vendor's own TypeScript source (shipped via source maps): firmware version structure, undocumented WebSocket endpoints, token leakage patterns, demo mode and mock credentials

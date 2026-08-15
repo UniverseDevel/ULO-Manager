@@ -29,6 +29,7 @@ public sealed partial class MainForm
         root.Controls.Add(BuildGeneralGroup());
         root.Controls.Add(BuildWifiGroup());
         root.Controls.Add(BuildDetectionGroup());
+        root.Controls.Add(BuildVoiceCommandsGroup());
         root.Controls.Add(BuildUsersGroup());
         root.Controls.Add(BuildMaintenanceGroup());
 
@@ -249,6 +250,61 @@ public sealed partial class MainForm
         return group;
     }
 
+    private Control BuildVoiceCommandsGroup()
+    {
+        var group = NewGroup("Voice Commands", 280);
+        var grid = NewGrid();
+
+        // Per-mode enable switches
+        _voiceStandard = new CheckBox { Text = "Standard mode" };
+        _voiceAlert    = new CheckBox { Text = "Alert mode" };
+        _voiceSpy      = new CheckBox { Text = "Spy mode" };
+        _voiceBattery  = new CheckBox { Text = "Battery mode" };
+        grid.Controls.Add(NewLabel("Listen in mode"), 0, 0);
+        var modeFlow = new FlowLayoutPanel { AutoSize = true };
+        modeFlow.Controls.AddRange(new Control[] { _voiceStandard, _voiceAlert, _voiceSpy, _voiceBattery });
+        grid.Controls.Add(modeFlow, 1, 0);
+
+        // Individual voice commands
+        _cmdGoToSleep  = new CheckBox { Text = "Go to sleep" };
+        _cmdAlertOn    = new CheckBox { Text = "Alert on" };
+        _cmdAlertOff   = new CheckBox { Text = "Alert off" };
+        _cmdTakePicture = new CheckBox { Text = "Take picture" };
+        _cmdStartVideo = new CheckBox { Text = "Start video" };
+        _cmdStopVideo  = new CheckBox { Text = "Stop video" };
+        grid.Controls.Add(NewLabel("Commands"), 0, 1);
+        var cmdFlow = new FlowLayoutPanel { AutoSize = true, Height = 60 };
+        cmdFlow.Controls.AddRange(new Control[] { _cmdGoToSleep, _cmdAlertOn, _cmdAlertOff, _cmdTakePicture, _cmdStartVideo, _cmdStopVideo });
+        grid.Controls.Add(cmdFlow, 1, 1);
+
+        var save = new Button { Text = "Save voice settings", Width = 240, Margin = new Padding(0, 3, 0, 3) };
+        save.Click += async (_, _) => await RunAsync("Saving voice settings", async ct =>
+        {
+            var voice = new UloVoiceConfig
+            {
+                Standard = _voiceStandard.Checked,
+                Alert    = _voiceAlert.Checked,
+                Spy      = _voiceSpy.Checked,
+                Battery  = _voiceBattery.Checked,
+                Commands = new UloVoiceCommands
+                {
+                    GoToSleep  = _cmdGoToSleep.Checked,
+                    AlertOn    = _cmdAlertOn.Checked,
+                    AlertOff   = _cmdAlertOff.Checked,
+                    TakePicture = _cmdTakePicture.Checked,
+                    StartVideo = _cmdStartVideo.Checked,
+                    StopVideo  = _cmdStopVideo.Checked,
+                }
+            };
+            await RequireDevice().Client.SendJsonAsync(HttpMethod.Put, "/api/v1/config/voice",
+                JsonSerializer.Serialize(voice, UloJson.Options), ct);
+        });
+        grid.Controls.Add(save, 1, 2);
+
+        group.Controls.Add(grid);
+        return group;
+    }
+
     private Control BuildMaintenanceGroup()
     {
         var group = NewGroup("Maintenance", 260);
@@ -429,6 +485,17 @@ public sealed partial class MainForm
             timeZones = Array.Empty<string>();
         }
 
+        // Voice configuration is a separate call; if it fails the rest of the tab still works.
+        UloVoiceConfig? voiceConfig;
+        try
+        {
+            voiceConfig = await device.Client.GetAsync<UloVoiceConfig>("/api/v1/config/voice", _cts.Token);
+        }
+        catch (UloApiException)
+        {
+            voiceConfig = null;
+        }
+
         void Apply()
         {
             _nameBox.Text = config.Device.Name;
@@ -480,6 +547,20 @@ public sealed partial class MainForm
             _exclusionRight.Value = Math.Clamp(config.Exclusion.Right, 0, 100);
             _exclusionReverse.Checked = config.Exclusion.Reverse;
             _exclusionReset.Checked = config.Exclusion.ResetOnDisplacement;
+
+            if (voiceConfig is not null)
+            {
+                _voiceStandard.Checked = voiceConfig.Standard;
+                _voiceAlert.Checked = voiceConfig.Alert;
+                _voiceSpy.Checked = voiceConfig.Spy;
+                _voiceBattery.Checked = voiceConfig.Battery;
+                _cmdGoToSleep.Checked = voiceConfig.Commands.GoToSleep;
+                _cmdAlertOn.Checked = voiceConfig.Commands.AlertOn;
+                _cmdAlertOff.Checked = voiceConfig.Commands.AlertOff;
+                _cmdTakePicture.Checked = voiceConfig.Commands.TakePicture;
+                _cmdStartVideo.Checked = voiceConfig.Commands.StartVideo;
+                _cmdStopVideo.Checked = voiceConfig.Commands.StopVideo;
+            }
 
             _firmwareLabel.Text =
                 $"Installed {config.Firmware.CurrentVersion}, cloud {config.Firmware.CloudVersion}, " +
@@ -721,4 +802,14 @@ public sealed partial class MainForm
     private Label _firmwareLabel = null!;
     private Label _wifiHintLabel = null!;
     private ComboBox _backupBox = null!;
+    private CheckBox _voiceStandard = null!;
+    private CheckBox _voiceAlert = null!;
+    private CheckBox _voiceSpy = null!;
+    private CheckBox _voiceBattery = null!;
+    private CheckBox _cmdGoToSleep = null!;
+    private CheckBox _cmdAlertOn = null!;
+    private CheckBox _cmdAlertOff = null!;
+    private CheckBox _cmdTakePicture = null!;
+    private CheckBox _cmdStartVideo = null!;
+    private CheckBox _cmdStopVideo = null!;
 }

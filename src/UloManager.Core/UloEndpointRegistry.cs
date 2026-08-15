@@ -175,6 +175,7 @@ public static class UloEndpointRegistry
         // ── Live stream ──────────────────────────────────────────────
         new() { Id = "LiveWs",     Method = "WS",   Path = "api/v1/live",             From = V06, Unauthenticated = true, Description = "Live H.264 video via WebSocket", Category = "Live" },
         new() { Id = "LiveRtsp",   Method = "RTSP", Path = "rtsp://<host>:8901/live", From = V06, Unauthenticated = true, Description = "Live RTSP stream", Category = "Live" },
+        new() { Id = "RtspWs",     Method = "WS",   Path = "api/v1/rtsp",             From = V06, Description = "RTSP signalling WebSocket (sub-protocol mudesign.ulo.rtsp); sends 'Started' text then pings — not a video source", Category = "Live" },
 
         // ── Configuration ────────────────────────────────────────────
         new() { Id = "Config",          Method = "GET",  Path = "api/v1/config",          From = V06, Description = "Full configuration tree", Category = "Config" },
@@ -184,13 +185,16 @@ public static class UloEndpointRegistry
         new() { Id = "ConfigDevice",    Method = "GET",  Path = "api/v1/config/device",   From = V06, Description = "Device name",            Category = "Config" },
         new() { Id = "ConfigEmail",     Method = "GET",  Path = "api/v1/config/email",    From = V06, Description = "Email config",           Category = "Config" },
         new() { Id = "ConfigExclusion", Method = "GET",  Path = "api/v1/config/exclusion",From = V06, Description = "Exclusion zone",         Category = "Config" },
-        new() { Id = "ConfigEyes",      Method = "GET",  Path = "api/v1/config/eyes",     From = V06, Description = "Eye appearance config",  Category = "Config" },
+        new() { Id = "ConfigEyes",      Method = "GET",   Path = "api/v1/config/eyes",     From = V06, Description = "Eye appearance config",  Category = "Config" },
+        new() { Id = "ConfigEyesPatch", Method = "PATCH", Path = "api/v1/config/eyes",     From = V06, Description = "Update eye appearance (irisHue, irisSize, pupilSize, reflection) — instant effect on physical LEDs", Category = "Config" },
         new() { Id = "ConfigFace",      Method = "GET",  Path = "api/v1/config/face",     From = V06, Description = "Face recognition config",Category = "Config" },
         new() { Id = "ConfigFirmware",  Method = "GET",  Path = "api/v1/config/firmware", From = V06, Description = "Firmware version info",  Category = "Config" },
         new() { Id = "ConfigLanguage",  Method = "GET",  Path = "api/v1/config/language", From = V06, Description = "Language setting",       Category = "Config" },
         new() { Id = "ConfigTime",      Method = "GET",  Path = "api/v1/config/time",     From = V06, Description = "Time zone config",       Category = "Config" },
         new() { Id = "ConfigVideo",     Method = "GET",  Path = "api/v1/config/video",    From = V06, Description = "Video quality config",   Category = "Config" },
         new() { Id = "ConfigVoice",     Method = "GET",  Path = "api/v1/config/voice",    From = V06, Description = "Voice config",           Category = "Config" },
+        new() { Id = "ConfigVoicePut",  Method = "PUT",  Path = "api/v1/config/voice",    From = V06, Description = "Update voice command and mode settings", Category = "Config" },
+        new() { Id = "ConfigFacePut",   Method = "PUT",  Path = "api/v1/config/face",     From = V06, Description = "Update face recognition mode settings", Category = "Config" },
         new() { Id = "ConfigWifi",      Method = "GET",  Path = "api/v1/config/wifi",     From = V06, Description = "WiFi SSID",              Category = "Config" },
         new() { Id = "ConfigReset",     Method = "GET",  Path = "api/v1/config/reset",    From = V06, Description = "Advertised by OPTIONS but 404", Category = "Config" },
         new() { Id = "WifiNetworks",    Method = "GET",  Path = "api/v1/config/wifi/networks",      From = V06, Description = "WiFi scan (only in ad-hoc mode)", Category = "Config" },
@@ -243,7 +247,10 @@ public static class UloEndpointRegistry
         new() { Id = "AccessEverywhere", Method = "GET", Path = "api/v1/accessEverywhere", From = V08, AbsentUpTo = V06, Description = "Device ID (trimmedMac), remote access info", Category = "Device" },
 
         // ── Undocumented / unknown payload ────────────────────────────
-        new() { Id = "Behaviors",  Method = "GET",  Path = "api/v1/behaviors", From = V06, Description = "Unknown — responds to OPTIONS", Category = "Undocumented" },
+        new() { Id = "Behaviors",      Method = "GET",    Path = "api/v1/behaviors",    From = V06, Description = "List face-recognition behavior rules (expression per user)", Category = "Config" },
+        new() { Id = "BehaviorsPost",  Method = "POST",   Path = "api/v1/behaviors",    From = V06, Description = "Create a behavior rule {expression, user}", Category = "Config" },
+        new() { Id = "BehaviorsPatch", Method = "PATCH",  Path = "api/v1/behaviors/:id", From = V06, Description = "Update a behavior rule", Category = "Config" },
+        new() { Id = "BehaviorsDelete",Method = "DELETE", Path = "api/v1/behaviors/:id", From = V06, Description = "Delete a behavior rule", Category = "Config" },
         new() { Id = "Neighbors",  Method = "GET",  Path = "api/v1/neighbors", From = V06, Description = "Unknown — responds to OPTIONS", Category = "Undocumented" },
         new() { Id = "Eyes",       Method = "GET",  Path = "api/v1/eyes",      From = V10, NotRouted = true, Description = "Listed by the web app but measured 404 on both 06.0601 and 10.1308", Category = "Undocumented" },
         new() { Id = "Faces",      Method = "GET",  Path = "api/v1/faces",     From = V10, NotRouted = true, Description = "Listed by the web app but measured 404 on both 06.0601 and 10.1308", Category = "Undocumented" },
