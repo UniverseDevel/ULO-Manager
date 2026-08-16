@@ -436,6 +436,24 @@ Kickstarter's policy states:
 
 ---
 
+### 4.5 The campaign was never told the company had failed
+
+The final Kickstarter update is **#41, 27 May 2019**. No further update was posted, and the campaign
+page carries no notice of the bankruptcy. The declaratory judgment came on **16 June 2021** — 751
+days, a little over two years, after backers last heard anything.
+
+Backers of the company's later product were told. Mu Design posted update #26 to the LUA Indiegogo
+campaign on **13 June 2021**, two days after the *aveu* was filed at the commercial court and three
+days before the court declared the bankruptcy, announcing the filing and the founder's personal
+guarantee over part of the bank debt.
+
+There was no legal obligation to notify either campaign. A Luxembourg bankruptcy is a public act:
+the judgment is registered and published, and creditors are convoked by that publication rather than
+individually. The practical consequence for ULO backers is nonetheless concrete. Anyone who wanted
+to lodge a claim had to do so with the curator during the proceeding, and the proceeding closed on
+6 March 2023 (§3.1). A backer relying on the campaign page for news would have had no indication
+that a claims process existed, or that it had ended.
+
 ## 5. Other ULO projects on GitHub
 
 A search across GitHub (August 2026) found **no other active projects** working on the ULO camera
