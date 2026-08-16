@@ -73,39 +73,39 @@ inference was right about the outcome and years late on the date.
 
 ### 3.1 The filing history
 
-| Filing | Date | Entry |
-|---|---|---|
-| `L230044773` | 14 March 2023 | Deletion of the head office by official act |
-| `L230043628` | 13 March 2023 | Court order — Bankruptcy: **closure of bankruptcy** (judgment of 6 March 2023) |
-| `L210113495` | 17 June 2021 | Court order — Bankruptcy: **declaratory decision of bankruptcy** (judgment of 16 June 2021) |
-| `L210089479` | 20 May 2021 | Annual accounts, financial year 2020 |
-| `L190213879` | 21 October 2019 | Annual accounts, correction to the 2018 filing |
-| `L190112432` | 1 July 2019 | Annual accounts, financial year 2018 |
-| `L180246752` | 18 December 2018 | Annual accounts, financial year 2017 |
-| `L180246599` | 18 December 2018 | Annual accounts, 30 November 2015 to 31 December 2016 |
-| `L170190807` | 19 September 2017 | Modification — associates |
-| `L170190313` | 19 September 2017 | Modification — managers |
-| `L160091975` | 31 May 2016 | Coordinated articles of association |
-| `L160091950` | 30 May 2016 | Modification — registered office |
-| `L160039575` | 4 March 2016 | Modification — associates |
-| `L160034446` | 25 February 2016 | Modification — associates |
-| `L150216852` | 1 December 2015 | Registration |
+| Filing       | Date              | Entry                                                                                       |
+|--------------|-------------------|---------------------------------------------------------------------------------------------|
+| `L230044773` | 14 March 2023     | Deletion of the head office by official act                                                 |
+| `L230043628` | 13 March 2023     | Court order — Bankruptcy: **closure of bankruptcy** (judgment of 6 March 2023)              |
+| `L210113495` | 17 June 2021      | Court order — Bankruptcy: **declaratory decision of bankruptcy** (judgment of 16 June 2021) |
+| `L210089479` | 20 May 2021       | Annual accounts, financial year 2020                                                        |
+| `L190213879` | 21 October 2019   | Annual accounts, correction to the 2018 filing                                              |
+| `L190112432` | 1 July 2019       | Annual accounts, financial year 2018                                                        |
+| `L180246752` | 18 December 2018  | Annual accounts, financial year 2017                                                        |
+| `L180246599` | 18 December 2018  | Annual accounts, 30 November 2015 to 31 December 2016                                       |
+| `L170190807` | 19 September 2017 | Modification — associates                                                                   |
+| `L170190313` | 19 September 2017 | Modification — managers                                                                     |
+| `L160091975` | 31 May 2016       | Coordinated articles of association                                                         |
+| `L160091950` | 30 May 2016       | Modification — registered office                                                            |
+| `L160039575` | 4 March 2016      | Modification — associates                                                                   |
+| `L160034446` | 25 February 2016  | Modification — associates                                                                   |
+| `L150216852` | 1 December 2015   | Registration                                                                                |
 
 #### The bankruptcy judgment
 
 The court order registered under `L210113495` gives the detail:
 
-| | |
-|---|---|
-| Procedure | Faillite (bankruptcy), reference **F-2021/00574-L** |
-| Opened | **16 June 2021**, filed with the RCS on 17 June 2021 |
-| Court | Tribunal d'arrondissement de Luxembourg, Chambre 15 |
-| Case / judgment | TAL-2021-05291 / 2021TALCH15/00957 |
-| Type | Declaratory decision of bankruptcy |
-| How it began | **Aveu** — the company declared its own bankruptcy |
-| Scope | Main insolvency proceeding under the EU Insolvency Regulation |
-| Registered status recorded | *en faillite* |
-| Curator | Me Laurent Bizzotto, Luxembourg |
+|                            |                                                               |
+|----------------------------|---------------------------------------------------------------|
+| Procedure                  | Faillite (bankruptcy), reference **F-2021/00574-L**           |
+| Opened                     | **16 June 2021**, filed with the RCS on 17 June 2021          |
+| Court                      | Tribunal d'arrondissement de Luxembourg, Chambre 15           |
+| Case / judgment            | TAL-2021-05291 / 2021TALCH15/00957                            |
+| Type                       | Declaratory decision of bankruptcy                            |
+| How it began               | **Aveu** — the company declared its own bankruptcy            |
+| Scope                      | Main insolvency proceeding under the EU Insolvency Regulation |
+| Registered status recorded | *en faillite*                                                 |
+| Curator                    | Me Laurent Bizzotto, Luxembourg                               |
 
 Two points matter for anyone reading this as a backer. The proceeding was opened on the company's
 own admission rather than on a creditor's petition — *aveu* is the director filing the company's
@@ -180,17 +180,17 @@ Before the register was read, the case for dormancy rested on this, and it holds
 Mu Design going quiet did not mean its founder stopped trading. A second Luxembourg company was
 registered, ran, and has since been wound up:
 
-| | |
-|---|---|
-| Name | **MuGames Sàrl-S** |
-| RCS number | **B246260** |
-| Legal form | Simplified limited liability company (*Sàrl-S*) |
-| Registered office | Esch-sur-Alzette — the same town as Mu Design |
-| Registered | **14 August 2020** |
-| Dissolved and liquidated | **26 June 2026**, filed 30 June 2026 (deposit `L260168745`) |
-| Corporate purpose | “the design, creation, realization, production and marketing of games, card games, playful supports and all other recreational processes” |
-| Sole shareholder and manager | Vivien Muller |
-| Product | *Ommatidia*, a four-player colour-mixing strategy game for mobile ([mugames.net](https://www.mugames.net/)), formerly on the iOS App Store |
+|                              |                                                                                                                                            |
+|------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                         | **MuGames Sàrl-S**                                                                                                                         |
+| RCS number                   | **B246260**                                                                                                                                |
+| Legal form                   | Simplified limited liability company (*Sàrl-S*)                                                                                            |
+| Registered office            | Esch-sur-Alzette — the same town as Mu Design                                                                                              |
+| Registered                   | **14 August 2020**                                                                                                                         |
+| Dissolved and liquidated     | **26 June 2026**, filed 30 June 2026 (deposit `L260168745`)                                                                                |
+| Corporate purpose            | “the design, creation, realization, production and marketing of games, card games, playful supports and all other recreational processes”  |
+| Sole shareholder and manager | Vivien Muller                                                                                                                              |
+| Product                      | *Ommatidia*, a four-player colour-mixing strategy game for mobile ([mugames.net](https://www.mugames.net/)), formerly on the iOS App Store |
 
 #### How it ended
 
@@ -257,13 +257,13 @@ Mu Design filed abbreviated annual accounts (*bilan abrégé*) throughout its li
 and they answer the question backers have asked for a decade — where the money went — better than any
 amount of speculation. All figures in EUR.
 
-| Financial year | Total assets | Equity | Result for the year | Debts |
-|---|---:|---:|---:|---:|
-| 30 Nov 2015 – 31 Dec 2016 | 1,805,807 | −54,915 | −67,415 | 6,988 |
-| 2017 | 1,394,676 | −476,154 | −421,238 | 16,560 |
-| 2018 *(as corrected)* | 60,600 | −327,924 | +148,230 | 372,648 |
-| 2019 | 70,061 | −331,418 | −3,494 | 400,944 |
-| 2020 | 193,420 | −190,967 | +27,951 | 384,387 |
+| Financial year            | Total assets |   Equity | Result for the year |   Debts |
+|---------------------------|-------------:|---------:|--------------------:|--------:|
+| 30 Nov 2015 – 31 Dec 2016 |    1,805,807 |  −54,915 |             −67,415 |   6,988 |
+| 2017                      |    1,394,676 | −476,154 |            −421,238 |  16,560 |
+| 2018 *(as corrected)*     |       60,600 | −327,924 |            +148,230 | 372,648 |
+| 2019                      |       70,061 | −331,418 |              −3,494 | 400,944 |
+| 2020                      |      193,420 | −190,967 |             +27,951 | 384,387 |
 
 Share capital was **€12,500** throughout. The 2020 balance sheet also carries **€112,500** of capital
 investment subsidies.
@@ -304,12 +304,12 @@ anyone's conduct.
 MuGames filed accounts too, and they describe something an order of magnitude smaller. The 2024
 financial year, filed 2 July 2025 (`L250211770`):
 
-| | 2024 | 2023 |
-|---|---:|---:|
-| Total assets | 5,279 | 6,905 |
-| Equity | −1,629 | +404 |
+|                     |   2024 |   2023 |
+|---------------------|-------:|-------:|
+| Total assets        |  5,279 |  6,905 |
+| Equity              | −1,629 |   +404 |
 | Result for the year | −2,033 | −2,918 |
-| Debts | 6,908 | 6,501 |
+| Debts               |  6,908 |  6,501 |
 
 Share capital was **€100** — the *Sàrl-S* minimum. This was a small venture running at a few thousand
 euros a year, which is consistent with the sole shareholder being able to take over its remaining
@@ -319,23 +319,23 @@ liabilities personally and close the liquidation in a single act (§3.4).
 
 ### 4.1 Campaign facts
 
-| Metric        | Value                                                                |
-|---------------|----------------------------------------------------------------------|
-| Platform      | [Kickstarter](https://www.kickstarter.com/projects/vivienmuller/ulo) |
-| Creator       | Vivien Muller                                                        |
-| Launched      | 2015-10-05                                                           |
-| Ended         | 2015-12-04                                                           |
-| Duration      | 60 days                                                              |
-| Goal          | ~€217,500                                                            |
-| Pledged       | **~€1,618,869** (≈$1.77 M USD)                                       |
-| Funding ratio | **813 %** of goal                                                    |
-| Backers       | **8,330**                                                            |
+| Metric        | Value                                                                            |
+|---------------|----------------------------------------------------------------------------------|
+| Platform      | [Kickstarter](https://www.kickstarter.com/projects/vivienmuller/ulo)             |
+| Creator       | Vivien Muller                                                                    |
+| Launched      | 2015-10-05                                                                       |
+| Ended         | 2015-12-04                                                                       |
+| Duration      | 60 days                                                                          |
+| Goal          | ~€217,500                                                                        |
+| Pledged       | **~€1,618,869** (≈$1.77 M USD)                                                   |
+| Funding ratio | **813 %** of goal                                                                |
+| Backers       | **8,330**                                                                        |
 | Comments      | **4,664** threads shown by Kickstarter, **6,880** including replies (2026-08-14) |
-| Updates       | 41                                                                   |
-| Category      | Design → Product Design                                              |
-| Reward price  | ~€149 early bird for one ULO unit                                    |
-| Delivery est. | Late 2016 (original)                                                 |
-| Status        | "Successful" (funding completed; does not imply delivery)            |
+| Updates       | 41                                                                               |
+| Category      | Design → Product Design                                                          |
+| Reward price  | ~€149 early bird for one ULO unit                                                |
+| Delivery est. | Late 2016 (original)                                                             |
+| Status        | "Successful" (funding completed; does not imply delivery)                        |
 
 ### 4.2 What was promised vs. what was delivered
 
@@ -393,8 +393,8 @@ Kickstarter's policy states:
 A search across GitHub (August 2026) found **no other active projects** working on the ULO camera
 besides this repository:
 
-| Repository                                                                | Language | Description                                                                                            |
-|---------------------------------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------|
+| Repository                                                                | Language | Description                                                                                           |
+|---------------------------------------------------------------------------|----------|-------------------------------------------------------------------------------------------------------|
 | [UniverseDevel/ULO-Manager](https://github.com/UniverseDevel/ULO-Manager) | C#       | This repository — tooling for the ULO camera, API documentation, security research, firmware analysis |
 
 **No other ULO camera projects exist on GitHub.** The only other result for "ULO" is
@@ -418,13 +418,13 @@ bankruptcy is recorded.
 Beyond that proceeding, no separate lawsuit, class action or enforcement action against Mu Design
 or its director was found:
 
-| Jurisdiction / Database                          | Result                                                        |
-|--------------------------------------------------|-----------------------------------------------------------------|
-| Luxembourg RCS (company file B201812)            | **Bankruptcy declared 2021, closed 2023** — see §3.1            |
-| Luxembourg courts (pseudonymised keyword search) | No other judgments found mentioning “Mu Design”               |
-| US federal courts (CourtListener / PACER)        | No cases found                                                  |
-| FTC enforcement actions                          | None targeting ULO or Mu Design                                 |
-| General legal news / press                       | No reports of litigation                                        |
+| Jurisdiction / Database                          | Result                                               |
+|--------------------------------------------------|------------------------------------------------------|
+| Luxembourg RCS (company file B201812)            | **Bankruptcy declared 2021, closed 2023** — see §3.1 |
+| Luxembourg courts (pseudonymised keyword search) | No other judgments found mentioning “Mu Design”      |
+| US federal courts (CourtListener / PACER)        | No cases found                                       |
+| FTC enforcement actions                          | None targeting ULO or Mu Design                      |
+| General legal news / press                       | No reports of litigation                             |
 
 ### 6.1 Why no group action materialised
 
@@ -448,14 +448,14 @@ This section previously listed small-claims and consumer-dispute routes. Those a
 applicable, and following them would waste your time: **you cannot sue a company that has ceased to
 exist.**
 
-| Route | Status |
-|---|---|
-| Claim in the bankruptcy | **Closed.** Claims went to the curator during the proceeding; it ended in March 2023 |
-| EU Small Claims Procedure | **Not available** — there is no defendant |
-| European Consumer Centres (ECC-Net) | **Not available** for the same reason |
-| National consumer authority | Will record a complaint; cannot recover money from a closed estate |
-| FTC / FBI IC3 (US backers) | Reporting only. Useful as statistics, not as recovery |
-| Kickstarter | Cannot compel delivery or refunds, and never could |
+| Route                               | Status                                                                               |
+|-------------------------------------|--------------------------------------------------------------------------------------|
+| Claim in the bankruptcy             | **Closed.** Claims went to the curator during the proceeding; it ended in March 2023 |
+| EU Small Claims Procedure           | **Not available** — there is no defendant                                            |
+| European Consumer Centres (ECC-Net) | **Not available** for the same reason                                                |
+| National consumer authority         | Will record a complaint; cannot recover money from a closed estate                   |
+| FTC / FBI IC3 (US backers)          | Reporting only. Useful as statistics, not as recovery                                |
+| Kickstarter                         | Cannot compel delivery or refunds, and never could                                   |
 
 A bankruptcy closes either after the estate is distributed or for insufficiency of assets. The
 register does not say which applied here, and this document does not guess — but in either case
