@@ -296,6 +296,14 @@ backers** once the pledge manager is included, with delivery promised for Decemb
 campaign ran across exactly the two financial years in question, and the two gross results total
 €343,057. The accounts do not confirm the connection and this document does not assert one.
 
+**The company's position when that campaign opened.** The most recent balance sheet on file in June
+2019 was the 2018 one: equity of −€327,924 against share capital of €12,500, and debts of €372,648.
+Those accounts were public, filed at the RCS and available to anyone who looked up B201812. No
+crowdfunding platform requires a campaign to publish or link its financial statements, and backers
+on Indiegogo are pre-purchasers rather than investors, so nothing obliged the figures to appear
+beside the campaign. Both facts are recorded here because a reader assessing the campaign is
+entitled to know the accounts existed and what they said.
+
 Two filing details worth recording. The 2018 accounts were **filed twice**: the original
 (`L190112432`, 28 June 2019) and a correction (`L190213879`, 21 October 2019) which moved
 €31,804.62 out of debts and into the result, improving the year from +€116,425 to +€148,230. And
