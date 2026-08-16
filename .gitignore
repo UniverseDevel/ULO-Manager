@@ -30,13 +30,13 @@ obj/
 # Rider stores the per-solution MSBuild choice here, with machine specific paths
 *.DotSettings.user
 
-# Forensics output - contains device names, SSIDs, accounts and log excerpts
+# Forensics output
 ulo_probe_results.json
 
-# Kickstarter scraped data - contains backer names, emails, personal comments
+# Scratch research data
 docs/ks/
 
-# APK files (too large for git, keep locally)
+# Application packages
 apk/*.apk
 docs/fcc/GO_SIGNAL.txt
 
@@ -45,24 +45,24 @@ __pycache__/
 *.pyc
 
 # ---------------------------------------------------------------------------
-# Third-party copyrighted material - kept locally, never published.
-# See docs/LEGAL.md for why. Each item is reproducible from your own device
-# or from its original public source; this repository documents it instead.
+# Not redistributed by this project. See docs/LEGAL.md section 1 for where the
+# originals come from.
 # ---------------------------------------------------------------------------
 
-# Vendor web application source, reconstructed from the shipped source map
+# Web application bundles and source maps
 firmware/*/webapp/src/
 firmware/*/webapp/main.js.map
 firmware/*/webapp/main.css.map
 
-# Vendor STM32 head firmware images
+# Firmware images
 firmware/*/factory/*.bin
 
-# Qualcomm / Arrow hardware documentation - redistribution restricted
+# Vendor hardware documentation
 docs/fcc/hardware_docs/*.pdf
 
-# One-off history rewrite helper - a local maintenance tool, not part of the project
+# Local maintenance helper, not part of the project
 scripts/purge-history.ps1
-# Vendor user manual and product photography
+
+# Product manual and photography
 docs/ULO-Users-Manual-*.pdf
 assets/images/ulo-*.png

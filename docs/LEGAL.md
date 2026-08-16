@@ -1,4 +1,4 @@
-﻿# Legal notes
+# Legal notes
 
 This repository documents the ULO camera by Mu Design Sarl. It is not affiliated with, endorsed by
 or licensed from Mu Design. Everything published here is either original work under the project's
@@ -10,47 +10,43 @@ explicitly: which files the GPL-3.0 grant applies to, and which third parties ho
 project cannot and does not grant. A licence file sitting at the root of a repository reads as an
 offer over everything beneath it, so the boundary is stated rather than assumed.
 
-## 1. What this repository deliberately does not contain
+## 1. What this repository does not include
 
-Research on a closed device produces copies of the vendor's material. Describing that material is
-lawful commentary; republishing it is not, regardless of how easy the device makes it to obtain.
-The following is therefore excluded from version control and listed in
-[`.gitignore`](../.gitignore). Each item stays reproducible — the documentation records what it is,
-where it comes from and how to get it yourself.
+Documenting a closed device means reading a lot of the vendor's material. Describing it is lawful
+commentary; republishing it is not, however freely the device hands it over. So the findings are
+here and the artefacts are not.
 
-| Excluded | Why | How to obtain it yourself |
-|---|---|---|
-| `apk/*.apk` | The official ULO Android app is Mu Design's proprietary software. Removal from Google Play did not place it in the public domain, and mirror sites are not a licence. | Extract from a device that has it installed, or an APK mirror. |
-| `firmware/*/webapp/src/` | The vendor's TypeScript source, reconstructed from the source map. Shipping a source map by mistake is not a licence grant. | `GET http://<ULO_IP>/build/main.js.map`, then reconstruct with any source-map tool. |
-| `firmware/*/webapp/main.js.map`, `main.css.map` | The same material in original form. | Same URL; hashes are recorded in `firmware/*/webapp/README.md`. |
-| `firmware/*/factory/*.bin` | Proprietary STM32 head firmware. | Vendor update packages; versions and CRC names are recorded in the firmware folders. |
-| `docs/fcc/hardware_docs/*.pdf` | Qualcomm APQ8016 and DragonBoard 410c documentation, redistributed under restricted terms — unlike the FCC exhibits, these are not public record. | Qualcomm Developer Network / Arrow, free registration. |
-| `docs/ULO-Users-Manual-*.pdf` | Vendor copyright. | The identical document is a public FCC exhibit: `docs/fcc/User manual.pdf`. |
-| `assets/images/ulo-*.png` | Vendor product photography, with no attribution or licence. | Vendor and press material. |
-| `docs/ks/` | Scraped Kickstarter comments containing backers' names and contact details — personal data under the GDPR, and outside Kickstarter's terms of use. | Kickstarter's public campaign page. |
-| `firmware/*/assets/sounds/*.mp4` | The clip described in [Easter eggs](EASTER_EGGS.md) is a third party's copyrighted music video. | `GET http://<ULO_IP>/assets/sounds/…` on any unit. |
+Where a document below relies on something not included, this is where it came from, so any finding
+can be checked against your own unit:
 
-The `.dts` / `.dtsi` device tree files under `docs/fcc/hardware_docs/` are kept: they come from the
-Linux kernel and are GPL-2.0, compatible with this repository.
+| Not included | Where the original comes from |
+|---|---|
+| The vendor's web application source and its source maps | `GET http://<ULO_IP>/build/main.js.map` from a unit on your network, reconstructed with any source-map tool. Hashes to check it against are in `firmware/*/webapp/README.md`. |
+| The STM32 head firmware images | Vendor update packages. Versions and CRC names are recorded in the firmware folders. |
+| Qualcomm APQ8016 and DragonBoard 410c documentation | Qualcomm Developer Network and Arrow, free registration. Unlike the FCC exhibits, these are not public record. |
+| The vendor user manual | The identical document is a public FCC exhibit: [`docs/fcc/User manual.pdf`](fcc/). |
+| The official Android application | It was withdrawn from Google Play in February 2024. Its endpoints and BLE identifiers are documented in [`apk/README.md`](../apk/README.md). |
+| The music video described in [Easter eggs](EASTER_EGGS.md) | `GET http://<ULO_IP>/assets/sounds/…` on any unit. It is a third party's copyrighted clip and its presence on the device is the point, not the file. |
 
-The vendor TLS certificates under `firmware/*/device/` are kept. They are public certificates, not
-keys, they contain no secret, and they are the evidence for the findings in
-[SECURITY.md](SECURITY.md).
+Two things that are included, deliberately. The `.dts` and `.dtsi` device trees under
+[`docs/fcc/hardware_docs/`](fcc/hardware_docs/) come from the Linux kernel, are GPL-2.0 and carry
+their SPDX headers, so they are compatible with this repository. The vendor TLS certificates under
+`firmware/*/device/` are public certificates rather than keys, contain no secret, and are the
+evidence for the certificate findings in [SECURITY.md](SECURITY.md).
 
-## 1a. History
+## 2. History
 
-Untracking a file stops it being published from now on; it does not remove it from the repository.
-Every commit that ever contained the file still carries it, and the forge serves those commits, so
-the material stays downloadable until history itself is rewritten.
+Removing a file from the current tree does not remove it from a repository. Every commit that ever
+contained it still carries it, and a forge serves those commits, so anything that should not be
+published has to come out of history rather than only out of the tip.
 
-That rewrite has been done with `git filter-repo --invert-paths`, dropping the paths above from
-every commit. It is not something this repository automates: it rewrites every commit hash, has to
-be force-pushed, and is a one-off act of maintenance rather than a part of the project.
+Where that has been necessary here it was done with `git filter-repo --invert-paths`. It is not
+automated: it rewrites every commit hash and has to be force-pushed, so it is a deliberate one-off
+rather than part of the project. It is also not the whole story — unreachable objects linger on a
+forge until it collects them, forks keep their own copies, and an existing clone will reintroduce
+the old history on a pull rather than a fresh clone.
 
-Rewriting is also not the end of it. Unreachable objects stay reachable by SHA on GitHub until their
-support team garbage-collects them, forks keep their own copy, and existing clones reintroduce the
-old history on the next pull rather than a fresh clone.
-## 2. FCC exhibits
+## 3. FCC exhibits
 
 The files in [`docs/fcc/`](fcc/) are US public records, published by the FCC under FCC ID
 `2ANJS-ULO1` and freely redistributable. `Confidentiality Request.pdf` is itself part of the public
@@ -61,21 +57,26 @@ that leaks does not become public, and the schematics listed as missing in
 [`fcc/README.md`](fcc/README.md) must be obtained by measurement on your own hardware, not by
 sourcing the withheld document.
 
-## 3. Personal data
+## 4. Personal data
 
-No third party's personal data belongs in this repository.
+No third party's personal data is published here, and none is quoted or attributed.
 
-* Backer names, e-mail addresses and comments are excluded (`docs/ks/`). Where the campaign's
-  reception is discussed in [COMPANY.md](COMPANY.md), it is summarised in aggregate rather than
-  quoted with attribution.
-* Forensic output is excluded (`ulo_probe_results.json`): it captures device names, SSIDs, account
-  names and log excerpts from a live unit.
-* All user names, passwords, e-mail addresses and IP addresses in the documentation and source are
-  invented examples. The credentials quoted in
-  [SOURCE_ANALYSIS.md §5](SOURCE_ANALYSIS.md#5-demo-mode-and-shipped-mock-data) are the vendor's own
-  shipped mock data — fictional test values, not anyone's account.
+The campaign's reception is discussed in [COMPANY.md](COMPANY.md) and
+[KICKSTARTER.md](KICKSTARTER.md) in aggregate: what backers reported, how often, and what it says
+about the device. Commenters are not named and their comments are not reproduced. People named
+anywhere in this repository are named in a public record or in their professional capacity, which
+is unavoidable when documenting a company's product.
 
-## 4. Statements about the company and its founder
+Output from the [forensics](../forensics/README.md) scripts is not published either. It captures
+device names, network names, account names and log excerpts from whichever unit it was pointed at,
+which is exactly the material [SECURITY.md](SECURITY.md) warns the device leaks.
+
+All user names, passwords, e-mail addresses and IP addresses in the documentation and the source
+are invented examples. The credentials quoted in
+[SOURCE_ANALYSIS.md §5](SOURCE_ANALYSIS.md#5-demo-mode-and-shipped-mock-data) are the vendor's
+own shipped mock data — fictional test values, not anyone's account.
+
+## 5. Statements about the company and its founder
 
 Mu Design Sàrl and Vivien Muller are named throughout, which is unavoidable in documentation of
 their product and legitimate. The rule this repository follows is that **only verifiable facts are
@@ -88,7 +89,7 @@ reported as what backers said, in aggregate and unattributed. Under Luxembourg a
 an allegation is publishing it, and there is no intermediary safe harbour for a repository's own
 text.
 
-## 5. Security research
+## 6. Security research
 
 The findings in [SECURITY.md](SECURITY.md) and [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) come from
 testing hardware the author owns, on the author's own network. That is lawful. The same techniques
@@ -105,7 +106,7 @@ Two consequences for what is written here:
   device tries to reach. Registering an abandoned vendor domain to collect credentials from units
   still calling home would be unlawful interception, whoever does it.
 
-## 6. Reporting a problem
+## 7. Reporting a problem
 
 If you own rights in anything published here, or believe something in this repository is inaccurate
 or unlawful, open an issue on the repository and it will be removed or corrected. Nothing here is
