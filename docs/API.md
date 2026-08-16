@@ -1,7 +1,7 @@
-# ULO HTTP API Reference
+﻿# ULO HTTP API Reference
 
 Everything known about the camera's API, verified against firmware **06.0601** unless stated
-otherwise. Endpoint availability differs between firmware versions — see [§6](#6-firmware-version-differences).
+otherwise. Endpoint availability differs between firmware versions — see [§7](#7-firmware-version-differences).
 
 Addresses below use `<ULO_IP>` as a placeholder.
 
@@ -229,7 +229,36 @@ This can change at any moment, so anything showing it should re-check regularly;
 pushes `state:config` over the event channel. Configuration writes are accepted by the API in either
 position — the orientation decides what the official app shows, not what the API allows.
 
-## 5. Device quirks
+## 5. Initial setup and provisioning
+
+When unconfigured or after a factory reset, ULO enters AP mode:
+
+| Property      | Value                                               |
+|---------------|-----------------------------------------------------|
+| WiFi SSID     | `ulo` (or `ulo_XXXX` with device suffix)            |
+| WiFi password | `MuDesign` (some units) or `Mu Design` (with space) |
+| Setup URL     | `http://setup.ulo.camera` or `http://192.168.43.1`  |
+| IP address    | `192.168.43.1` (AP mode gateway)                    |
+
+**Procedure:**
+
+1. Flip ULO upside-down — it creates its own WiFi AP
+2. Connect your device to ULO's WiFi network
+3. Open `http://192.168.43.1` in a browser
+4. Configure home WiFi SSID and password
+5. ULO reboots and joins your network — the setup page goes blank (normal)
+6. Find ULO's new IP on your router or via network scan
+
+### Factory reset
+
+Two methods:
+
+- **Forehead tap:** Hold a tap on ULO's forehead for **30 seconds** until circular arrows appear
+- **Menu:** Flip upside-down → navigate settings menu → factory reset
+
+A reset deletes all settings (WiFi, users, recordings) but does **not** downgrade firmware.
+
+## 6. Device quirks
 
 * An unintended reboot resets the recording mode to `standard`. The camera does this on its own,
   which is why re-applying the intended mode on a schedule is worthwhile.
@@ -263,7 +292,7 @@ position — the orientation decides what the official app shows, not what the A
 * **`POST /api/v1/snapshot` on 10.1308 emits an invalid HTTP header line** (`success`) and no file
   name — see [§2.2](#22-camera-and-recording).
 
-## 6. Firmware version differences
+## 7. Firmware version differences
 
 Endpoint availability is **not** the same across firmware versions. The rows below marked
 *measured* were tested directly against live `10.1308` and `06.0601` units; `08.0904` rows come from
@@ -293,7 +322,7 @@ its `timeZones`** — 43 KB, the whole table in one call |
 | `/api/v1/system/log` | **GET, POST** | **GET, POST** | **GET** only | The original controller switches on
 `>= 08.0000` |
 | `/api/v1/system/backups` | **404** in alert/spy mode (measured) | untested | **200** in any mode (measured) | 10.1308
-requires standard mode — see [§5](#5-device-quirks) |
+requires standard mode — see [§6](#6-device-quirks) |
 | `/api/v1/state` | untested | Returns `language` field | No `language` field | Extra field in 08.0904+ |
 | `/api/v1/snapshot` | **invalid `success` header line, `filename` is `"media/"`** | untested | valid response with the
 real `filename` and a `Location` header | Confirmed on live units; needs a tolerant parser on 10.1308 |
@@ -370,7 +399,7 @@ HTTP layer (e.g. `GET /api/v1/interface/fotaStatus`).
 If you have a unit on another firmware, the quickest way to enumerate it is an `OPTIONS` sweep: the
 camera answers every known path with its allowed methods, and unknown paths with `404`.
 
-## 7. Appendix — the original scraped endpoint list
+## 8. Appendix — the original scraped endpoint list
 
 Preserved from the project's first API notes, gathered by watching browser traffic against a
 `10.1308` unit. It is explicitly partial ("there are many, many more when using ULO upside down")
@@ -403,7 +432,7 @@ and is reproduced here as the historical record; §2 above is the verified refer
 | `rtsp://<ULO_IP>:8901/live`                  | RTSP          | Live stream, unsecured                                                                                                             |
 | `/api/v1/logout`                             | POST          | Logout, invalidating the token                                                                                                     |
 
-## 8. Related documents
+## 9. Related documents
 
 * [Application guide](APPLICATION.md) — the tool that implements all of the above
 * [Use cases](USE_CASES.md) — scheduled sync, presence-based mode switching, backups
