@@ -315,6 +315,38 @@ for small companies. They show totals rather than transactions, so they cannot t
 individual sum was spent on, and nothing here should be read as an audit or as a finding about
 anyone's conduct.
 
+#### What the 2020 annex adds
+
+The 2020 filing carries explanatory notes, and they answer questions the balance sheet alone cannot.
+
+**The debts, itemised (Note 10).** The €384,387 owed at the end of 2020 breaks down as:
+
+| | EUR |
+|---|---:|
+| Credit institutions | 336,209 |
+| Trade payables | 3,501 |
+| Tax and social security | 1,843 |
+| Other | 42,833 |
+| **Total** | **384,387** |
+
+So the debt was overwhelmingly **bank debt**, not unpaid suppliers or unpaid tax. The note records
+that an **InnovFin** overdraft line — the EU programme for innovative SMEs, backed by the European
+Investment Bank — was converted into a six-year bank loan running to 2026. That conversion is what
+moved €336,209 from short-term to long-term between the 2019 and 2020 balance sheets.
+
+**The loan was guaranteed 50% by the EIB, 25% by the Mutualité des PME, and 25% personally by
+Vivien Muller.** A quarter of €336,209 is roughly €84,000 of personal exposure carried by the
+manager into the bankruptcy that followed six months later.
+
+**The manager and the staff (Note 12).** Vivien Muller was the sole manager, appointed for an
+indefinite period. The note states explicitly that **no loan or credit was granted to him** by the
+company. Three people were salaried during the year.
+
+**What that means for the wage figures.** Salaries of €112,394 across three employees average
+€37,465, or about €3,122 a month. Luxembourg's 2020 social minimum wage was €2,141.99 a month
+unqualified and €2,570.39 qualified, so the average sits about a fifth above the qualified minimum.
+A three-person payroll of that size does not leave room for a large salary for anyone in it.
+
 #### MuGames, for comparison
 
 MuGames filed accounts too, and they describe something an order of magnitude smaller. The 2024
