@@ -63,8 +63,8 @@ for retail purchase through any known channel.
 ## 3. Company status — Mu Design is bankrupt and closed
 
 Mu Design Sàrl was **declared bankrupt by judgment of 16 June 2021**, on its own admission. The
-bankruptcy was **closed on 13 March 2023**, and the registered office was struck from the record
-the following day. The company no longer exists.
+bankruptcy was **closed by judgment of 6 March 2023**, filed on the 13th, and the registered office
+was struck from the record the following day. The company no longer exists.
 
 This is settled by the company's own filing history on the RCS, read at
 [lbr.lu](https://www.lbr.lu) under RCS number **B201812**. Earlier revisions of this document
@@ -76,7 +76,7 @@ inference was right about the outcome and years late on the date.
 | Filing | Date | Entry |
 |---|---|---|
 | `L230044773` | 14 March 2023 | Deletion of the head office by official act |
-| `L230043628` | 13 March 2023 | Court order — Bankruptcy: **closure of bankruptcy** |
+| `L230043628` | 13 March 2023 | Court order — Bankruptcy: **closure of bankruptcy** (judgment of 6 March 2023) |
 | `L210113495` | 17 June 2021 | Court order — Bankruptcy: **declaratory decision of bankruptcy** (judgment of 16 June 2021) |
 | `L210089479` | 20 May 2021 | Annual accounts, financial year 2020 |
 | `L190213879` | 21 October 2019 | Annual accounts, correction to the 2018 filing |
@@ -251,6 +251,70 @@ and a residential address serves no reader of a camera's documentation. Personal
 media are likewise not collected — they are not relevant to a camera, and assembling them would
 serve no purpose this repository has.
 
+### 3.5 What the accounts show
+
+Mu Design filed abbreviated annual accounts (*bilan abrégé*) throughout its life. They are public,
+and they answer the question backers have asked for a decade — where the money went — better than any
+amount of speculation. All figures in EUR.
+
+| Financial year | Total assets | Equity | Result for the year | Debts |
+|---|---:|---:|---:|---:|
+| 30 Nov 2015 – 31 Dec 2016 | 1,805,807 | −54,915 | −67,415 | 6,988 |
+| 2017 | 1,394,676 | −476,154 | −421,238 | 16,560 |
+| 2018 *(as corrected)* | 60,600 | −327,924 | +148,230 | 372,648 |
+| 2019 | 70,061 | −331,418 | −3,494 | 400,944 |
+| 2020 | 193,420 | −190,967 | +27,951 | 384,387 |
+
+Share capital was **€12,500** throughout. The 2020 balance sheet also carries **€112,500** of capital
+investment subsidies.
+
+Four things stand out.
+
+**The campaign money was gone by the end of 2018.** Total assets peaked at €1.81 million at the close
+of 2016 — the crowdfunding proceeds — held largely as current assets and capitalised development
+costs. A year later the balance sheet was €1.39 million; a year after that, €60,600. The intangible
+assets alone fell from €467,562 to €19,154 across 2018. The money was spent on developing and
+manufacturing the product, over roughly two years, and the accounts are consistent with the ULO
+having been genuinely built rather than the money having simply vanished.
+
+**Equity was negative from the very first balance sheet and never recovered.** −€54,915 at the end of
+2016, before a single unit shipped, and negative in every year after. The company was technically
+insolvent on paper for its entire existence.
+
+**The debts appear in 2018 and stay.** From €16,560 at the end of 2017 to €372,648 a year later, and
+around €380–400,000 from then on — roughly the size of the hole the bankruptcy would later close over.
+
+**It was still paying wages to the end.** Staff costs were €129,016 in 2019 and €131,731 in 2020, on
+gross results of €144,954 and €198,104. This was a going concern with employees, not a shell, in the
+year before it filed.
+
+Two filing details worth recording. The 2018 accounts were **filed twice**: the original
+(`L190112432`, 28 June 2019) and a correction (`L190213879`, 21 October 2019) which moved
+€31,804.62 out of debts and into the result, improving the year from +€116,425 to +€148,230. And
+**no standalone accounts were filed for 2019** — that year appears only as the comparative column in
+the 2020 filing.
+
+**Read them for what they are.** These are abbreviated accounts, unaudited, filed under the regime
+for small companies. They show totals rather than transactions, so they cannot tell you what any
+individual sum was spent on, and nothing here should be read as an audit or as a finding about
+anyone's conduct.
+
+#### MuGames, for comparison
+
+MuGames filed accounts too, and they describe something an order of magnitude smaller. The 2024
+financial year, filed 2 July 2025 (`L250211770`):
+
+| | 2024 | 2023 |
+|---|---:|---:|
+| Total assets | 5,279 | 6,905 |
+| Equity | −1,629 | +404 |
+| Result for the year | −2,033 | −2,918 |
+| Debts | 6,908 | 6,501 |
+
+Share capital was **€100** — the *Sàrl-S* minimum. This was a small venture running at a few thousand
+euros a year, which is consistent with the sole shareholder being able to take over its remaining
+liabilities personally and close the liquidation in a single act (§3.4).
+
 ## 4. Kickstarter campaign and backer outrage
 
 ### 4.1 Campaign facts
@@ -403,7 +467,9 @@ closed in 2023. Nothing in the public record indicates it was raised, and nothin
 read as suggesting it should have been.
 
 The honest summary for a backer who never received a unit: **the money is gone, the company is
-gone, and there is no longer a process to join.** What remains is the device you may already own,
+gone, and there is no longer a process to join.** The accounts in §3.5 show where it went — spent on
+developing and manufacturing the product across 2017 and 2018, with the balance sheet down to
+€60,600 by the end of that period. What remains is the device you may already own,
 which is what the rest of this repository is for.
 
 ---
