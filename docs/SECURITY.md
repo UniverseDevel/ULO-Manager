@@ -1,4 +1,4 @@
-﻿# ULO Security Assessment
+# ULO Security Assessment
 
 Consolidated security assessment of the ULO camera, covering both sides of the device:
 
@@ -869,7 +869,7 @@ The device runs Android ≥4.2 on a Qualcomm APQ SoC (§2) with a platform image
 exploits require either a local app running on the device (unlikely on a camera) or a pivot from
 the web server. If an attacker achieves code execution on the web server (via a Mongoose/Civetweb
 CVE), the entire Android stack is wide open to privilege escalation because the Android version is
-unpatched and unpatchable, the vendor is effectively dormant, and the kernel-level exploits above
+unpatched and unpatchable, the vendor no longer exists, and the kernel-level exploits above
 grant full root access.
 
 ### 9.3 TLS implementation — TLS 1.0/1.1, self-signed shared certificate

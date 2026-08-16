@@ -1,4 +1,4 @@
-﻿# ULO Kickstarter Campaign — Technical Summary
+# ULO Kickstarter Campaign — Technical Summary
 
 > Compiled from 41 Kickstarter updates, 6,880 backer comments (the full thread as scraped 2026-08-14), campaign description, FAQ, and reward tiers.
 > Focus: Technical details useful for understanding, maintaining, and hacking the ULO device.
@@ -18,7 +18,7 @@
 | **Promised Delivery**     | November 2016                                                 |
 | **Actual First Shipment** | January 5, 2018 (US backers)                                  |
 | **Last Update**           | May 27, 2019 (#41)                                            |
-| **Company Status**        | Mu Design filed for bankruptcy (announced on Indiegogo ~2020) |
+| **Company Status**        | Bankrupt — declared 16 June 2021 on the company's own admission, closed 13 March 2023 |
 
 ### What Was Promised
 
@@ -199,7 +199,7 @@ not within the EU as originally implied.
 | **Firmware bricking**          | Skipping intermediate firmware versions causes boot loop (spinning arrow). Version 08.0904 is a required intermediate step                                               |
 | **Wi-Fi setup failures**       | Many users unable to connect; early firmware required manual SSID entry (typo-prone); app crashes during Wi-Fi configuration                                             |
 | **App crashes**                | Android app crashes during first-time configuration; iOS app also unstable                                                                                               |
-| **Cloud access offline**       | Cloud servers permanently down after Mu Design bankruptcy                                                                                                                |
+| **Cloud access offline**       | Cloud servers permanently down after the 2021 bankruptcy                                                                                                                |
 | **Remote access broken**       | UPnP-based "access from everywhere" reportedly unreliable; cloud alternative now dead                                                                                    |
 | **Constant logout**            | App doesn't maintain login session despite "remember me" checkbox                                                                                                        |
 | **No night vision**            | Despite IR capability, practical night vision mode not well-implemented                                                                                                  |

@@ -60,59 +60,107 @@ for retail purchase through any known channel.
 
 ---
 
-## 3. Company status — is Mu Design still operating?
+## 3. Company status — Mu Design is bankrupt and closed
 
-### 3.1 What is confirmed
+Mu Design Sàrl was **declared bankrupt by judgment of 16 June 2021**, on its own admission. The
+bankruptcy was **closed on 13 March 2023**, and the registered office was struck from the record
+the following day. The company no longer exists.
 
-* The company's RCS registration (**B201812**) has not been publicly marked as dissolved or
-  liquidated in any source found. PitchBook and aggregator sites still list it as a "privately held"
-  company.
-* The domain `mu-design.lu` is still registered. At least one page appeared to show a "for sale"
-  indicator on the domain, which can signal a change in business status but is not conclusive.
-  (*Noted in search results; not directly confirmed.*)
-* PitchBook records a **cancelled crowdfunding round** (2016) but no other funding events.
-* A Paperjam article (Luxembourg business press) mentioned Mu Design representing Luxembourg at CES
-  and preparing a second-generation ULO. The article's date and whether this ever materialised could
-  not be confirmed from the outside.
-  ([Paperjam](https://paperjam.lu/article/news-mu-design-la-videosurveillance-aux-yeux-malins))
+This is settled by the company's own filing history on the RCS, read at
+[lbr.lu](https://www.lbr.lu) under RCS number **B201812**. Earlier revisions of this document
+recorded the status as unverified, and inferred dormancy from product and server evidence. That
+inference was right about the outcome and years late on the date.
 
-### 3.2 What is not confirmed
+### 3.1 The filing history
 
-* **Company status could not be verified programmatically.** The Luxembourg Business Registers
-  portal ([lbr.lu](https://www.lbr.lu)) uses Cloudflare Turnstile captcha on all company searches,
-  blocking automated access. The company's status (active, dissolved, in liquidation, bankrupt, or
-  struck off) **must be checked manually** by visiting the portal and searching for RCS number
-  **B201812**. The REGINSOL (Register of Insolvency) section on the same portal publishes monthly
-  CSV/PDF lists of all bankruptcy declarations, judicial liquidations and administrative
-  dissolutions.
-* **No IP sale or design auction was found.** No listing on Metis Partners, EUIPO transfer records
-  or any IP marketplace was discovered for Mu Design assets. If such a sale occurred, it was not
-  publicly advertised through the usual channels.
-* **No "FTE" or design-sale page was found.** The user's recollection of a page where Mu Design
-  attempted to sell designs could not be corroborated. It is possible this was a temporary listing,
-  a broker page, or a misremembered context.
+| Filing | Date | Entry |
+|---|---|---|
+| `L230044773` | 14 March 2023 | Deletion of the head office by official act |
+| `L230043628` | 13 March 2023 | Court order — Bankruptcy: **closure of bankruptcy** |
+| `L210113495` | 17 June 2021 | Court order — Bankruptcy: **declaratory decision of bankruptcy** (judgment of 16 June 2021) |
+| `L210089479` | 20 May 2021 | Annual accounts, financial year 2020 |
+| `L190213879` | 21 October 2019 | Annual accounts, correction to the 2018 filing |
+| `L190112432` | 1 July 2019 | Annual accounts, financial year 2018 |
+| `L180246752` | 18 December 2018 | Annual accounts, financial year 2017 |
+| `L180246599` | 18 December 2018 | Annual accounts, 30 November 2015 to 31 December 2016 |
+| `L170190807` | 19 September 2017 | Modification — associates |
+| `L170190313` | 19 September 2017 | Modification — managers |
+| `L160091975` | 31 May 2016 | Coordinated articles of association |
+| `L160091950` | 30 May 2016 | Modification — registered office |
+| `L160039575` | 4 March 2016 | Modification — associates |
+| `L160034446` | 25 February 2016 | Modification — associates |
+| `L150216852` | 1 December 2015 | Registration |
 
-**How to verify manually:**
+#### The bankruptcy judgment
+
+The court order registered under `L210113495` gives the detail:
+
+| | |
+|---|---|
+| Procedure | Faillite (bankruptcy), reference **F-2021/00574-L** |
+| Opened | **16 June 2021**, filed with the RCS on 17 June 2021 |
+| Court | Tribunal d'arrondissement de Luxembourg, Chambre 15 |
+| Case / judgment | TAL-2021-05291 / 2021TALCH15/00957 |
+| Type | Declaratory decision of bankruptcy |
+| How it began | **Aveu** — the company declared its own bankruptcy |
+| Scope | Main insolvency proceeding under the EU Insolvency Regulation |
+| Registered status recorded | *en faillite* |
+| Curator | Me Laurent Bizzotto, Luxembourg |
+
+Two points matter for anyone reading this as a backer. The proceeding was opened on the company's
+own admission rather than on a creditor's petition — *aveu* is the director filing the company's
+books, which Luxembourg law requires once payments stop. And a curator was appointed, which is who
+creditors' claims go to; but the bankruptcy **closed in March 2023**, so that mandate has ended and
+there is no longer a claims process to join. See §6.2.
+
+Two further details are worth reading off the filing list. The company filed accounts for financial year 2020 on
+**20 May 2021**, four weeks before the bankruptcy judgment — so it was still meeting its filing
+obligations to the end. And the last accounts on file cover 2020, so there is no public financial
+picture of the final period.
+
+**What the closure does and does not say.** A Luxembourg bankruptcy is closed either after the
+estate is distributed or for insufficiency of assets, and the register entry does not say which.
+This document does not guess. What the closure does establish is that proceedings are over and the
+legal person is gone.
+
+### 3.2 What this settles, and what is still open
+
+Settled:
+
+* The company is bankrupt and closed. There is no entity to contact, sue, or ask for firmware.
+* There is a court record, so the earlier statement in §6 that no court judgments were found was
+  wrong — it has been corrected.
+
+Still open, and minor by comparison:
+
+* **No IP sale or design auction was found.** Nothing on Metis Partners, in EUIPO transfer records
+  or on any IP marketplace. Where the designs, trade marks and firmware rights went in the
+  bankruptcy is not public. A curator would have realised whatever had value; nothing indicates
+  what that was.
+* **No “FTE” or design-sale page was found.** A recollection of a page where Mu Design offered
+  designs for sale could not be corroborated.
+
+**How to read the file yourself:**
 
 1. Go to [lbr.lu](https://www.lbr.lu)
-2. Click **Consult** → **FILE OF A COMPANY OR ASSOCIATION**
-3. Enter **B201812** in the RCS number field
-4. The result will show the company's current legal status (active / dissolved / in liquidation /
-   bankrupt / struck off)
-5. The same page is the bankruptcy check. Luxembourg has **no separate insolvency register**:
-   a court declaring a bankruptcy notifies the business register, which records it on the
-   company's own file, so the RCS entry shows *en faillite* if one exists. This is how
-   [MuGames was established as struck off rather than bankrupt](#34-the-founders-later-company)
-6. Two secondary routes, both weaker. The monthly lists of bankruptcy judgments are published in
-   **Mémorial B** and are free to consult on [Legilux](https://legilux.public.lu); its search is
-   a client-side application, so it has to be driven by hand. The Luxembourg Bar formerly ran a
-   *Faillites* search; [barreau.lu/faillites](https://www.barreau.lu/faillites/) now simply
-   forwards to the business register
+2. **Consult** → **FILE OF A COMPANY OR ASSOCIATION**
+3. Enter **B201812**
+4. The file shows the legal status and the full list of filings above
 
-### 3.3 Practical indicators of inactivity
+The portal sits behind a captcha and an authentication gateway, so this cannot be automated; the
+endpoints that the EU e-Justice portal still documents for programmatic access now return 404.
 
-Despite the lack of a formal dissolution filing, the company shows strong signs of being effectively
-dormant:
+Luxembourg has **no separate insolvency register**. A court declaring a bankruptcy notifies the
+business register, which records it on the company's own file — which is exactly how the two
+entries above appear, and why the company file is the bankruptcy check. Secondary routes exist and
+are weaker: the monthly lists of bankruptcy judgments are published in **Mémorial B**, free to
+consult on [Legilux](https://legilux.public.lu) but behind a client-side search, and the Luxembourg
+Bar's former *Faillites* search at [barreau.lu](https://www.barreau.lu/faillites/) now simply
+forwards to the business register.
+
+### 3.3 What the outside evidence had shown
+
+Before the register was read, the case for dormancy rested on this, and it holds up:
 
 * **All four products are discontinued** with no retail availability.
 * **No firmware or software updates** have been released for ULO in years.
@@ -122,8 +170,8 @@ dormant:
 * **Customer communication has effectively ceased** (see §4).
 * **The Kickstarter campaign has had 41 updates** total, with the cadence slowing to near-zero.
 
-> **Assessment:** Mu Design appears to be dormant or defunct in practice, even if not formally
-> dissolved. The Luxembourg RCS should be checked directly for a definitive answer.
+> **Assessment.** Every one of these pointed the right way. The register later confirmed it: the
+> company was already bankrupt when most of this evidence was gathered, and closed in 2023.
 
 ---
 
@@ -273,45 +321,66 @@ work with the ULO camera.
 
 ## 6. Legal actions and lawsuits
 
-As of 2026-08-14, **no lawsuits, court judgments or enforcement actions** were found against Vivien
-Muller or Mu Design Sàrl in any publicly accessible source:
+There is one court proceeding on record, and it is the one that ended the company: the bankruptcy
+declared on **16 June 2021** and closed on **13 March 2023** (§3.1). Earlier revisions of this
+document said no court judgments had been found. That was wrong — it reflected searches of press
+and case-law databases rather than the company's own RCS file, which is where a Luxembourg
+bankruptcy is recorded.
 
-| Jurisdiction / Database                          | Result                                                |
-|--------------------------------------------------|-------------------------------------------------------|
-| Luxembourg courts (pseudonymised keyword search) | No judgments found mentioning "Mu Design" (2023–2026) |
-| Luxembourg insolvency                            | Not searchable as a register — see §3.2              |
-| US federal courts (CourtListener / PACER)        | No cases found                                        |
-| FTC enforcement actions                          | None targeting ULO or Mu Design                       |
-| General legal news / press                       | No reports of litigation                              |
+Beyond that proceeding, no separate lawsuit, class action or enforcement action against Mu Design
+or its director was found:
 
-### 6.1 Backer discussions about legal action
+| Jurisdiction / Database                          | Result                                                        |
+|--------------------------------------------------|-----------------------------------------------------------------|
+| Luxembourg RCS (company file B201812)            | **Bankruptcy declared 2021, closed 2023** — see §3.1            |
+| Luxembourg courts (pseudonymised keyword search) | No other judgments found mentioning “Mu Design”               |
+| US federal courts (CourtListener / PACER)        | No cases found                                                  |
+| FTC enforcement actions                          | None targeting ULO or Mu Design                                 |
+| General legal news / press                       | No reports of litigation                                        |
 
-Kickstarter backers have **discussed** pursuing legal action in the campaign's comment section and
-on Reddit, but no organised class action or group complaint has materialised. Reasons include:
+### 6.1 Why no group action materialised
 
-* **Kickstarter's terms** frame backing as a pledge, not a purchase, weakening breach-of-contract
-  claims.
-* **Cross-border complexity.** Mu Design is a Luxembourg Sàrl; backers are spread across 96
-  countries. Individual pledge amounts (~€100–200) make cross-border litigation uneconomical.
-* **Partial delivery.** The company shipped *some* units and posted 41 updates, which complicates
-  a fraud argument compared to a project that delivered nothing.
-* **Kickstarter's limited role.** The platform cannot enforce delivery or refunds; it can only
-  suspend the creator's ability to launch future campaigns.
+Backers discussed legal action in the campaign comments and on Reddit, but nothing organised
+formed. The reasons given at the time still explain it:
 
-### 6.2 Available recourse for affected backers
+* **Kickstarter's terms** frame backing as a pledge rather than a purchase, which weakens a
+  breach-of-contract claim.
+* **Cross-border economics.** Backers are spread across 96 countries and individual pledges were
+  around €100–200, so litigation in Luxembourg was never worth one person's while.
+* **Partial delivery.** Some units shipped and 41 updates were posted, which makes the picture more
+  complicated than a project that delivered nothing.
+* **Kickstarter's limited role.** The platform cannot compel delivery or refunds.
 
-| Route                                      | Applicability                                                                                          |
-|--------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| **EU Small Claims Procedure**              | Claims up to €5,000; cross-border within the EU. Creator is in Luxembourg, so EU backers can use this. |
-| **European Consumer Centres (ECC-Net)**    | Free cross-border dispute resolution for EU consumers.                                                 |
-| **National consumer protection authority** | File a complaint in your home country.                                                                 |
-| **FTC (US backers)**                       | Report at [ReportFraud.ftc.gov](https://reportfraud.ftc.gov). Helps build enforcement patterns.        |
-| **FBI IC3 (US backers)**                   | Internet crime complaints at [ic3.gov](https://www.ic3.gov) for significant losses.                    |
-| **Luxembourg Justice Portal**              | Direct inquiry via `credoc@justice.etat.lu` for case-specific searches.                                |
+Events overtook the discussion. By the time most backers concluded nothing was coming, the company
+was already in bankruptcy, and any claim belonged in that proceeding rather than in a new one.
 
-> **Note on pseudonymisation.** Luxembourg court judgments are published with party names removed.
-> A case *could* exist under anonymised identifiers without appearing in keyword searches. A formal
-> inquiry to the Luxembourg legal documentation service would be needed to rule this out completely.
+### 6.2 What recourse remains — realistically, none
+
+This section previously listed small-claims and consumer-dispute routes. Those are no longer
+applicable, and following them would waste your time: **you cannot sue a company that has ceased to
+exist.**
+
+| Route | Status |
+|---|---|
+| Claim in the bankruptcy | **Closed.** Claims went to the curator during the proceeding; it ended in March 2023 |
+| EU Small Claims Procedure | **Not available** — there is no defendant |
+| European Consumer Centres (ECC-Net) | **Not available** for the same reason |
+| National consumer authority | Will record a complaint; cannot recover money from a closed estate |
+| FTC / FBI IC3 (US backers) | Reporting only. Useful as statistics, not as recovery |
+| Kickstarter | Cannot compel delivery or refunds, and never could |
+
+A bankruptcy closes either after the estate is distributed or for insufficiency of assets. The
+register does not say which applied here, and this document does not guess — but in either case
+there is nothing left to claim against.
+
+Personal liability of a director is a separate question in Luxembourg law, and it is one for the
+curator to raise inside the proceeding, on evidence, while the proceeding is open. That window
+closed in 2023. Nothing in the public record indicates it was raised, and nothing here should be
+read as suggesting it should have been.
+
+The honest summary for a backer who never received a unit: **the money is gone, the company is
+gone, and there is no longer a process to join.** What remains is the device you may already own,
+which is what the rest of this repository is for.
 
 ---
 
