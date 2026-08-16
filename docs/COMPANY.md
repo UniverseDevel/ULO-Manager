@@ -33,8 +33,8 @@ Vivien Muller is a French industrial designer who gained attention with **Electr
 bonsai-shaped solar charger that won several design awards. He went on to create ULO, Bearbot, and
 LUA through Mu Design. His portfolio site ([vivien-muller.fr](https://vivien-muller.fr)) is still
 online but carries design work rather than products. He later registered a second Luxembourg
-company, MuGames Sàrl-S, which published a mobile game and was struck off the register in June
-2026 — see §3.4.
+company, MuGames Sàrl-S, which published a mobile game and was voluntarily wound up in June 2026
+— see §3.4.
 
 ### 1.3 ODM / hardware partner
 
@@ -178,7 +178,7 @@ Before the register was read, the case for dormancy rested on this, and it holds
 ### 3.4 The founder's later company
 
 Mu Design going quiet did not mean its founder stopped trading. A second Luxembourg company was
-registered, ran, and has since been struck off:
+registered, ran, and has since been wound up:
 
 | | |
 |---|---|
@@ -187,45 +187,69 @@ registered, ran, and has since been struck off:
 | Legal form | Simplified limited liability company (*Sàrl-S*) |
 | Registered office | Esch-sur-Alzette — the same town as Mu Design |
 | Registered | **14 August 2020** |
-| Struck off | **30 June 2026** |
+| Dissolved and liquidated | **26 June 2026**, filed 30 June 2026 (deposit `L260168745`) |
 | Corporate purpose | “the design, creation, realization, production and marketing of games, card games, playful supports and all other recreational processes” |
-| Managing director | Vivien Muller |
+| Sole shareholder and manager | Vivien Muller |
 | Product | *Ommatidia*, a four-player colour-mixing strategy game for mobile ([mugames.net](https://www.mugames.net/)), formerly on the iOS App Store |
 
-Source: the Luxembourg Business Registers entry for RCS **B246260**, read manually at
-[lbr.lu](https://www.lbr.lu) — **Consult** → **FILE OF A COMPANY OR ASSOCIATION** — which is the
-only way to get a legal status, since the portal is behind a captcha. The company is also indexed by
-[North Data](https://www.northdata.com/MuGames%20S%C3%A0rl-S,%20Esch-Sur-Alzette/B246260), though
-aggregators lagged the strike-off, which is why the register itself is the source cited here.
+#### How it ended
 
-The observable trail matches the register. The game's privacy policy is dated **31 January 2024**,
-which is the most recent dated artefact found anywhere; no release, update or announcement after
-early 2024 was found, and no Android build. **The app is no longer on the App Store**: Apple's
-lookup endpoint returns nothing for its identifier in any storefront tried, a search for
-*Ommatidia* returns no such title, and a search for the publisher returns no MuGames application
-(checked 16 August 2026, against a control lookup that succeeded). The marketing site is still
-served, which costs a domain renewal and nothing else. A product that stops in early 2024, a
-delisted app and a company struck off in mid-2026 are the same story told three times.
+Not a bankruptcy, and not an administrative strike-off. The company was closed **voluntarily and
+solvently**, by a written decision of its sole shareholder dated 26 June 2026 and filed with the
+register four days later. In a single act he dissolved the company, appointed himself liquidator,
+and closed the liquidation.
 
-**What “struck off” does and does not mean.** It is a register status: the company has been removed
-from the RCS and no longer exists as a legal person. It is **not** a finding of insolvency or
-wrongdoing. Luxembourg can dissolve dormant or non-compliant companies administratively, without
-liquidation, and a strike-off can equally follow an ordinary voluntary wind-up. Nothing in the
-register entry distinguishes those, and this document does not guess.
+The declarations in that act are what make it a solvent wind-up rather than an insolvency:
 
-**Why this is here, and what it is not.** It answers the only question this section asks: whether
-anyone is still in a position to revive ULO. The answer is that the founder did keep trading after
-Mu Design went quiet, that the work was games rather than connected hardware, and that this second
-company is now struck off too. No corporate vehicle remains through which ULO could be supported.
+* All liabilities were declared settled or provisioned.
+* For any liability not yet known, the shareholder assumed an **irrevocable personal obligation**
+  to pay it — which is the standard undertaking that lets a Luxembourg single-member liquidation
+  close immediately.
+* He took over the company's remaining assets and its liabilities personally, and approved the
+  closing balance sheet.
+* The appointment of a *commissaire à la liquidation* was formally waived, which is ordinary in a
+  solvent single-member wind-up.
+* Full discharge was given to the manager.
+* The company's books are to be kept for at least five years.
+
+This is the orderly opposite of what happened to Mu Design, which ended in bankruptcy on its own
+admission (§3.1). Both facts come from the same register, and neither says anything about the
+other.
+
+#### The evidence from outside
+
+The observable trail matches. The game's privacy policy is dated **31 January 2024**, which is the
+most recent dated artefact found anywhere; no release, update or announcement after early 2024 was
+found, and no Android build. **The app is no longer on the App Store**: Apple's lookup endpoint
+returns nothing for its identifier in any storefront tried, a search for *Ommatidia* returns no such
+title, and a search for the publisher returns no MuGames application (checked 16 August 2026,
+against a control lookup that succeeded). The marketing site is still served, which costs a domain
+renewal and nothing else. A product that stops in early 2024, a delisted app and a company wound up
+in mid-2026 are the same story told three times.
+
+Source: the Luxembourg Business Registers file for RCS **B246260**, read at
+[lbr.lu](https://www.lbr.lu) — **Consult** → **FILE OF A COMPANY OR ASSOCIATION** — including the
+liquidation act filed under `L260168745`. The company is also indexed by
+[North Data](https://www.northdata.com/MuGames%20S%C3%A0rl-S,%20Esch-Sur-Alzette/B246260), but the
+aggregators lagged the closure, which is why the register is the source cited here.
+
+#### Why this is here, and what it is not
+
+It answers the only question this section asks: whether anyone is still in a position to revive ULO.
+The founder did keep trading after Mu Design went quiet, the work was games rather than connected
+hardware, and that company has now been wound up as well. No corporate vehicle remains through which
+ULO could be supported.
 
 MuGames was a **separate legal entity**. Mu Design's obligations to its backers were Mu Design's,
-and they never transferred to another company merely because the two shared a director and a town.
-A person starting a later business is not evidence of anything about an earlier one, and nothing
-here should be read as suggesting otherwise. This entry records company registrations, which are
-public commercial records. The registered street address is omitted — a *Sàrl-S* is often run from
-home, and the town is all the comparison needs. Personal accounts and social media are likewise not
-collected: they are not relevant to a camera, and assembling them would serve no purpose this
-repository has.
+they were dealt with in Mu Design's bankruptcy, and they never transferred to another company merely
+because the two shared a director and a town. A person starting a later business is not evidence of
+anything about an earlier one, and nothing here should be read as suggesting otherwise.
+
+This entry records company registrations, which are public commercial records. The registered
+address is deliberately omitted: the liquidation act shows it is also the sole shareholder's home,
+and a residential address serves no reader of a camera's documentation. Personal accounts and social
+media are likewise not collected — they are not relevant to a camera, and assembling them would
+serve no purpose this repository has.
 
 ## 4. Kickstarter campaign and backer outrage
 
