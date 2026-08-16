@@ -99,8 +99,15 @@ for retail purchase through any known channel.
 3. Enter **B201812** in the RCS number field
 4. The result will show the company's current legal status (active / dissolved / in liquidation /
    bankrupt / struck off)
-5. Alternatively, click **Consult** → **REGINSOL - REGISTER OF INSOLVENCY** and download the
-   monthly "ALL" CSV statements to search for "Mu Design" across all insolvency declarations
+5. The same page is the bankruptcy check. Luxembourg has **no separate insolvency register**:
+   a court declaring a bankruptcy notifies the business register, which records it on the
+   company's own file, so the RCS entry shows *en faillite* if one exists. This is how
+   [MuGames was established as struck off rather than bankrupt](#34-the-founders-later-company)
+6. Two secondary routes, both weaker. The monthly lists of bankruptcy judgments are published in
+   **Mémorial B** and are free to consult on [Legilux](https://legilux.public.lu); its search is
+   a client-side application, so it has to be driven by hand. The Luxembourg Bar formerly ran a
+   *Faillites* search; [barreau.lu/faillites](https://www.barreau.lu/faillites/) now simply
+   forwards to the business register
 
 ### 3.3 Practical indicators of inactivity
 
@@ -135,7 +142,7 @@ registered, ran, and has since been struck off:
 | Struck off | **30 June 2026** |
 | Corporate purpose | “the design, creation, realization, production and marketing of games, card games, playful supports and all other recreational processes” |
 | Managing director | Vivien Muller |
-| Product | *Ommatidia*, a four-player colour-mixing strategy game for mobile ([mugames.net](https://www.mugames.net/)), listed on the iOS App Store |
+| Product | *Ommatidia*, a four-player colour-mixing strategy game for mobile ([mugames.net](https://www.mugames.net/)), formerly on the iOS App Store |
 
 Source: the Luxembourg Business Registers entry for RCS **B246260**, read manually at
 [lbr.lu](https://www.lbr.lu) — **Consult** → **FILE OF A COMPANY OR ASSOCIATION** — which is the
@@ -145,8 +152,12 @@ aggregators lagged the strike-off, which is why the register itself is the sourc
 
 The observable trail matches the register. The game's privacy policy is dated **31 January 2024**,
 which is the most recent dated artefact found anywhere; no release, update or announcement after
-early 2024 was found, and no Android build. A site that stops being updated in early 2024 and a
-company struck off in mid-2026 are the same story told twice.
+early 2024 was found, and no Android build. **The app is no longer on the App Store**: Apple's
+lookup endpoint returns nothing for its identifier in any storefront tried, a search for
+*Ommatidia* returns no such title, and a search for the publisher returns no MuGames application
+(checked 16 August 2026, against a control lookup that succeeded). The marketing site is still
+served, which costs a domain renewal and nothing else. A product that stops in early 2024, a
+delisted app and a company struck off in mid-2026 are the same story told three times.
 
 **What “struck off” does and does not mean.** It is a register status: the company has been removed
 from the RCS and no longer exists as a legal person. It is **not** a finding of insolvency or
@@ -268,7 +279,7 @@ Muller or Mu Design Sàrl in any publicly accessible source:
 | Jurisdiction / Database                          | Result                                                |
 |--------------------------------------------------|-------------------------------------------------------|
 | Luxembourg courts (pseudonymised keyword search) | No judgments found mentioning "Mu Design" (2023–2026) |
-| European Insolvency Register                     | No insolvency proceedings found                       |
+| Luxembourg insolvency                            | Not searchable as a register — see §3.2              |
 | US federal courts (CourtListener / PACER)        | No cases found                                        |
 | FTC enforcement actions                          | None targeting ULO or Mu Design                       |
 | General legal news / press                       | No reports of litigation                              |
