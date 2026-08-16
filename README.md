@@ -76,6 +76,14 @@ came — it still happens. The workaround was to use the API to set the correct 
 a phone was reachable on the network, driven by the Windows scheduler. That workflow is
 [still supported](docs/USE_CASES.md#5-keep-the-camera-in-the-right-mode).
 
+## Licence
+
+GPL-3.0 — see [LICENSE](LICENSE).
+
+That grant covers this project's own work: the tooling under `src/`, the scripts under
+`forensics/`, and the documentation. It does not extend to third-party material, which this
+project has no rights in and does not redistribute. [NOTICE](NOTICE) sets out the boundary and
+[legal notes](docs/LEGAL.md) explains what is excluded and how to obtain it from your own device.
 ## Disclaimer
 
 This is not a professional product and there is no warranty that it will work. Use it entirely at

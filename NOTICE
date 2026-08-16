@@ -1,0 +1,52 @@
+ULO Manager
+Copyright (C) 2019-2026 UniverseDevel
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version. The full text is in LICENSE.
+
+
+SCOPE OF THAT GRANT
+-------------------
+
+The GPL-3.0 grant in LICENSE applies to the work authored by this project:
+
+  * src/            the ULO Manager library, command line tool and application
+  * forensics/      the probing and capture scripts
+  * docs/           the written documentation
+  * build.ps1, and the repository's own configuration
+
+It does NOT apply, and cannot apply, to third-party material. This project
+holds no rights in the following and grants no licence over it:
+
+  * Mu Design Sarl - the ULO camera's firmware, its web application and the
+    source reconstructed from the shipped source map, the Android application,
+    the user manual, and product photography. Facts about these are documented
+    here; the material itself is not redistributed. See docs/LEGAL.md.
+
+  * Qualcomm Technologies and Arrow Electronics - APQ8016 and DragonBoard 410c
+    platform documentation. Referenced, not redistributed.
+
+  * The FCC exhibits under docs/fcc/ - US public records, published by the FCC
+    under FCC ID 2ANJS-ULO1. Freely redistributable as public records; the
+    copyright in individual exhibits remains with their authors.
+
+  * The Linux device tree sources under docs/fcc/hardware_docs/ (*.dts,
+    *.dtsi) - GPL-2.0-only, (C) their respective authors, from the Linux
+    kernel.
+
+  * Any dependency package retained under packages/ - each carries its own
+    licence inside its .nupkg and is redistributed unmodified under it.
+    Newtonsoft.Json is MIT; AForge is LGPL-3.0.
+
+Trademarks named here - ULO, Mu Design, Qualcomm, Snapdragon, DragonBoard,
+VLC - belong to their respective owners and are used only to identify the
+products this project works with or refers to. Their use implies no
+affiliation with or endorsement by those owners.
+
+If you redistribute this repository, the GPL-3.0 obligations you take on cover
+this project's own work. Nothing in LICENSE should be read as permission from
+this project to copy, publish or redistribute the third-party material above.
+Any earlier revision of this repository that appeared to offer such permission
+did so in error, and no such permission was ever the project's to give.

@@ -1,9 +1,14 @@
 ﻿# Legal notes
 
-This repository documents the ULO camera by Mu Design Sàrl. It is not affiliated with, endorsed by
+This repository documents the ULO camera by Mu Design Sarl. It is not affiliated with, endorsed by
 or licensed from Mu Design. Everything published here is either original work under the project's
 [GPL-3.0 licence](../LICENSE), a public record, or a factual description of material that is **not**
 redistributed.
+
+The licence covers this project's own work and nothing else. [NOTICE](../NOTICE) draws that line
+explicitly: which files the GPL-3.0 grant applies to, and which third parties hold the rights this
+project cannot and does not grant. A licence file sitting at the root of a repository reads as an
+offer over everything beneath it, so the boundary is stated rather than assumed.
 
 ## 1. What this repository deliberately does not contain
 
