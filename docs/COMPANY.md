@@ -32,8 +32,9 @@ crowdfunding.
 Vivien Muller is a French industrial designer who gained attention with **Electree**, a
 bonsai-shaped solar charger that won several design awards. He went on to create ULO, Bearbot, and
 LUA through Mu Design. His portfolio site ([vivien-muller.fr](https://vivien-muller.fr)) is still
-online but carries design work rather than products. He has since registered a second Luxembourg
-company, MuGames Sàrl-S, which publishes games — see §3.4.
+online but carries design work rather than products. He later registered a second Luxembourg
+company, MuGames Sàrl-S, which published a mobile game and was struck off the register in June
+2026 — see §3.4.
 
 ### 1.3 ODM / hardware partner
 
@@ -121,50 +122,50 @@ dormant:
 
 ### 3.4 The founder's later company
 
-Mu Design being dormant does not mean its founder stopped trading. A second Luxembourg company
-exists:
+Mu Design going quiet did not mean its founder stopped trading. A second Luxembourg company was
+registered, ran, and has since been struck off:
 
 | | |
 |---|---|
 | Name | **MuGames Sàrl-S** |
 | RCS number | **B246260** |
-| Registered office | Esch-sur-Alzette — the same city as Mu Design |
+| Legal form | Simplified limited liability company (*Sàrl-S*) |
+| Registered office | Esch-sur-Alzette — the same town as Mu Design |
+| Registered | **14 August 2020** |
+| Struck off | **30 June 2026** |
 | Corporate purpose | “the design, creation, realization, production and marketing of games, card games, playful supports and all other recreational processes” |
 | Managing director | Vivien Muller |
-| Product | *Ommatidia*, a four-player colour-mixing strategy game for mobile ([mugames.net](https://www.mugames.net/)), whose privacy policy is dated 31 January 2024 |
+| Product | *Ommatidia*, a four-player colour-mixing strategy game for mobile ([mugames.net](https://www.mugames.net/)), listed on the iOS App Store |
 
-**Is it still active?** Not established from the outside, and for the same reason as Mu Design:
-[lbr.lu](https://www.lbr.lu) is the authoritative source for legal status and it is behind a
-captcha, so it has to be checked by hand — **Consult** → **FILE OF A COMPANY OR ASSOCIATION**,
-RCS number **B246260**. The company is indexed by
-[North Data](https://www.northdata.com/MuGames%20S%C3%A0rl-S,%20Esch-Sur-Alzette/B246260), which
-carries the registration and the corporate purpose but no dissolution entry; an absent entry is not
-the same as a confirmed active status.
+Source: the Luxembourg Business Registers entry for RCS **B246260**, read manually at
+[lbr.lu](https://www.lbr.lu) — **Consult** → **FILE OF A COMPANY OR ASSOCIATION** — which is the
+only way to get a legal status, since the portal is behind a captcha. The company is also indexed by
+[North Data](https://www.northdata.com/MuGames%20S%C3%A0rl-S,%20Esch-Sur-Alzette/B246260), though
+aggregators lagged the strike-off, which is why the register itself is the source cited here.
 
-What can be observed is thin and stops early:
+The observable trail matches the register. The game's privacy policy is dated **31 January 2024**,
+which is the most recent dated artefact found anywhere; no release, update or announcement after
+early 2024 was found, and no Android build. A site that stops being updated in early 2024 and a
+company struck off in mid-2026 are the same story told twice.
 
-* The site is up, and *Ommatidia* is listed on the iOS App Store (app id `6476962833`).
-* The game's privacy policy is dated **31 January 2024**, which is the most recent dated artefact
-  found anywhere.
-* No release, update or announcement after early 2024 was found, and no Android build.
+**What “struck off” does and does not mean.** It is a register status: the company has been removed
+from the RCS and no longer exists as a legal person. It is **not** a finding of insolvency or
+wrongdoing. Luxembourg can dissolve dormant or non-compliant companies administratively, without
+liquidation, and a strike-off can equally follow an ordinary voluntary wind-up. Nothing in the
+register entry distinguishes those, and this document does not guess.
 
-So the honest reading is a company that was registered and shipped one product, with no public sign
-of activity since — the same shape of evidence that section 3.3 treats as dormancy for Mu Design,
-and it deserves the same caution in both directions.
+**Why this is here, and what it is not.** It answers the only question this section asks: whether
+anyone is still in a position to revive ULO. The answer is that the founder did keep trading after
+Mu Design went quiet, that the work was games rather than connected hardware, and that this second
+company is now struck off too. No corporate vehicle remains through which ULO could be supported.
 
-**Why this is here, and what it is not.** It bears on the only question this section asks: whether
-anyone is still in a position to revive ULO. It shows the founder kept trading after Mu Design went
-quiet, through a registered entity that can be looked up and written to — which is more than the
-ULO support channels offer — and it shows that work was games rather than connected hardware. It
-makes a ULO firmware release no more likely, and on the evidence above it does not establish that
-anyone is actively running anything today.
-
-MuGames is a **separate legal entity**. Mu Design's obligations to its backers are Mu Design's, and
-they do not transfer to another company merely because the two share a director and a city. A
-person starting a new business is not evidence of anything about an earlier one, and nothing here
-should be read as suggesting otherwise. This entry records a company registration, which is a
-public commercial record. The founder's personal accounts and social media are deliberately not
-collected here; they are not relevant to a camera, and assembling them would serve no purpose this
+MuGames was a **separate legal entity**. Mu Design's obligations to its backers were Mu Design's,
+and they never transferred to another company merely because the two shared a director and a town.
+A person starting a later business is not evidence of anything about an earlier one, and nothing
+here should be read as suggesting otherwise. This entry records company registrations, which are
+public commercial records. The registered street address is omitted — a *Sàrl-S* is often run from
+home, and the town is all the comparison needs. Personal accounts and social media are likewise not
+collected: they are not relevant to a camera, and assembling them would serve no purpose this
 repository has.
 
 ## 4. Kickstarter campaign and backer outrage
