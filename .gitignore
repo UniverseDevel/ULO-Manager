@@ -66,3 +66,6 @@ scripts/purge-history.ps1
 # Product manual and photography
 docs/ULO-Users-Manual-*.pdf
 assets/images/ulo-*.png
+
+# Company register filings, retrieved from lbr.lu
+docs/registry/
