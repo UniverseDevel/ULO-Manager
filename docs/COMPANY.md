@@ -1,4 +1,4 @@
-﻿# ULO — Manufacturer, Company Status and Community
+# ULO — Manufacturer, Company Status and Community
 
 Research compiled 2026-08-14. Sources are linked inline; claims without a link are marked
 *unconfirmed*.
@@ -32,7 +32,8 @@ crowdfunding.
 Vivien Muller is a French industrial designer who gained attention with **Electree**, a
 bonsai-shaped solar charger that won several design awards. He went on to create ULO, Bearbot, and
 LUA through Mu Design. His portfolio site ([vivien-muller.fr](https://vivien-muller.fr)) is still
-online but shows no recent product activity.
+online but carries design work rather than products. He has since registered a second Luxembourg
+company, MuGames Sàrl-S, which publishes games — see §3.4.
 
 ### 1.3 ODM / hardware partner
 
@@ -117,6 +118,54 @@ dormant:
 > dissolved. The Luxembourg RCS should be checked directly for a definitive answer.
 
 ---
+
+### 3.4 The founder's later company
+
+Mu Design being dormant does not mean its founder stopped trading. A second Luxembourg company
+exists:
+
+| | |
+|---|---|
+| Name | **MuGames Sàrl-S** |
+| RCS number | **B246260** |
+| Registered office | Esch-sur-Alzette — the same city as Mu Design |
+| Corporate purpose | “the design, creation, realization, production and marketing of games, card games, playful supports and all other recreational processes” |
+| Managing director | Vivien Muller |
+| Product | *Ommatidia*, a four-player colour-mixing strategy game for mobile ([mugames.net](https://www.mugames.net/)), whose privacy policy is dated 31 January 2024 |
+
+**Is it still active?** Not established from the outside, and for the same reason as Mu Design:
+[lbr.lu](https://www.lbr.lu) is the authoritative source for legal status and it is behind a
+captcha, so it has to be checked by hand — **Consult** → **FILE OF A COMPANY OR ASSOCIATION**,
+RCS number **B246260**. The company is indexed by
+[North Data](https://www.northdata.com/MuGames%20S%C3%A0rl-S,%20Esch-Sur-Alzette/B246260), which
+carries the registration and the corporate purpose but no dissolution entry; an absent entry is not
+the same as a confirmed active status.
+
+What can be observed is thin and stops early:
+
+* The site is up, and *Ommatidia* is listed on the iOS App Store (app id `6476962833`).
+* The game's privacy policy is dated **31 January 2024**, which is the most recent dated artefact
+  found anywhere.
+* No release, update or announcement after early 2024 was found, and no Android build.
+
+So the honest reading is a company that was registered and shipped one product, with no public sign
+of activity since — the same shape of evidence that section 3.3 treats as dormancy for Mu Design,
+and it deserves the same caution in both directions.
+
+**Why this is here, and what it is not.** It bears on the only question this section asks: whether
+anyone is still in a position to revive ULO. It shows the founder kept trading after Mu Design went
+quiet, through a registered entity that can be looked up and written to — which is more than the
+ULO support channels offer — and it shows that work was games rather than connected hardware. It
+makes a ULO firmware release no more likely, and on the evidence above it does not establish that
+anyone is actively running anything today.
+
+MuGames is a **separate legal entity**. Mu Design's obligations to its backers are Mu Design's, and
+they do not transfer to another company merely because the two share a director and a city. A
+person starting a new business is not evidence of anything about an earlier one, and nothing here
+should be read as suggesting otherwise. This entry records a company registration, which is a
+public commercial record. The founder's personal accounts and social media are deliberately not
+collected here; they are not relevant to a camera, and assembling them would serve no purpose this
+repository has.
 
 ## 4. Kickstarter campaign and backer outrage
 
@@ -262,6 +311,8 @@ on Reddit, but no organised class action or group complaint has materialised. Re
 * [Paperjam — Mu Design article](https://paperjam.lu/article/news-mu-design-la-videosurveillance-aux-yeux-malins)
 * [Vivien Muller portfolio](https://vivien-muller.fr)
 * [Cybo — Mu Design listing](https://www.cybo.com/LU-biz/mu-design)
+* [North Data — MuGames Sàrl-S, RCS B246260](https://www.northdata.com/MuGames%20S%C3%A0rl-S,%20Esch-Sur-Alzette/B246260)
+* [MuGames — Ommatidia](https://www.mugames.net/)
 * [Kickstarter accountability policy](https://help.kickstarter.com/hc/en-us/sections/115001107133-Accountability)
 * [OpenCVE — Mongoose](https://app.opencve.io/cve/?product=mongoose&vendor=cesanta)
 * [OpenCVE — Civetweb](https://app.opencve.io/cve/?vendor=civetweb_project)
