@@ -53,7 +53,7 @@ image and Qualcomm APQ board support package. See the
 | **Electree** | Solar-powered bonsai charger   | Limited edition       | **Discontinued**, no longer sold ([vivien-muller.fr](https://vivien-muller.fr))                                                                        |
 | **ULO**      | Owl-shaped surveillance camera | Kickstarter, Oct 2015 | Shipped to *some* backers; many undelivered; no firmware updates since at least 2019                                                                   |
 | **Bearbot**  | Expressive universal remote    | Indiegogo             | **Discontinued**, pledge manager closed ([Indiegogo](https://www.indiegogo.com/en/projects/vivienmuller-14618304/bearbot))                             |
-| **LUA**      | Animated smart planter         | Indiegogo             | **Discontinued**, pledge manager closed ([Indiegogo](https://www.indiegogo.com/en/projects/vivienmuller-14618304/lua-the-smart-planter-with-feelings)) |
+| **LUA**      | Animated smart planter         | Indiegogo, June 2019 — **€351,150** from 2,728 backers | **Discontinued**, pledge manager closed ([Indiegogo](https://www.indiegogo.com/en/projects/vivienmuller-14618304/lua-the-smart-planter-with-feelings)) |
 
 All four products are effectively **discontinued or out of stock** as of 2026. None are available
 for retail purchase through any known channel.
@@ -287,6 +287,14 @@ around €380–400,000 from then on — roughly the size of the hole the bankru
 **It was still paying wages to the end.** Staff costs were €129,016 in 2019 and €131,731 in 2020, on
 gross results of €144,954 and €198,104. This was a going concern with employees, not a shell, in the
 year before it filed.
+
+**Where that later income came from is not stated.** Abbreviated accounts report a single gross
+result and do not break out turnover, so the accounts themselves do not identify a source. What can
+be placed beside them is the LUA campaign: launched on Indiegogo in June 2019 against a €30,000
+target, it closed at roughly €155,000 from about 889 backers and reached **€351,150 from 2,728
+backers** once the pledge manager is included, with delivery promised for December 2019. The
+campaign ran across exactly the two financial years in question, and the two gross results total
+€343,057. The accounts do not confirm the connection and this document does not assert one.
 
 Two filing details worth recording. The 2018 accounts were **filed twice**: the original
 (`L190112432`, 28 June 2019) and a correction (`L190213879`, 21 October 2019) which moved
