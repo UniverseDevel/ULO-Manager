@@ -113,22 +113,6 @@ books, which Luxembourg law requires once payments stop. And a curator was appoi
 creditors' claims go to; but the bankruptcy **closed in March 2023**, so that mandate has ended and
 there is no longer a claims process to join. See §6.2.
 
-#### The last attempt to raise money
-
-On **5 May 2021** the company offered the intellectual property of LUA as a single NFT, seeking
-around **40 ETH — roughly €100,000 at the time** — to finance a production run of 5,000 units, after
-the pandemic had closed a manufacturing plant and disrupted supply
-([Silicon Luxembourg](https://www.siliconluxembourg.lu/mu-design-licences-the-intellectual-property-of-lua-for-nft/)).
-The buyer would have received licence rights to the design and a credit on the packaging. The
-company's own FAQ put it plainly: *“We are still looking for funding, which is why we launched the
-Lua NFT.”*
-
-No record of a completed sale has been found.
-
-The annual accounts for 2020 were filed on **20 May 2021**, and the bankruptcy was declared on
-**16 June 2021**. The sequence reads as a company seeking rescue funding, failing to obtain it, and
-filing once it had run out of options — which is what an *aveu* is for.
-
 Two further details are worth reading off the filing list. The company filed accounts for financial year 2020 on
 **20 May 2021**, four weeks before the bankruptcy judgment — so it was still meeting its filing
 obligations to the end. And the last accounts on file cover 2020, so there is no public financial
