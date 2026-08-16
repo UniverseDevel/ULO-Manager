@@ -424,6 +424,12 @@ public sealed partial class MainForm
         }
 
         lines.Add($"Battery: {camera.BatteryLevel}% ({(camera.Plugged ? "plugged in" : "on battery")})");
+
+        if (!string.IsNullOrWhiteSpace(camera.LastError))
+        {
+            lines.Add($"⚠ {camera.LastError}");
+        }
+
         return string.Join(Environment.NewLine, lines);
     }
 
@@ -921,8 +927,7 @@ public sealed partial class MainForm
         _firmwareLabel.Text = "";
 
         // Eyes tab
-        _eyeHueSlider.Value = 0;
-        _eyeHueLabel.Text = "0";
+        SetSelectedIrisHue(0);
         _eyeIrisSpin.Value = 0;
         _eyePupilSpin.Value = 0;
         _eyeReflectionBox.SelectedIndex = -1;
