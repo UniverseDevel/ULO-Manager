@@ -22,7 +22,7 @@ are byte-identical, so the build is the same and only the packaging timestamp di
 ## What the source map exposes
 
 A source map lets any browser's developer tools reconstruct the original TypeScript source, file by
-file, with full variable names and comments. In effect it is the web app's source code. The vendor's own files reconstruct into `src/` beside this README - 173 TypeScript files, ~419 KB.
+file, with full variable names and comments. In effect it is the web app's source code. The vendor's own files reconstruct into `src/` beside this README — 173 TypeScript files, ~419 KB.
 **That reconstruction is not published in this repository.** It is Mu Design's proprietary source
 code, and shipping a source map by mistake does not licence it for redistribution, so `src/` and
 the `.map` files above are git-ignored and stay local. See
@@ -52,10 +52,10 @@ and add nothing to the analysis.
 Source maps are a development convenience that should never ship in production — they give any
 attacker the complete API surface, the authentication flow, the token handling and the WebSocket
 protocol in readable form, rather than having to reverse-engineer the minified bundle. Everything
-documented in [`docs/API.md`](../../docs/API.md) was cross-referenced against this map.
+documented in [`docs/API.md`](../../../docs/API.md) was cross-referenced against this map.
 
-See also [`docs/SECURITY.md`](../../docs/SECURITY.md) and
-[`docs/ACCESS_RESEARCH.md`](../../docs/ACCESS_RESEARCH.md).
+See also [`docs/SECURITY.md`](../../../docs/SECURITY.md) and
+[`docs/ACCESS_RESEARCH.md`](../../../docs/ACCESS_RESEARCH.md).
 
 ## Why both firmware folders hold a copy
 

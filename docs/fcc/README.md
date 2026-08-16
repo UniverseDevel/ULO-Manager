@@ -77,11 +77,11 @@ File at https://www.fcc.gov/foia or https://foia.gov with:
 
 These are the general contacts printed in the exhibits in this folder. The named individuals'
 personal work mailboxes are in the FCC's online application record rather than in these documents,
-and are not collected here - a page telling readers which people to e-mail for documents the
+and are not collected here — a page telling readers which people to e-mail for documents the
 applicant asked to keep confidential is a different thing from the filing itself being public.
 Write to the organisations.
 
-The test lab prepared all documents and may provide copies if the applicant consents - but the
+The test lab prepared all documents and may provide copies if the applicant consents — but the
 applicant company no longer exists, so there is nobody left to give that consent.
 
 **Option 3: Download the Confidentiality Request letter**

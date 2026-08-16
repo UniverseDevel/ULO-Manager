@@ -1,4 +1,4 @@
-# Build Guide
+﻿# Build Guide
 
 ## 1. Requirements
 
@@ -11,39 +11,37 @@
 ## 2. Quick build
 
 ```powershell
-.\UloManager\build.ps1                      # Release
-.\UloManager\build.ps1 -Configuration Debug -Run
+.\build.ps1                      # Release
+.\build.ps1 -Configuration Debug -Run
 ```
 
 The script finds a usable SDK by itself, which matters when several are installed. The plain SDK
 command works too:
 
 ```powershell
-dotnet build UloManager\UloManager.sln -c Release
+dotnet build UloManager.sln -c Release
 ```
 
 Outputs:
 
 ```
-UloManager\src\UloManager.Gui\bin\Release\net9.0-windows\UloManager.exe
-UloManager\src\UloManager.Cli\bin\Release\net9.0\ulo.exe
+src\UloManager.Gui\bin\Release\net9.0-windows\UloManager.exe
+src\UloManager.Cli\bin\Release\net9.0\ulo.exe
 ```
 
-## 3. Solutions
+## 3. Solution
 
-| Solution                    | Contents                                                                        |
-|-----------------------------|---------------------------------------------------------------------------------|
-| `UloManager.sln`            | Repository root: the three projects plus the `docs` folder — use this in an IDE |
-| `UloManager\UloManager.sln` | The three projects only — slightly quicker for command line builds              |
-
-Both build the same projects, provided the IDE uses an MSBuild new enough for .NET 9 — see §5.
+One solution, `UloManager.sln`, at the repository root. It holds the three projects —
+`UloManager.Core`, `UloManager.Cli` and `UloManager.Gui` — plus the `docs` folder, so the
+documentation is editable alongside the code. Open it in an IDE, provided that IDE uses an MSBuild
+new enough for .NET 9 — see §5.
 
 ## 4. Linux
 
 The library and CLI target `net9.0` and run on Linux; only the GUI is Windows-only.
 
 ```bash
-dotnet publish UloManager/src/UloManager.Cli/UloManager.Cli.csproj \
+dotnet publish src/UloManager.Cli/UloManager.Cli.csproj \
        -c Release -r linux-x64 --self-contained false -o out/ulo
 ./out/ulo/ulo status --host 192.168.0.10 --user user@example.com
 ```
@@ -66,7 +64,7 @@ the installed SDK: **.NET 9.0.3xx requires MSBuild 17.12 or newer**. Several MSB
 exist side by side and not all of them qualify. Ask the build script:
 
 ```powershell
-.\UloManager\build.ps1 -Diagnose
+.\build.ps1 -Diagnose
 ```
 
 It lists every MSBuild it can find, marks the usable one, and prints the exact paths to configure.
@@ -107,3 +105,10 @@ SDK is installed.
 | Thousands of unresolved types while `dotnet build` reports 0 errors             | the IDE could not load the SDK at all                      |
 
 None of these indicate a problem with the code — if `dotnet build` succeeds, the sources are fine.
+
+## 6. Related documents
+
+* [Application guide](APPLICATION.md) — what the built tool does, command by command
+* [Use cases](USE_CASES.md) — recipes the finished build is used for
+* [API reference](API.md) — the endpoints the library speaks
+* [Legal notes](LEGAL.md) — what this repository does and does not redistribute

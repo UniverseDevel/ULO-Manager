@@ -96,7 +96,7 @@ and version cannot be pinned down further from the outside, because the banner i
 **The same server answers on four ports** — 80, 8080, 443 and 8443 — serving byte-identical content
 (same `ETag`, same `Content-Length`). A broader port scan found one additional port: **55555**, which
 is an internal IPC status socket (sends 6 bytes on connect, accepts only one client, ignores all
-input — see [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) Attempt 2 for full protocol analysis).
+input — see [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) Attempt 4 for full protocol analysis).
 No SSH (22), no Telnet (23), and importantly **no ADB (5555)**, so the obvious route to a shell is closed.
 
 ### 2.1 What this does not tell us

@@ -1,6 +1,6 @@
-﻿# ULO Kickstarter Campaign - Technical Summary
+﻿# ULO Kickstarter Campaign — Technical Summary
 
-> Compiled from 41 Kickstarter updates, ~6885 backer comments, campaign description, FAQ, and reward tiers.
+> Compiled from 41 Kickstarter updates, 6,880 backer comments (the full thread as scraped 2026-08-14), campaign description, FAQ, and reward tiers.
 > Focus: Technical details useful for understanding, maintaining, and hacking the ULO device.
 
 ---
@@ -355,10 +355,10 @@ page, not a public record, and the technical substance is what matters here. See
 | **Failed update leaves a spinning arrow** | Units bricked at a rotating-arrow screen after updating. Consistent with a partial install of the three firmware layers. | - |
 | **Pink / magenta tint** | Widely reported across many units. Caused by the camera not filtering infrared; the vendor promised a colour-balance fix in a later firmware, which never shipped. | Update #40, [SECURITY.md](SECURITY.md) |
 | **Resolution below expectation** | The live stream is 720p rather than the 1080p promised in the campaign, which drew repeated complaints. | Update #17 |
-| **Assembly defects** | At least one unit arrived non-functional with the power connector unsoldered, a warped board and shields partly removed - the reporter judged it a prototype rather than a production unit. | - |
+| **Assembly defects** | At least one unit arrived non-functional with the power connector unsoldered, a warped board and shields partly removed — the reporter judged it a prototype rather than a production unit. | - |
 | **LAN-only in practice** | Remote access frequently did not work, leaving the camera reachable only on the local network, and some units only at very short range. Remote viewing was the device's main selling point. | [API.md](API.md), [SECURITY.md](SECURITY.md) |
 | **Cloud access dead** | Cloud login returns a server-down error. The endpoints no longer resolve. | [apk/README.md](../apk/README.md) |
-| **Vendor forum deleted** | The support forum on `mu-design.lu` was removed, taking community workarounds - including a cloud-access workaround - with it. | [COMPANY.md](COMPANY.md) |
+| **Vendor forum deleted** | The support forum on `mu-design.lu` was removed, taking community workarounds — including a cloud-access workaround — with it. | [COMPANY.md](COMPANY.md) |
 | **Working units** | Units that were set up successfully were reported as working as intended: sharp image, responsive eye behaviours, and storage sufficient for roughly 30-40 photos plus a few short videos. | [USE_CASES.md](USE_CASES.md) |
 
 ---

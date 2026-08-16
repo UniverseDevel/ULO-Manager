@@ -302,7 +302,7 @@ console would likely give:
 
 ---
 
-## Attempt 2 — CVE analysis and exploitation testing
+## Attempt 4 — CVE analysis and exploitation testing
 
 **Date:** 2026-08-15
 **Method:** Active probing — directory traversal, command injection, file upload, config injection,
@@ -497,7 +497,7 @@ are unknown — requires BLE enumeration with nRF Connect or `gatttool`.
 
 ---
 
-## Attempt 3 — Similar hardware research and manufacturer documentation
+## Attempt 5 — Similar hardware research and manufacturer documentation
 
 **Date:** 2026-08-15
 **Method:** Web research — FCC filings, reference hardware documentation, community projects.

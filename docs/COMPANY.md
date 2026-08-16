@@ -1,4 +1,4 @@
-# ULO — Manufacturer, Company Status and Community
+﻿# ULO — Manufacturer, Company Status and Community
 
 Research compiled 2026-08-14. Sources are linked inline; claims without a link are marked
 *unconfirmed*.
@@ -40,7 +40,7 @@ The ULO hardware was designed and manufactured in partnership with **VVDN Techno
 large ODM specialising in cameras, networking and IoT. The device's system log prefixes all
 platform-level messages with `VVDN:`, and VVDN's involvement extends to the WiFi, Android platform
 image and Qualcomm APQ board support package. See the
-[security assessment §2](docs/SECURITY.md#2-the-platform-underneath) for evidence.
+[security assessment §2](SECURITY.md#2-the-platform-underneath) for evidence.
 
 ---
 
@@ -133,7 +133,7 @@ dormant:
 | Pledged       | **~€1,618,869** (≈$1.77 M USD)                                       |
 | Funding ratio | **813 %** of goal                                                    |
 | Backers       | **8,330**                                                            |
-| Comments      | **4,664** (as of 2026-08-14)                                         |
+| Comments      | **4,664** threads shown by Kickstarter, **6,880** including replies (2026-08-14) |
 | Updates       | 41                                                                   |
 | Category      | Design → Product Design                                              |
 | Reward price  | ~€149 early bird for one ULO unit                                    |
@@ -142,39 +142,27 @@ dormant:
 
 ### 4.2 What was promised vs. what was delivered
 
-**Promised (original campaign + unlocked stretch goals):**
+The full promise-by-promise comparison, drawn from the campaign updates themselves, lives in the
+[Kickstarter campaign notes](KICKSTARTER.md#8-promises-vs-reality). What matters here is the pattern
+it shows about the company rather than the feature list.
 
-| Feature                                               | Original / Stretch goal                       | Status                                                                  |
-|-------------------------------------------------------|-----------------------------------------------|-------------------------------------------------------------------------|
-| Owl-shaped surveillance camera with animated LCD eyes | Original                                      | Delivered to *some* backers                                             |
-| 720p camera                                           | Original (upgraded to 1080p via stretch goal) | Delivered as 720p on shipped units; 1080p upgrade unclear               |
-| Motion detection                                      | Original                                      | Delivered                                                               |
-| Animated GIF emails on motion events (Alert Mode)     | Original                                      | Delivered                                                               |
-| iOS/Android companion app                             | Original                                      | Delivered, never updated                                                |
-| Wi-Fi connectivity                                    | Original                                      | Delivered                                                               |
-| **1080p Full HD upgrade**                             | Stretch goal (unlocked)                       | **Not confirmed on shipped units** — device records 1280×720            |
-| **Facial recognition**                                | Stretch goal (unlocked)                       | **Never delivered**                                                     |
-| **Waterproofing for outdoor use**                     | Stretch goal (unlocked)                       | **Never delivered**                                                     |
-| **Voice control (English/French)**                    | Stretch goal (unlocked)                       | **Never delivered**                                                     |
-| **Voice control (Spanish)**                           | Stretch goal (unlocked)                       | **Never delivered**                                                     |
-| Open API / developer access                           | Promised                                      | **Never delivered** — the API in this repository was reverse-engineered |
-| No subscription fees, local storage only              | Promised                                      | Delivered                                                               |
-| IFTTT integration                                     | Promised                                      | **Never delivered**                                                     |
-| Delivery to all backers                               | Promised (originally late 2016)               | **Many backers never received units**                                   |
+Four of the unlocked stretch goals — **facial recognition**, **waterproofing**, **voice control**
+and **IFTTT** — never appeared in any shipped firmware. The **1080p upgrade** was funded and
+announced, and the camera does carry a Sony sensor described as 1080p capable, but no shipped
+firmware ever produced 1080p output: the live stream and the recordings measure
+**1280—720** on every unit tested, which is what
+[SECURITY.md 3.3](SECURITY.md#33-s3--live-video-needs-no-authentication) and
+[API.md 3](API.md#3-websocket-protocols) record. The **open API** was promised and never
+published — everything documented in this repository was reverse-engineered from the device.
 
-**Key delivery failures:**
-
-* The camera shipped at **720p** — the stretch-goal 1080p upgrade was never implemented.
-* **Facial recognition**, **waterproofing**, **voice control** and **IFTTT** — all unlocked stretch
-  goals — were never delivered in any firmware version.
-* The **open API** was never published; everything in this repository's API documentation was
-  reverse-engineered from watching the device's own web application.
-* A significant portion of the **8,330 backers never received the product** at all, despite paying
-  in 2015.
+The delivery failure is the larger one. A significant portion of the **8,330 backers never received
+a unit at all**, despite paying in 2015, and the company continued announcing features while that
+remained true.
 
 ### 4.3 Backer complaints and community response
 
-The Kickstarter comments section (4,664 comments) is dominated by complaints from backers who:
+The Kickstarter comments section (4,664 threads, 6,880 comments including replies) is dominated by
+complaints from backers who:
 
 * **Never received the product** despite paying years earlier.
 * **Received no response** to emails, Kickstarter messages or social media inquiries.
@@ -208,9 +196,9 @@ Kickstarter's policy states:
 A search across GitHub (August 2026) found **no other active projects** working on the ULO camera
 besides this repository:
 
-| Repository                                                                      | Description                                                                                           | Language | Stars | Active                      |
-|---------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|----------|-------|-----------------------------|
-| [UniverseDevel/ULO-Controller](https://github.com/UniverseDevel/ULO-Controller) | This repository — tooling for the ULO camera, API documentation, security research, firmware analysis | C#       | 11    | Yes (last updated May 2026) |
+| Repository                                                                | Language | Description                                                                                            |
+|---------------------------------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------|
+| [UniverseDevel/ULO-Manager](https://github.com/UniverseDevel/ULO-Manager) | C#       | This repository — tooling for the ULO camera, API documentation, security research, firmware analysis |
 
 **No other ULO camera projects exist on GitHub.** The only other result for "ULO" is
 [devileya/ulos-android](https://github.com/devileya/ulos-android), which detects "Ulos" textile
@@ -283,4 +271,4 @@ on Reddit, but no organised class action or group complaint has materialised. Re
 * [NIST NVD — CVE-2011-3389 (BEAST)](https://nvd.nist.gov/vuln/detail/CVE-2011-3389)
 * [NIST NVD — CVE-2014-3566 (POODLE)](https://nvd.nist.gov/vuln/detail/CVE-2014-3566)
 * [Luxembourg Business Registers](https://www.lbr.lu)
-* [ULO-Controller repository](https://github.com/UniverseDevel/ULO-Controller)
+* [ULO-Manager repository](https://github.com/UniverseDevel/ULO-Manager)

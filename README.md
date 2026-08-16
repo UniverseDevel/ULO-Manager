@@ -1,4 +1,4 @@
-﻿# ULO Controller
+﻿# ULO Manager
 
 Tooling for the **ULO camera** by Mu Design — a documented client for its undocumented HTTP API,
 plus the research behind it.
@@ -18,25 +18,26 @@ analysis of the images it ships.
 | [Build guide](docs/BUILDING.md)          | Building on Windows and Linux, IDE setup, troubleshooting                                                                            |
 | [Easter eggs](docs/EASTER_EGGS.md)       | Oddities found on the device: the Bollywood music video in the firmware, and certificate absurdities                                 |
 | [Source analysis](docs/SOURCE_ANALYSIS.md)| What the vendor's own source code reveals: version format, undocumented endpoints, leaked tokens, demo mode, voice commands          |
-| [Legal notes](docs/LEGAL.md)             | What this repository deliberately does not redistribute, and why - copyright, personal data, security research                      |
+| [Kickstarter campaign](docs/KICKSTARTER.md)| The 41 campaign updates as a timeline: hardware as it changed, firmware history, known defects, promises against delivery           |
+| [Legal notes](docs/LEGAL.md)             | What this repository deliberately does not redistribute, and why                       |
 
 ## What is here
 
-**`UloManager/`** — the tooling, .NET 9, no third-party dependencies.
+**`src/`** — the tooling, .NET 9, no third-party dependencies.
 
 * `ulo` — command line tool, Windows and Linux
 * `UloManager.exe` — Windows dashboard with live video, activity feed and the full setup surface
 * `UloManager.Core` — the client library
 
-**`firmware/`** - the analysis of each firmware version: what the unit serves, the device
+**`firmware/`**  of each firmware version: what the unit serves, the device
 certificates, and the findings behind the [security assessment](docs/SECURITY.md). The vendor's own
-binaries and reconstructed source are **not** redistributed - see [legal notes](docs/LEGAL.md) for
+binaries and reconstructed source are **not** redistributed (docs/LEGAL.md) for
 what is excluded and how to obtain it from your own device.
 
 ## Quick start
 
 ```powershell
-.\UloManager\build.ps1
+.\build.ps1
 
 $env:ULO_HOST     = '192.168.0.10'
 $env:ULO_USER     = 'user@example.com'
@@ -93,7 +94,7 @@ It is also not aimed at beginners — expect to need some knowledge of C#, APIs,
 command line.
 
 ULO and Mu Design are the marks of their owner and are used here only to identify the product this
-tooling works with. No vendor code, firmware, application or documentation is redistributed - see
+tooling works with. No vendor code, firmware, application or documentation is redistributed — see
 [legal notes](docs/LEGAL.md). Security findings come from hardware the author owns, tested on the
 author's own network; do not apply them to a device you do not own.
 All user names, passwords and IP addresses in this repository are examples, and should not be

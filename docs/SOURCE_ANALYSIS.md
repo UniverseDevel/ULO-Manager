@@ -6,12 +6,12 @@ files, 419 KB — was extracted. This document records what that source reveals 
 API, and the attack surface. Everything here was read from the source and, where noted, confirmed
 against live hardware.
 
-The extracted source is **not** redistributed here - it is the vendor's proprietary code, and the
+The extracted source is **not** redistributed here — it is the vendor's proprietary code, and the
 mistake of shipping a source map is not a licence to republish it (see [LEGAL.md](LEGAL.md)). It is
 reconstructed locally into `firmware/<version>/webapp/src/`, which is git-ignored. Any unit will
 hand you the map at `GET http://<ULO_IP>/build/main.js.map`; the hashes to verify it against are in
 [`firmware/10.1308/webapp/README.md`](../firmware/10.1308/webapp/README.md). The source is
-identical on both firmware versions - same build.
+identical on both firmware versions — same build.
 
 ---
 
@@ -45,7 +45,7 @@ A **third** WebSocket endpoint, in addition to the documented `/api/v1` (events,
 sub-protocol is `mudesign.ulo.rtsp` and it carries binary data.
 
 **Confirmed working** on both firmware versions — WebSocket upgrade succeeds on ports 80, 8080, 443
-and 8443. **Live probing** (see [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) Attempt 2) revealed it is
+and 8443. **Live probing** (see [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) Attempt 4) revealed it is
 a **signalling channel only**: after authentication it sends the text `Started`, then periodic
 WebSocket pings. It does not carry video data and is not an alternative to the fMP4 live stream.
 
@@ -155,7 +155,7 @@ registered face is detected. (Source: Mu Design's public campaign responses)
 ## 7. What this tells us about gaining deeper access
 
 **Nothing in the web app source reveals a shell, a debug port, or direct system access.**
-This was confirmed by live probing in [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) Attempt 2, which
+This was confirmed by live probing in [ACCESS_RESEARCH.md](ACCESS_RESEARCH.md) Attempt 4, which
 tested all speculative paths, setup mode, WebDAV, and command injection without finding any route
 to a shell.
 

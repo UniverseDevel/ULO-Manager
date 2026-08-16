@@ -10,7 +10,7 @@ no state, and every address and account is passed on the command line. None of t
 back to the camera except where a script says so explicitly.
 
 Point them at a camera you own. Probing a device on someone else's network is unlawful in most
-jurisdictions regardless of how gentle the request is - the offence turns on authorisation, not on
+jurisdictions regardless of how gentle the request is — the offence turns on authorisation, not on
 technique. See [LEGAL.md](../docs/LEGAL.md).
 
 | Script                                               | What it answers                                                                                                                                                                    |
