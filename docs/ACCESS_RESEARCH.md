@@ -1,9 +1,13 @@
-# ULO Access Research
+﻿# ULO Access Research
 
 Log of attempts to gain deeper access to the ULO camera for the purpose of community firmware
 development and continued use of an otherwise abandoned product.
 
 Research started 2026-08-14.
+
+Every attempt below was made against units the author owns, on the author's own network. The goal
+is owner access to owner hardware; none of it is a route into a camera belonging to somebody else,
+and it should not be used as one. See [LEGAL.md](LEGAL.md).
 
 ---
 

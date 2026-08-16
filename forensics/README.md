@@ -1,4 +1,4 @@
-# Forensics
+﻿# Forensics
 
 The scripts used to work out how the camera actually behaves. Everything documented in
 [`docs/API.md`](../docs/API.md) and [`docs/SECURITY.md`](../docs/SECURITY.md) was measured with
@@ -8,6 +8,10 @@ can be reproduced, and so a unit on a firmware version nobody has seen yet can b
 They are deliberately plain: Python 3 standard library and PowerShell only, no packages to install,
 no state, and every address and account is passed on the command line. None of them writes anything
 back to the camera except where a script says so explicitly.
+
+Point them at a camera you own. Probing a device on someone else's network is unlawful in most
+jurisdictions regardless of how gentle the request is - the offence turns on authorisation, not on
+technique. See [LEGAL.md](../docs/LEGAL.md).
 
 | Script                                               | What it answers                                                                                                                                                                    |
 |------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

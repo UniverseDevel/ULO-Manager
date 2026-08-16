@@ -65,23 +65,25 @@ File at https://www.fcc.gov/foia or https://foia.gov with:
   business. The product has been on the market since 2017. Trade secret protection serves no
   legitimate purpose for a defunct company with no successor. The documents were prepared by
   a third-party test lab (WTS Taiwan) using standard Qualcomm reference designs.
-- **TCB:** Eurofins Product Service GmbH (JoergKusig@eurofins.de) — they processed the grant
+- **TCB:** Eurofins Product Service GmbH — they processed the grant
 
-**Option 2: Contact the test lab directly**
+**Option 2: Ask the parties to the filing**
 
-| Role                    | Name          | Email                  | Phone             |
-|-------------------------|---------------|------------------------|-------------------|
-| Responsible Party (CEO) | Vivien Muller | ceo@mu-design.lu       | +352 54 55 80 233 |
-| Technical Contact (WTS) | Danny Sung    | danny@wts-lab.com      | +886-2-6606-8877  |
-| TCB (Eurofins)          | Joerg Kusig   | JoergKusig@eurofins.de | —                 |
+| Role                    | Organisation                              |
+|-------------------------|-------------------------------------------|
+| Applicant / responsible | Mu Design SARL, Luxembourg (dissolved)    |
+| Test lab                | Worldwide Testing Services (WTS), Taiwan  |
+| TCB                     | Eurofins Product Service GmbH, Germany    |
 
-The test lab (WTS Taiwan) prepared all documents and may provide copies if the applicant
-consents — but the applicant company no longer exists.
+The test lab prepared all documents and may provide copies if the applicant consents - but the
+applicant company no longer exists, so there is nobody left to give that consent. Named
+individuals and their contact details appear in the filing itself and are not reproduced here:
+collecting a person's work e-mail and phone number into a contact sheet is a separate act from
+the filing being public. Approach the organisations through their published channels.
 
 **Option 3: Download the Confidentiality Request letter**
 
-The filing includes a `Confidentiality Request` letter (85 KB, 1 page) authored by Daniela
-Eckert at Eurofins. This document specifies exactly which items are confidential and the
+The filing includes a `Confidentiality Request` letter (85 KB, 1 page), authored at Eurofins. This document specifies exactly which items are confidential and the
 stated justification. It may reveal an expiry date or conditions for release. Download from:
 https://fccid.io/2ANJS-ULO1/Letter/Confidentiality-Request-3564622
 

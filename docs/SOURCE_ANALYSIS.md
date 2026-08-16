@@ -143,15 +143,14 @@ Each can be enabled or disabled per recording mode (standard, spy, alert, batter
 `PUT /api/v1/config/voice`.
 
 **Implementation:** Voice recognition uses **CMU Sphinx** (open-source speech recognition engine).
-The creator noted it "doesn't work well" — likely due to accent sensitivity and the limited
-microphone hardware. (Source: Kickstarter comments, Vivien Muller)
+The vendor acknowledged in the campaign thread that it worked poorly — likely due to accent sensitivity and the limited
+microphone hardware. (Source: Mu Design's public campaign responses)
 
 ### Face recognition
 
-The face recognition system uses **Qualcomm's SDK** (bundled with the APQ8016 BSP). The creator
-stated "accuracy needs to be improved." Face detection per mode is toggled via
+The face recognition system uses **Qualcomm's SDK** (bundled with the APQ8016 BSP). The vendor stated that its accuracy needed improvement. Face detection per mode is toggled via
 `PUT /api/v1/config/face` and triggers behavior expressions (happy/unhappy/surprised) when a
-registered face is detected. (Source: Kickstarter comments, Vivien Muller)
+registered face is detected. (Source: Mu Design's public campaign responses)
 
 ## 7. What this tells us about gaining deeper access
 

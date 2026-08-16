@@ -1,4 +1,4 @@
-# ULO Security Assessment
+﻿# ULO Security Assessment
 
 Consolidated security assessment of the ULO camera, covering both sides of the device:
 
@@ -11,6 +11,7 @@ Consolidated security assessment of the ULO camera, covering both sides of the d
 | **Device observations**    | 2026-08-13/14, firmware `06.0601`                                                                                                          |
 | **Firmware method**        | Static binary analysis only — no device contacted, no code executed on hardware, no emulation                                              |
 | **Device method**          | Read-only HTTP/WebSocket/TLS requests and a port scan against a live unit, the device's own system log, and a DNS capture from the network |
+| **Authorisation**          | Units owned by the author, tested on the author's own network. Nothing here was run against a device belonging to anyone else, and nothing here should be. See [LEGAL.md](LEGAL.md).       |
 | **Tooling**                | Python 3.14, `capstone` disassembler, custom scripts kept outside the repository                                                           |
 
 The individual findings are, taken alone, mostly unremarkable. The risk comes from how they **chain**.
