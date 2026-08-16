@@ -1,4 +1,4 @@
-# Web application source analysis
+﻿# Web application source analysis
 
 The camera's built-in web application ships with its **source map** (`/build/main.js.map`, 6.1 MB,
 served without authentication), from which the complete original TypeScript source — 173 vendor
@@ -6,9 +6,12 @@ files, 419 KB — was extracted. This document records what that source reveals 
 API, and the attack surface. Everything here was read from the source and, where noted, confirmed
 against live hardware.
 
-The extracted source sits in [`firmware/10.1308/webapp/src/`](../firmware/10.1308/webapp/src/) and
-[`firmware/06.0601/webapp/src/`](../firmware/06.0601/webapp/src/) (identical on both firmware
-versions — same build).
+The extracted source is **not** redistributed here - it is the vendor's proprietary code, and the
+mistake of shipping a source map is not a licence to republish it (see [LEGAL.md](LEGAL.md)). It is
+reconstructed locally into `firmware/<version>/webapp/src/`, which is git-ignored. Any unit will
+hand you the map at `GET http://<ULO_IP>/build/main.js.map`; the hashes to verify it against are in
+[`firmware/10.1308/webapp/README.md`](../firmware/10.1308/webapp/README.md). The source is
+identical on both firmware versions - same build.
 
 ---
 
@@ -139,6 +142,17 @@ The configuration models list seven voice commands the camera understands:
 Each can be enabled or disabled per recording mode (standard, spy, alert, battery) through
 `PUT /api/v1/config/voice`.
 
+**Implementation:** Voice recognition uses **CMU Sphinx** (open-source speech recognition engine).
+The creator noted it "doesn't work well" — likely due to accent sensitivity and the limited
+microphone hardware. (Source: Kickstarter comments, Vivien Muller)
+
+### Face recognition
+
+The face recognition system uses **Qualcomm's SDK** (bundled with the APQ8016 BSP). The creator
+stated "accuracy needs to be improved." Face detection per mode is toggled via
+`PUT /api/v1/config/face` and triggers behavior expressions (happy/unhappy/surprised) when a
+registered face is detected. (Source: Kickstarter comments, Vivien Muller)
+
 ## 7. What this tells us about gaining deeper access
 
 **Nothing in the web app source reveals a shell, a debug port, or direct system access.**
@@ -171,7 +185,7 @@ configuration endpoint, or a way to write to the filesystem beyond the media and
 
 ## 9. Related documents
 
-* [`firmware/10.1308/webapp/`](../firmware/10.1308/webapp/) — the extracted source and source maps
+* [`firmware/10.1308/webapp/`](../firmware/10.1308/webapp/) — how to obtain the source map and what it contains
 * [API reference](API.md) — the endpoint table built partly from this source
 * [Security assessment](SECURITY.md) — the risk analysis that this source confirms
 * [Easter eggs](EASTER_EGGS.md) — the Bollywood video and other oddities found alongside

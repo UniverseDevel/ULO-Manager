@@ -1,4 +1,4 @@
-# Build output
+﻿# Build output
 [Bb]in/
 [Oo]bj/
 [Dd]ebug/
@@ -33,6 +33,36 @@ obj/
 # Forensics output - contains device names, SSIDs, accounts and log excerpts
 ulo_probe_results.json
 
+# Kickstarter scraped data - contains backer names, emails, personal comments
+docs/ks/
+
+# APK files (too large for git, keep locally)
+apk/*.apk
+docs/fcc/GO_SIGNAL.txt
+
 # Python
 __pycache__/
 *.pyc
+
+# ---------------------------------------------------------------------------
+# Third-party copyrighted material - kept locally, never published.
+# See docs/LEGAL.md for why. Each item is reproducible from your own device
+# or from its original public source; this repository documents it instead.
+# ---------------------------------------------------------------------------
+
+# Vendor web application source, reconstructed from the shipped source map
+firmware/*/webapp/src/
+firmware/*/webapp/main.js.map
+firmware/*/webapp/main.css.map
+
+# Vendor STM32 head firmware images
+firmware/*/factory/*.bin
+
+# Qualcomm / Arrow hardware documentation - redistribution restricted
+docs/fcc/hardware_docs/*.pdf
+
+# One-off history rewrite helper - a local maintenance tool, not part of the project
+scripts/purge-history.ps1
+# Vendor user manual and product photography
+docs/ULO-Users-Manual-*.pdf
+assets/images/ulo-*.png

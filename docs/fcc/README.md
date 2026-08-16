@@ -1,4 +1,4 @@
-# FCC Filing Documents — ULO Camera (FCC ID: 2ANJS-ULO1)
+﻿# FCC Filing Documents — ULO Camera (FCC ID: 2ANJS-ULO1)
 
 Official FCC filing for the ULO camera by Mu Design SARL, submitted 2017-09-16.
 
@@ -155,7 +155,10 @@ Examined all 18 pages. The device has **4 PCBs** connected by flat flex cables:
 
 ## Reference hardware documentation
 
-Downloaded to `hardware_docs/`:
+Reference documentation for the APQ8016 / DragonBoard 410c platform. The Qualcomm and Arrow PDFs
+are **not** redistributed here (see [LEGAL.md](../LEGAL.md)) — download them from the Qualcomm
+Developer Network into `hardware_docs/`, which is git-ignored. The Linux device tree sources in
+that folder are GPL-2.0 and are kept:
 
 | File                                 | Contents                                                                                  |
 |--------------------------------------|-------------------------------------------------------------------------------------------|

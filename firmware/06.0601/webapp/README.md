@@ -1,4 +1,4 @@
-# Web application source maps
+﻿# Web application source maps
 
 The camera's built-in web application (Ionic 3 / Angular 5, built with Webpack) ships its source
 maps alongside the compiled bundles. They are served without authentication at:
@@ -22,8 +22,11 @@ are byte-identical, so the build is the same and only the packaging timestamp di
 ## What the source map exposes
 
 A source map lets any browser's developer tools reconstruct the original TypeScript source, file by
-file, with full variable names and comments. In effect it is the web app's source code. The vendor's
-own files are extracted into `src/` beside this README — 173 TypeScript files, ~419 KB:
+file, with full variable names and comments. In effect it is the web app's source code. The vendor's own files reconstruct into `src/` beside this README - 173 TypeScript files, ~419 KB.
+**That reconstruction is not published in this repository.** It is Mu Design's proprietary source
+code, and shipping a source map by mistake does not licence it for redistribution, so `src/` and
+the `.map` files above are git-ignored and stay local. See
+[LEGAL.md](../../../docs/LEGAL.md). The layout is:
 
 ```
 src/

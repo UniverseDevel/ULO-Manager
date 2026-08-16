@@ -1,4 +1,4 @@
-# ULO Controller
+﻿# ULO Controller
 
 Tooling for the **ULO camera** by Mu Design — a documented client for its undocumented HTTP API,
 plus the research behind it.
@@ -18,6 +18,7 @@ analysis of the images it ships.
 | [Build guide](docs/BUILDING.md)          | Building on Windows and Linux, IDE setup, troubleshooting                                                                            |
 | [Easter eggs](docs/EASTER_EGGS.md)       | Oddities found on the device: the Bollywood music video in the firmware, and certificate absurdities                                 |
 | [Source analysis](docs/SOURCE_ANALYSIS.md)| What the vendor's own source code reveals: version format, undocumented endpoints, leaked tokens, demo mode, voice commands          |
+| [Legal notes](docs/LEGAL.md)             | What this repository deliberately does not redistribute, and why - copyright, personal data, security research                      |
 
 ## What is here
 
@@ -27,8 +28,10 @@ analysis of the images it ships.
 * `UloManager.exe` — Windows dashboard with live video, activity feed and the full setup surface
 * `UloManager.Core` — the client library
 
-**`firmware/`** — the head firmware images shipped by the vendor, analysed in the
-[security assessment](docs/SECURITY.md).
+**`firmware/`** - the analysis of each firmware version: what the unit serves, the device
+certificates, and the findings behind the [security assessment](docs/SECURITY.md). The vendor's own
+binaries and reconstructed source are **not** redistributed - see [legal notes](docs/LEGAL.md) for
+what is excluded and how to obtain it from your own device.
 
 ## Quick start
 
@@ -81,5 +84,9 @@ your own risk. This project is in no way affiliated with Mu Design Sàrl.
 It is also not aimed at beginners — expect to need some knowledge of C#, APIs, networking and the
 command line.
 
+ULO and Mu Design are the marks of their owner and are used here only to identify the product this
+tooling works with. No vendor code, firmware, application or documentation is redistributed - see
+[legal notes](docs/LEGAL.md). Security findings come from hardware the author owns, tested on the
+author's own network; do not apply them to a device you do not own.
 All user names, passwords and IP addresses in this repository are examples, and should not be
 considered default or safe.
