@@ -150,7 +150,7 @@ Four of the unlocked stretch goals — **facial recognition**, **waterproofing**
 and **IFTTT** — never appeared in any shipped firmware. The **1080p upgrade** was funded and
 announced, and the camera does carry a Sony sensor described as 1080p capable, but no shipped
 firmware ever produced 1080p output: the live stream and the recordings measure
-**1280—720** on every unit tested, which is what
+**1280×720** on every unit tested, which is what
 [SECURITY.md 3.3](SECURITY.md#33-s3--live-video-needs-no-authentication) and
 [API.md 3](API.md#3-websocket-protocols) record. The **open API** was promised and never
 published — everything documented in this repository was reverse-engineered from the device.
