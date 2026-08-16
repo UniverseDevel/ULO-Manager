@@ -18,7 +18,7 @@ Research compiled 2026-08-14. Sources are linked inline; claims without a link a
 | Founded            | 2015                                                          |
 | Industry           | Consumer electronics / connected objects (B2C)                |
 | Founder / CEO      | Vivien Muller                                                 |
-| Website            | [mu-design.lu](https://mu-design.lu)                          |
+| Website            | `mu-design.lu` — deliberately not linked, see [SECURITY.md §3.4](SECURITY.md#34-s4--the-cloud-update-check) |
 | Designer portfolio | [vivien-muller.fr](https://vivien-muller.fr)                  |
 
 Mu Design is (or was) incubated at **Technoport**, Luxembourg's national technology incubator in

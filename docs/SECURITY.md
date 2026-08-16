@@ -206,6 +206,17 @@ path to running attacker-chosen code on the device — the chain is set out as R
   `interface/fotaStatus`, `fotaNumberOfUpdates`, `fotaIsInstallAvailable`, `fotaStartDownload` and
   `fotaInstallFirmware`. Those are all *local* reads of state the device already holds; none makes the
   camera ask a server, so the exposure now sits in whatever `fotaStartDownload` contacts.
+* **The vendor's domains today (checked 16 August 2026).** Every hostname the camera or its app
+  actually used is now de-registered and resolves to nothing: `ulo.camera`, `app.ulo.camera`,
+  `support.ulo.camera` and `setup.ulo.camera` all return NXDOMAIN. The company's marketing domain
+  `mu-design.lu` is the exception — it resolves, and it is under third-party control, serving
+  advertising unrelated to the vendor. A lapsed domain with residual traffic is routinely
+  re-registered by whoever wants that traffic. No device is affected, because the firmware and the
+  app never contacted `mu-design.lu`; the update path used the hard-coded IP above. But the same
+  logic that makes the elastic IP re-allocatable applies to the de-registered names: any of them can
+  be taken by anyone at any time. **This repository therefore does not hyperlink vendor domains.**
+  They appear as plain text so that a reader is never one click from whatever currently sits behind
+  them, and so the documentation does not send traffic to an address the vendor no longer controls.
 * **Hunting the traffic.** DNS logs will not show it. A DNS capture of the camera resolved no vendor, AWS
   or update-related name at all, which is expected when the target is a hard-coded IP: no name is ever
   looked up. Router or firewall connection logs, a port mirror or an inline capture are required instead.
