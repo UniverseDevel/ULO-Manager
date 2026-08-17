@@ -966,6 +966,9 @@ Usage mode commands:
 
 Admin / setup mode commands (need an admin account):
   config [show [section]|set <section> <json>|name <name>|quality <q>]
+                         Sections: access, alert, device, email, exclusion, eyes,
+                         face, firmware, language, time, video, voice, wifi
+                         'set' replaces the whole section, so send every field
   wifi [show|scan|connect <ssid> <password>]
   users [list|show <id>|add <email> --user-password <p> [--admin]|delete <id>]
   clean <period>         Delete recordings from the camera storage
@@ -983,6 +986,20 @@ Examples:
   ulo mode alert --host 192.168.0.10 --user admin@example.com
   ulo download --out D:\ulo\media --type video --age 24 --host 192.168.0.10 --user admin@example.com
   ulo api api/v1/state --host 192.168.0.10 --user admin@example.com
+
+Eye appearance (irisHue 0-359 or 360 for black, irisSize/pupilSize 0-100,
+reflection none|triangle|circles|rectangle):
+  ulo config show eyes
+
+  The JSON quotes have to survive the shell, which needs escaping either way.
+  Never wrap the JSON in single quotes in cmd: they are not quote characters
+  there, so the camera receives them and answers 400 "illegal value".
+
+  cmd:        ulo config set eyes "{\"irisHue\":140,\"irisSize\":85,\"pupilSize\":55,\"reflection\":\"circles\"}"
+  PowerShell: ulo config set eyes '{\"irisHue\":140,\"irisSize\":85,\"pupilSize\":55,\"reflection\":\"circles\"}'
+
+  Unescaped quotes are stripped before the camera sees them, which it reports
+  as 400 "unterminated object".
 """);
     }
 }
