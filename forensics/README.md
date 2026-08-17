@@ -19,6 +19,7 @@ technique. See [LEGAL.md](../docs/LEGAL.md).
 | [`probe_endpoints.py`](probe_endpoints.py)           | Which endpoints exist on this firmware, with the status code of each. Run it against two units and diff, and the firmware table in `docs/API.md` falls out.                        |
 | [`raw_http.py`](raw_http.py)                         | What the camera literally puts on the wire, bypassing every HTTP parser.                                                                                                           |
 | [`websocket_probe.py`](websocket_probe.py)           | Which ports and schemes accept a WebSocket upgrade (`ws://`, `wss://`).                                                                                                            |
+| [`ulo_eye_cycle.py`](ulo_eye_cycle.py)               | **Writes.** Cycles the iris hue 1-359 and starts over until Ctrl+C, one `PUT /api/v1/config/eyes` per step. Restores the settings it found on exit. Confirms the LEDs follow the config section live. |
 | [`capture_certificate.ps1`](capture_certificate.ps1) | The TLS certificate a unit presents, with every field worth recording, optionally archived as DER and PEM.                                                                         |
 
 ## Findings these produced
@@ -46,6 +47,7 @@ python ulo_probe.py <camera-ip> --user you@example.com --password yourpass
 python probe_endpoints.py <camera-ip> --user you@example.com --password yourpass
 python raw_http.py <camera-ip> POST /api/v1/snapshot --user you@example.com --password yourpass --body '{"savePicture": 0}'
 python websocket_probe.py <camera-ip>
+python ulo_eye_cycle.py <camera-ip> --user you@example.com --password yourpass --step 1 --delay 0.02
 ```
 
 ```powershell
